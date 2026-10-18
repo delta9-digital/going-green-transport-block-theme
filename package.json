@@ -1,0 +1,40 @@
+{
+	"name": "going-green-transport-block-theme",
+	"version": "0.1.0",
+	"description": "Eightshift block theme for goinggreentransport.com.",
+	"authors": [
+		{
+			"name": "Delta9 Digital",
+			"email": "team@delta9digital.com",
+			"homepage": "https://delta9digital.com/",
+			"role": "Developer"
+		}
+	],
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/delta9-digital/going-green-transport-block-theme.git"
+	},
+	"homepage": "https://goinggreentransport.com",
+	"scripts": {
+		"lintStyle": "stylelint **/*.scss",
+		"lintJs": "eslint src/ assets/",
+		"lint": "npm run lintJs && npm run lintStyle && composer standards:check -- --filter=gitstaged",
+		"start": "webpack --progress --watch --mode development",
+		"build": "webpack --progress --mode production",
+		"test": "wp boilerplate"
+	},
+	"devDependencies": {
+		"husky": "^9.0.11",
+		"webpack": "^5.92.1",
+		"webpack-cli": "^5.1.4"
+	},
+	"dependencies": {
+		"@eightshift/frontend-libs": "12.0.0"
+	},
+	"husky": {
+		"hooks": {
+			"pre-commit": "npm run lint"
+		}
+	}
+}

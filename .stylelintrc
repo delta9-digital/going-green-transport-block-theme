@@ -1,0 +1,12 @@
+{
+	"extends": "./node_modules/@eightshift/frontend-libs/linters/stylelint.config.js",
+	"ignoreFiles": "public/**/*.css",
+	"rules": {
+		"custom-property-pattern": [
+			"^(wp(--[a-z0-9-]+)+|[a-z][a-z0-9]*(-[a-z0-9]+)*)$",
+			{
+				"message": "Custom properties must be kebab-case, or WordPress --wp--* global-style variables."
+			}
+		]
+	}
+}
