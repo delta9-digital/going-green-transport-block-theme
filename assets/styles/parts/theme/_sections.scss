@@ -360,3 +360,83 @@
 		padding-inline-end: 56px;
 	}
 }
+
+// Post cards (Resources Query Loop): category chip, date, read more with arrow circle.
+.ggt-post-card {
+	&::after {
+		content: none;
+	}
+
+
+	.wp-block-post-date {
+		margin: 0;
+	}
+
+	.wp-block-post-title {
+		margin: 0;
+	}
+
+	.wp-block-post-excerpt {
+		flex: 1 1 0%;
+		margin: 0;
+
+		.wp-block-post-excerpt__excerpt {
+			margin: 0;
+		}
+
+		.wp-block-post-excerpt__more-text {
+			display: none;
+		}
+	}
+}
+
+.ggt-read-more {
+	position: relative;
+	z-index: 1;
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+	color: var(--wp--preset--color--green-800);
+	font-family: var(--wp--preset--font-family--heading);
+	font-size: var(--wp--preset--font-size--small);
+	font-weight: 700;
+	text-decoration: none;
+
+	&::after {
+		content: '';
+		width: 36px;
+		height: 36px;
+		border: 1.5px solid currentcolor;
+		border-radius: 50%;
+		background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23133F2D' stroke-width='2' stroke-linecap='square'%3E%3Cpath d='M7 17 17 7M9 7h8v8'/%3E%3C/svg%3E") center / 14px no-repeat;
+	}
+}
+
+// Guide cards carry a "Guide" chip instead of the card arrow.
+.ggt-card-link:has(> .ggt-pill)::after,
+.ggt-card-link:has(> * > .ggt-pill)::after {
+	content: none;
+}
+
+// Category chip (post-terms block): cards and post hero.
+.ggt-term-chip {
+	margin: 0;
+	font-family: var(--wp--preset--font-family--heading);
+	font-size: var(--wp--preset--font-size--caption);
+	font-weight: 700;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+
+	a {
+		display: inline-block;
+		padding: 6px 12px;
+		border-radius: var(--wp--custom--radius--pill);
+		background: var(--wp--preset--color--lime-100);
+		color: var(--wp--preset--color--green-800);
+		text-decoration: none;
+	}
+
+	.wp-block-post-terms__separator {
+		display: none;
+	}
+}

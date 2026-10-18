@@ -636,5 +636,14 @@
 			"title": "Footer",
 			"area": "footer"
 		}
+	],
+	"customTemplates": [
+		{
+			"name": "page-guide",
+			"title": "Guide",
+			"postTypes": [
+				"page"
+			]
+		}
 	]
 }
