@@ -38,3 +38,4 @@
   (round arrows beside the heading, content slides).
 - Round 2: ggt-arrow button style, ggt-clip, scroll-story placeholder note, resets for core
   Columns/Group background padding and Columns bottom margin, testimonials bleed clipped.
+- Round 3: ggt/location bindings `format` arg, location cards (Query Loop), Locations link to /locations/.

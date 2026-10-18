@@ -115,6 +115,38 @@ $ggt-check: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' vi
 	}
 }
 
+// Row link: full-width link with a top rule and a small arrow (resource lists).
+.wp-block-buttons:has(> .is-style-ggt-row-link) {
+	gap: 0;
+}
+
+.wp-block-button.is-style-ggt-row-link {
+	width: 100%;
+
+	.wp-block-button__link {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		width: 100%;
+		padding: 14px 0;
+		border-top: 1px solid var(--wp--preset--color--gray-300);
+		border-radius: 0;
+		background: none;
+		color: var(--wp--preset--color--green-900);
+		font-size: var(--wp--preset--font-size--meta);
+		font-weight: 600;
+		text-align: left;
+
+		&::after {
+			content: '';
+			flex: none;
+			width: 16px;
+			height: 16px;
+			background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23757876' stroke-width='2' stroke-linecap='square'%3E%3Cpath d='M7 17 17 7M9 7h8v8'/%3E%3C/svg%3E") center / contain no-repeat;
+		}
+	}
+}
+
 // Large pills without the arrow circle (design system .btn-pill), solid and ghost-on-dark.
 .wp-block-button.is-style-ggt-pill .wp-block-button__link,
 .wp-block-button.is-style-ggt-ghost-light .wp-block-button__link {
@@ -232,6 +264,28 @@ $ggt-check: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' vi
 }
 
 // ---------- Lists, images ----------
+
+.wp-block-list.is-style-ggt-numbered {
+	padding-inline-start: 0;
+	list-style: none;
+
+	li {
+		display: grid;
+		grid-template-columns: 42px minmax(0, 1fr);
+	}
+
+	li + li {
+		margin-block-start: 14px;
+	}
+
+	.ggt-num {
+		opacity: 0.6;
+		font-family: var(--wp--preset--font-family--mono);
+		font-size: var(--wp--preset--font-size--small);
+		font-weight: 700;
+		line-height: inherit;
+	}
+}
 
 .wp-block-list.is-style-ggt-check {
 	padding-inline-start: 0;

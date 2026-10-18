@@ -33,6 +33,7 @@ class BlockStyles implements ServiceInterface
 			'ggt-outline-light' => 'Outline pill (on dark)',
 			'ggt-text' => 'Underlined text link',
 			'ggt-arrow' => 'Text link with arrow circle',
+			'ggt-row-link' => 'Row link (list of links)',
 			'ggt-pill' => 'Pill (lime, no arrow)',
 			'ggt-ghost-light' => 'Ghost pill (on dark)',
 		],
@@ -54,6 +55,7 @@ class BlockStyles implements ServiceInterface
 		],
 		'core/list' => [
 			'ggt-check' => 'Check list',
+			'ggt-numbered' => 'Numbered list',
 		],
 		'core/image' => [
 			'ggt-rounded' => 'Rounded',

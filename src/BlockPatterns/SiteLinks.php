@@ -4,8 +4,8 @@
  * Site URLs used by the header and footer patterns, in one place.
  *
  * Paths point at the pages that exist today. Flat-Rate, On-Demand and How It Works are the
- * proposed slugs for pages still to be built (BUILD-PLAN §2); the locations hub moves to
- * /locations/ with a 301 in the locations round.
+ * proposed slugs (BUILD-PLAN §2). The locations hub is /locations/ (301 from the old
+ * /cannabis-transport-locations-mn/, Redirection plugin).
  *
  * @package GoingGreenTransportTheme\BlockPatterns
  */
@@ -33,7 +33,7 @@ final class SiteLinks
 		'services-cultivation' => '/services/#cultivation',
 		'services-lab' => '/services/#lab',
 		'services-dispensary' => '/services/#dispensary',
-		'locations' => '/cannabis-transport-locations-mn/',
+		'locations' => '/locations/',
 		'flat-rate' => '/flat-rate-transport/',
 		'on-demand' => '/on-demand-transport/',
 		'how-it-works' => '/how-it-works/',

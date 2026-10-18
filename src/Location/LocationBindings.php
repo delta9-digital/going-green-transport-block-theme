@@ -5,6 +5,7 @@
  *
  * Usage: {"metadata":{"bindings":{"content":{"source":"ggt/location","args":{"key":"city"}}}}}
  * Keys: city, region, route_day, route (e.g. "Southeast Route · Wed"), nearby (comma list).
+ * Optional `format` arg: a sprintf pattern with one %s, e.g. "Cannabis transport in %s, MN".
  *
  * @package GoingGreenTransportTheme\Location
  */
@@ -88,7 +89,13 @@ class LocationBindings implements ServiceInterface
 			default => null,
 		};
 
-		return $value === null ? null : \esc_html($value);
+		if ($value === null) {
+			return null;
+		}
+
+		$format = (string) ($args['format'] ?? '');
+
+		return \esc_html($format !== '' && \str_contains($format, '%s') ? \sprintf($format, $value) : $value);
 	}
 
 	/**

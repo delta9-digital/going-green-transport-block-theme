@@ -337,3 +337,26 @@
 .ggt-clip {
 	overflow: hidden;
 }
+
+// Location cards (Locations hub Query Loop): route line left, arrow circle right.
+.ggt-location-card {
+	justify-content: space-between;
+
+	&::after {
+		position: absolute;
+		right: 28px;
+		bottom: 28px;
+		width: 40px;
+		height: 40px;
+		margin: 0;
+	}
+
+	.wp-block-post-title {
+		margin: 0 0 8px;
+	}
+
+	> :last-child {
+		margin-block-start: auto;
+		padding-inline-end: 56px;
+	}
+}
