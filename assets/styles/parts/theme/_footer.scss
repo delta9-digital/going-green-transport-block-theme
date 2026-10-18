@@ -1,0 +1,156 @@
+// Site footer (comp `Site Footer`). Pattern: src/BlockPatterns/SiteFooterPattern.php.
+
+.ggt-ftr {
+	margin-block-start: var(--wp--preset--spacing--140);
+
+	a {
+		text-decoration: none;
+	}
+}
+
+// Lime email band with the "Contact us" ring.
+.ggt-ftr__band {
+	margin-block: 0;
+	color: var(--wp--preset--color--green-900);
+
+	.ggt-ftr__band-inner {
+		gap: 24px 48px;
+		padding-block: 56px;
+	}
+
+	.ggt-ftr__email {
+		min-width: 0;
+		margin: 0;
+		font-family: var(--wp--preset--font-family--heading);
+		font-size: clamp(26px, 4vw, 56px);
+		font-weight: 700;
+		letter-spacing: -0.02em;
+		line-height: 1.1;
+		overflow-wrap: anywhere;
+
+		a {
+			color: inherit;
+		}
+	}
+}
+
+.ggt-ftr__badge {
+	position: relative;
+	display: flex;
+	flex: none;
+	align-items: center;
+	justify-content: center;
+	width: 120px;
+	height: 120px;
+	border: 1px solid var(--wp--preset--color--green-800);
+	border-radius: 50%;
+	background: var(--wp--preset--color--white);
+
+	svg {
+		position: absolute;
+		inset: 0;
+	}
+
+	text {
+		fill: var(--wp--preset--color--green-800);
+		font-family: var(--wp--preset--font-family--heading);
+		font-size: 12px;
+		font-weight: 700;
+		letter-spacing: 0.22em;
+	}
+}
+
+.ggt-ftr__badge-dot {
+	width: 44px;
+	height: 44px;
+	border: 1px solid var(--wp--preset--color--green-800);
+	border-radius: 50%;
+}
+
+.ggt-ftr__main {
+	margin-block: 0;
+	padding-block: 72px 32px;
+	color: var(--wp--preset--color--green-900);
+	font-family: var(--wp--preset--font-family--body);
+}
+
+.ggt-ftr__grid {
+	gap: 40px;
+
+	// Core's grid layout uses auto-fill, which leaves an empty fifth track; the comp uses auto-fit.
+	&.is-layout-grid {
+		grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr));
+	}
+}
+
+.ggt-ftr__col > * {
+	margin-block: 0;
+}
+
+.ggt-ftr__logo {
+	margin-block-end: 16px !important;
+
+	img {
+		display: block;
+		width: auto;
+		max-width: 100%;
+		height: auto;
+		max-height: 216px;
+	}
+}
+
+.ggt-ftr__quote {
+	margin-block-end: 20px !important;
+	color: var(--wp--preset--color--ink-muted);
+	font-style: italic;
+}
+
+.ggt-ftr__contacts {
+	font-family: var(--wp--preset--font-family--mono);
+	font-size: var(--wp--preset--font-size--small);
+	line-height: 2;
+
+	a {
+		color: var(--wp--preset--color--green-900);
+	}
+}
+
+.ggt-ftr__heading {
+	margin-block-end: 16px !important;
+	color: var(--wp--preset--color--gray-600);
+}
+
+.ggt-ftr__links {
+	gap: 10px;
+	color: var(--wp--preset--color--green-900);
+	font-family: var(--wp--preset--font-family--body);
+	font-size: var(--wp--preset--font-size--meta);
+	font-weight: 400;
+}
+
+.ggt-ftr__legal {
+	gap: 12px 24px;
+	margin-block-start: 48px;
+	padding-block-start: 20px;
+	border-block-start: 1px solid var(--wp--preset--color--gray-300);
+	color: var(--wp--preset--color--gray-600);
+	font-family: var(--wp--preset--font-family--mono);
+	font-size: var(--wp--preset--font-size--caption);
+
+	p {
+		margin: 0;
+	}
+
+	a {
+		color: var(--wp--preset--color--gray-600);
+	}
+}
+
+.ggt-ftr__legal-links {
+	display: flex;
+	gap: 16px;
+
+	.ggt-ftr__top {
+		color: var(--wp--preset--color--green-800);
+	}
+}

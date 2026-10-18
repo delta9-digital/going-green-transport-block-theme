@@ -13,3 +13,11 @@
 - Fonts: Roboto (wdth+wght, incl. italic), Roboto Condensed (same file at 75%), Inter (opsz+wght,
   incl. italic), Roboto Mono, as latin-subset variable woff2.
 - Base SCSS restates body typography over the blocks plugin's normalize rules.
+
+## 0.3.0 (unreleased)
+
+- Header and footer patterns from the Site Nav / Site Footer comps (core blocks), wired into
+  parts/header.html and parts/footer.html. Sticky blurred bar, Pricing panel with descriptions,
+  drawer below 960px with the Get a Quote button kept visible; lime email band with the
+  Contact us ring, logo/contacts, Company / Services / Guide navigation, legal row.
+- SiteLinks: every header/footer URL in one map.

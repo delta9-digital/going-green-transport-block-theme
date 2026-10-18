@@ -1,0 +1,160 @@
+// Site header (comp `Site Nav`). Pattern: src/BlockPatterns/SiteHeaderPattern.php.
+
+// The template part wrapper is the sticky element, so the bar stays pinned for the whole page.
+header.wp-block-template-part:has(.ggt-hdr) {
+	position: sticky;
+	top: var(--wp-admin--admin-bar--height, 0);
+	z-index: 20;
+
+	// Blur on a pseudo-element: backdrop-filter on the header itself would become the containing
+	// block for the navigation overlay (position: fixed) and trap the mobile drawer in the bar.
+	&::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+		background: var(--wp--custom--nav--surface);
+		backdrop-filter: blur(var(--wp--custom--nav--blur));
+		-webkit-backdrop-filter: blur(var(--wp--custom--nav--blur));
+	}
+}
+
+.ggt-hdr {
+	margin-block: 0;
+
+	.ggt-hdr__bar {
+		min-height: var(--wp--custom--nav--height);
+		gap: 24px;
+	}
+
+	.ggt-hdr__right {
+		gap: 28px;
+	}
+
+	.ggt-hdr__logo {
+		margin: 0;
+		flex: none;
+
+		img {
+			display: block;
+			width: auto;
+			height: 48px;
+		}
+	}
+}
+
+// Top-level links: Roboto 600, 2px underline that turns lime on the current page.
+.ggt-hdr__menu {
+	--ggt-nav-gap: 28px;
+	gap: var(--ggt-nav-gap);
+	color: var(--wp--preset--color--green-800);
+	font-family: var(--wp--preset--font-family--heading);
+	font-size: var(--wp--preset--font-size--body);
+	font-weight: 600;
+
+	.wp-block-navigation__container {
+		gap: var(--ggt-nav-gap);
+	}
+
+	.wp-block-navigation-item__content {
+		text-decoration: none;
+	}
+
+	.wp-block-navigation__container > .wp-block-navigation-item > .wp-block-navigation-item__content {
+		padding-block-end: 4px;
+		border-block-end: 2px solid transparent;
+	}
+
+	.wp-block-navigation__container > .current-menu-item > .wp-block-navigation-item__content {
+		border-block-end-color: var(--wp--preset--color--lime-500);
+	}
+
+	// Pricing panel. Core paints submenus with the overlay colour preset (an !important class).
+	.wp-block-navigation__submenu-container {
+		min-width: 280px;
+		margin-block-start: 12px;
+		padding: 8px;
+		border: 0 !important;
+		border-radius: 18px;
+		background-color: var(--wp--preset--color--white) !important;
+		box-shadow: var(--wp--preset--shadow--lg);
+
+		.wp-block-navigation-item__content {
+			display: flex;
+			flex-direction: column;
+			gap: 2px;
+			padding: 12px 14px;
+			border-radius: 12px;
+			color: var(--wp--preset--color--green-900);
+			font-weight: 700;
+			transition: background var(--wp--custom--motion--base) var(--wp--custom--motion--ease);
+
+			&:hover,
+			&:focus-visible {
+				background: var(--wp--preset--color--lime-500);
+			}
+		}
+
+		// Core hides navigation descriptions by default.
+		.wp-block-navigation-item__description {
+			display: block;
+			color: var(--wp--preset--color--ink-muted);
+			font-family: var(--wp--preset--font-family--body);
+			font-size: var(--wp--preset--font-size--small);
+			font-weight: 400;
+			line-height: 1.4;
+		}
+	}
+}
+
+.ggt-hdr__cta .wp-block-button__link {
+	padding: 12px 22px;
+	background: var(--wp--preset--color--green-800);
+}
+
+// Drawer below 960px: the six links do not fit beside the logo earlier than that. The Get a Quote
+// button stays visible at every width (the comps have no mobile header).
+@media (max-width: 959px) {
+	.ggt-hdr__menu .wp-block-navigation__responsive-container-open:not(.always-shown) {
+		display: flex;
+	}
+
+	.ggt-hdr__menu .wp-block-navigation__responsive-container:not(.hidden-by-default):not(.is-menu-open) {
+		display: none;
+	}
+
+	.ggt-hdr .ggt-hdr__right {
+		gap: 16px;
+	}
+
+	.ggt-hdr .ggt-hdr__cta {
+		order: -1;
+	}
+}
+
+// Open drawer.
+.ggt-hdr__menu .wp-block-navigation__responsive-container.is-menu-open {
+	padding: 24px;
+
+	// Left-align the drawer. The desktop bar is right-aligned, and core redefines the alignment
+	// variable on the list itself, so set it there.
+	.wp-block-navigation__container {
+		--navigation-layout-justification-setting: flex-start;
+	}
+
+	.wp-block-navigation__responsive-container-content {
+		gap: 20px;
+		font-size: var(--wp--preset--font-size--heading-md);
+	}
+
+	.wp-block-navigation__submenu-container {
+		margin: 8px 0 0;
+		padding: 0;
+		box-shadow: none;
+
+		.wp-block-navigation-item__content {
+			padding-inline: 0;
+		}
+	}
+
+}
