@@ -21,3 +21,8 @@
   drawer below 960px with the Get a Quote button kept visible; lime email band with the
   Contact us ring, logo/contacts, Company / Services / Guide navigation, legal row.
 - SiteLinks: every header/footer URL in one map.
+- Templates: page/index (full-width content, no title; heroes live in content), single,
+  archive/home, search, 404.
+- Block styles from the comps: split-pill CTA (lime, and white for lime backgrounds), outline
+  pills, text link, eyebrow and mono labels, chips, tag, card and panel surfaces (white, forest,
+  lime), check list, rounded image.

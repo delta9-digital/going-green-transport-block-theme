@@ -8,3 +8,15 @@ html body {
 	font-size: var(--wp--preset--font-size--body);
 	line-height: 1.6;
 }
+
+// Content starts flush under the header; sections set their own rhythm.
+.ggt-main {
+	margin-block-start: 0;
+}
+
+.ggt-single,
+.ggt-archive,
+.ggt-search,
+.ggt-404 {
+	padding-block-start: var(--wp--preset--spacing--110);
+}

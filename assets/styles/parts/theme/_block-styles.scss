@@ -1,0 +1,216 @@
+// Block styles registered in src/BlockStyles/BlockStyles.php. Values from the comps.
+
+// Arrow from the comps' split CTA (path "M7 17 17 7M9 7h8v8"), one per arrow colour.
+$ggt-arrow-green: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23133F2D' stroke-width='2' stroke-linecap='square'%3E%3Cpath d='M7 17 17 7M9 7h8v8'/%3E%3C/svg%3E");
+$ggt-arrow-lime: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23BBFD6A' stroke-width='2' stroke-linecap='square'%3E%3Cpath d='M7 17 17 7M9 7h8v8'/%3E%3C/svg%3E");
+$ggt-check: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23133F2D' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m7 12.5 3.2 3.2L17 9'/%3E%3C/svg%3E");
+
+// ---------- Buttons ----------
+
+// Split pill: the link is the pill; the arrow circle is drawn beside it, so it stays one link.
+.wp-block-button.is-style-ggt-split,
+.wp-block-button.is-style-ggt-split-light {
+	--ggt-pill-bg: var(--wp--preset--color--lime-500);
+	--ggt-pill-bg-hover: var(--wp--preset--color--lime-700);
+	--ggt-pill-fg: var(--wp--preset--color--green-800);
+	--ggt-circle-bg: var(--wp--preset--color--white);
+	--ggt-circle-bg-hover: var(--wp--preset--color--cream-50);
+	--ggt-arrow: #{$ggt-arrow-green};
+	position: relative;
+	padding-inline-end: 60px;
+
+	.wp-block-button__link {
+		padding: 16px 32px;
+		border-radius: var(--wp--custom--radius--pill);
+		background: var(--ggt-pill-bg);
+		color: var(--ggt-pill-fg);
+		font-size: var(--wp--preset--font-size--lead-lg);
+		font-weight: 700;
+		line-height: 1;
+		transition: background var(--wp--custom--motion--base) var(--wp--custom--motion--ease);
+
+		&::after {
+			content: '';
+			position: absolute;
+			top: 50%;
+			right: 0;
+			width: 52px;
+			height: 52px;
+			border-radius: 50%;
+			background: var(--ggt-arrow) center / 22px no-repeat, var(--ggt-circle-bg);
+			transform: translateY(-50%);
+			transition: transform var(--wp--custom--motion--base) var(--wp--custom--motion--ease), box-shadow var(--wp--custom--motion--base) var(--wp--custom--motion--ease);
+		}
+
+		&:hover {
+			background: var(--ggt-pill-bg-hover);
+		}
+
+		&:hover::after {
+			background: var(--ggt-arrow) center / 22px no-repeat, var(--ggt-circle-bg-hover);
+			box-shadow: var(--wp--preset--shadow--md);
+			transform: translateY(calc(-50% - 1px));
+		}
+	}
+}
+
+// For lime backgrounds: white pill, forest circle, lime arrow.
+.wp-block-button.is-style-ggt-split-light {
+	--ggt-pill-bg: var(--wp--preset--color--white);
+	--ggt-pill-bg-hover: var(--wp--preset--color--cream-50);
+	--ggt-circle-bg: var(--wp--preset--color--green-900);
+	--ggt-circle-bg-hover: var(--wp--preset--color--green-800);
+	--ggt-arrow: #{$ggt-arrow-lime};
+}
+
+.wp-block-button.is-style-ggt-outline .wp-block-button__link,
+.wp-block-button.is-style-ggt-outline-light .wp-block-button__link {
+	padding: 10px 16px;
+	border: 1px solid var(--wp--preset--color--green-800);
+	background: transparent;
+	color: var(--wp--preset--color--green-900);
+	font-size: var(--wp--preset--font-size--meta);
+	font-weight: 600;
+}
+
+.wp-block-button.is-style-ggt-outline-light .wp-block-button__link {
+	border-color: var(--wp--preset--color--gray-500);
+	color: var(--wp--preset--color--cream-50);
+}
+
+.wp-block-button.is-style-ggt-text .wp-block-button__link {
+	padding: 0;
+	border-radius: 0;
+	background: none;
+	color: var(--wp--preset--color--green-800);
+	font-weight: 700;
+	text-decoration: underline;
+	text-underline-offset: 4px;
+}
+
+// ---------- Labels, chips, tags ----------
+
+.is-style-ggt-label {
+	margin-block-end: 12px;
+	color: var(--wp--preset--color--gray-600);
+	font-family: var(--wp--preset--font-family--heading);
+	font-size: var(--wp--preset--font-size--small);
+	font-weight: 600;
+	letter-spacing: var(--wp--custom--tracking--caps);
+	line-height: 1.4;
+	text-transform: uppercase;
+}
+
+.is-style-ggt-mono-label {
+	color: var(--wp--preset--color--gray-600);
+	font-family: var(--wp--preset--font-family--mono);
+	font-size: var(--wp--preset--font-size--small);
+	font-weight: 700;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+}
+
+.is-style-ggt-chip,
+.is-style-ggt-chip-outline,
+.is-style-ggt-tag {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	width: fit-content;
+	border-radius: var(--wp--custom--radius--pill);
+	font-family: var(--wp--preset--font-family--heading);
+	line-height: 1.2;
+}
+
+.is-style-ggt-chip {
+	padding: 6px 12px;
+	background: var(--wp--preset--color--lime-100);
+	color: var(--wp--preset--color--green-800);
+	font-size: var(--wp--preset--font-size--caption);
+	font-weight: 700;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+}
+
+// Inherits its text colour, so it works on cream, lime and forest.
+.is-style-ggt-chip-outline {
+	padding: 7px 14px;
+	border: 1px solid currentcolor;
+	font-size: var(--wp--preset--font-size--small);
+	font-weight: 600;
+}
+
+.is-style-ggt-tag {
+	padding: 4px 9px;
+	background: var(--wp--preset--color--green-800);
+	color: var(--wp--preset--color--lime-500);
+	font-size: var(--wp--preset--font-size--micro);
+	font-weight: 800;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+}
+
+// ---------- Surfaces ----------
+
+.wp-block-group.is-style-ggt-card {
+	padding: 28px;
+	border-radius: var(--wp--custom--radius--card);
+	background: var(--wp--preset--color--white);
+	color: var(--wp--preset--color--green-900);
+}
+
+.wp-block-group.is-style-ggt-panel {
+	padding: 32px;
+	border-radius: var(--wp--custom--radius--panel);
+	background: var(--wp--preset--color--white);
+}
+
+.wp-block-group.is-style-ggt-panel-dark {
+	padding: clamp(48px, 7vw, 96px) clamp(24px, 5vw, 64px);
+	border-radius: var(--wp--custom--radius--panel);
+	background: var(--wp--preset--color--green-800);
+	color: var(--wp--preset--color--cream-50);
+
+	:where(h1, h2, h3, h4, h5, h6) {
+		color: var(--wp--preset--color--cream-50);
+	}
+}
+
+.wp-block-group.is-style-ggt-panel-lime {
+	padding: clamp(32px, 5vw, 64px);
+	border-radius: var(--wp--custom--radius--panel);
+	background: var(--wp--preset--color--lime-500);
+	color: var(--wp--preset--color--green-900);
+}
+
+// ---------- Lists, images ----------
+
+.wp-block-list.is-style-ggt-check {
+	padding-inline-start: 0;
+	list-style: none;
+
+	li {
+		position: relative;
+		padding-inline-start: 30px;
+
+		&::before {
+			content: '';
+			position: absolute;
+			top: 0.15em;
+			left: 0;
+			width: 20px;
+			height: 20px;
+			border: 1.5px solid var(--wp--preset--color--green-800);
+			border-radius: 50%;
+			background: $ggt-check center / 14px no-repeat;
+		}
+	}
+
+	li + li {
+		margin-block-start: 10px;
+	}
+}
+
+.wp-block-image.is-style-ggt-rounded img {
+	border-radius: var(--wp--custom--radius--panel);
+}
