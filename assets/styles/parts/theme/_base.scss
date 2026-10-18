@@ -1,0 +1,10 @@
+// The shared blocks plugin ships Eightshift's normalize plus base `body` rules
+// (system font stack, and colour/size presets from other client themes that do
+// not exist here). Restate the theme.json body values with higher specificity
+// so they win regardless of stylesheet order.
+html body {
+	color: var(--wp--preset--color--ink);
+	font-family: var(--wp--preset--font-family--body);
+	font-size: var(--wp--preset--font-size--body);
+	line-height: 1.6;
+}
