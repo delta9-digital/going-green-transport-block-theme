@@ -88,6 +88,33 @@ $ggt-check: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' vi
 	text-underline-offset: 4px;
 }
 
+// Text link followed by an outlined 40px arrow circle ("Learn More").
+.wp-block-button.is-style-ggt-arrow .wp-block-button__link {
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+	padding: 0;
+	border-radius: 0;
+	background: none;
+	color: var(--wp--preset--color--green-800);
+	font-size: var(--wp--preset--font-size--body);
+	font-weight: 700;
+
+	&::after {
+		content: '';
+		width: 40px;
+		height: 40px;
+		border: 1.5px solid currentcolor;
+		border-radius: 50%;
+		background: #{$ggt-arrow-green} center / 16px no-repeat;
+		transition: transform var(--wp--custom--motion--base) var(--wp--custom--motion--ease);
+	}
+
+	&:hover::after {
+		transform: translateX(2px);
+	}
+}
+
 // Large pills without the arrow circle (design system .btn-pill), solid and ghost-on-dark.
 .wp-block-button.is-style-ggt-pill .wp-block-button__link,
 .wp-block-button.is-style-ggt-ghost-light .wp-block-button__link {

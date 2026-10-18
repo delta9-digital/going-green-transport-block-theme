@@ -36,3 +36,5 @@
   styles ggt-pill and ggt-ghost-light, icon links.
 - GGT look for the plugin tabs (icon circles, lime when selected) and the testimonials carousel
   (round arrows beside the heading, content slides).
+- Round 2: ggt-arrow button style, ggt-clip, scroll-story placeholder note, resets for core
+  Columns/Group background padding and Columns bottom margin, testimonials bleed clipped.

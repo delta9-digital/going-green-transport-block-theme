@@ -279,7 +279,13 @@
 	margin-block-start: 0;
 }
 
-// Testimonials carousel: round arrows top-right (comp: beside the section heading).
+// Testimonials carousel: round arrows top-right (comp: beside the section heading). The next
+// card bleeds past the container as in the comp; the section clips it so the page never scrolls
+// sideways.
+.ggt-sec--testimonials {
+	overflow-x: clip;
+}
+
 .ggt-sec--testimonials .block-carousel {
 	grid-template-columns: 1fr auto auto;
 	grid-template-areas: '. prev next' 'images images images' 'pagination pagination pagination';
@@ -316,4 +322,18 @@
 
 .ggt-sec--testimonials .block-carousel-item--content > .wp-block-group {
 	height: 100%;
+}
+
+// Placeholder for blocks still to be built (visible note, so the gap is obvious in review).
+.ggt-placeholder--scroll-story {
+	margin-block-start: var(--wp--preset--spacing--140);
+	padding-block: 64px;
+	border: 1px dashed var(--wp--preset--color--gray-400);
+	border-radius: var(--wp--custom--radius--panel);
+	text-align: center;
+	color: var(--wp--preset--color--gray-600);
+}
+
+.ggt-clip {
+	overflow: hidden;
 }

@@ -20,3 +20,15 @@ html body {
 .ggt-404 {
 	padding-block-start: var(--wp--preset--spacing--110);
 }
+
+// Core gives Columns a default bottom margin; spacing here comes from block attributes and gaps.
+:where(.wp-block-columns) {
+	margin-bottom: 0;
+}
+
+// Core pads Columns/Groups that have a background (1.25em 2.375em). Converted sections set their
+// padding explicitly (inline style, which still wins), so drop the default.
+.wp-block-columns.has-background,
+.wp-block-group.has-background {
+	padding: 0;
+}
