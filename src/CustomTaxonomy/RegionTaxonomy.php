@@ -33,6 +33,33 @@ class RegionTaxonomy extends AbstractTaxonomy
 	{
 		parent::register();
 		\add_action('init', [$this, 'registerTermMeta']);
+		\add_filter('post_class', [$this, 'postClass'], 10, 3);
+	}
+
+	/**
+	 * Add region-{slug} to a location's classes. WordPress adds term classes only for viewable
+	 * taxonomies and this one is private (no archives); the Locations hub route chips (plugin
+	 * filter-chips) match on these classes.
+	 *
+	 * @param array<int, string> $classes Post classes.
+	 * @param array<int, string> $extra Extra classes passed to get_post_class().
+	 * @param int $postId Post ID.
+	 *
+	 * @return array<int, string>
+	 */
+	public function postClass(array $classes, array $extra, int $postId): array
+	{
+		$terms = \get_the_terms($postId, self::TAXONOMY_SLUG);
+
+		if (!\is_array($terms)) {
+			return $classes;
+		}
+
+		foreach ($terms as $term) {
+			$classes[] = \sanitize_html_class(self::TAXONOMY_SLUG . '-' . $term->slug, self::TAXONOMY_SLUG . '-' . $term->term_id);
+		}
+
+		return $classes;
 	}
 
 	/**

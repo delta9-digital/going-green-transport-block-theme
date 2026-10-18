@@ -440,3 +440,93 @@
 		display: none;
 	}
 }
+
+// Filter controls (plugin filter-chips / filter-search / filter-grid): Locations hub, Resources.
+.ggt-filter-chips {
+	gap: 8px;
+
+	.block-filter-chips__label {
+		margin-inline-end: 4px;
+		color: var(--wp--preset--color--gray-600);
+		font-family: var(--wp--preset--font-family--heading);
+		font-size: var(--wp--preset--font-size--caption);
+		font-weight: 600;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+	}
+
+	.block-filter-chips__chip {
+		padding: 8px 14px;
+		border: 1px solid var(--wp--preset--color--green-800);
+		border-radius: var(--wp--custom--radius--pill);
+		background: transparent;
+		color: var(--wp--preset--color--green-900);
+		font-family: var(--wp--preset--font-family--heading);
+		font-size: var(--wp--preset--font-size--small);
+		font-weight: 600;
+		line-height: 1.2;
+		transition: background-color 180ms ease, color 180ms ease;
+
+		&:hover {
+			background: var(--wp--preset--color--lime-100);
+		}
+
+		&[aria-pressed='true'] {
+			background: var(--wp--preset--color--green-800);
+			color: var(--wp--preset--color--white);
+		}
+
+		&:focus-visible {
+			outline: 2px solid var(--wp--preset--color--green-500);
+			outline-offset: 2px;
+		}
+	}
+}
+
+// Resources: larger chips beside the "Blog Posts." heading.
+.ggt-sec--posts .ggt-filter-chips .block-filter-chips__chip {
+	padding: 10px 18px;
+	font-size: var(--wp--preset--font-size--meta);
+}
+
+.ggt-filter-search {
+	max-width: 460px;
+
+	.block-filter-search__input {
+		width: 100%;
+		padding: 16px 56px 16px 24px;
+		border: 1px solid transparent;
+		border-radius: var(--wp--custom--radius--pill);
+		background: var(--wp--preset--color--white);
+		color: var(--wp--preset--color--green-900);
+		font-family: var(--wp--preset--font-family--body);
+		font-size: var(--wp--preset--font-size--body-md);
+
+		&:focus-visible {
+			outline: 2px solid var(--wp--preset--color--lime-500);
+			outline-offset: 2px;
+		}
+
+		&::-webkit-search-cancel-button {
+			margin-inline-end: 4px;
+		}
+	}
+
+	.block-filter-search__submit {
+		position: absolute;
+		top: 6px;
+		right: 6px;
+		width: 44px;
+		height: 44px;
+		border-radius: 50%;
+		background: var(--wp--preset--color--lime-500) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230a2418' stroke-width='2' stroke-linecap='square'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m20 20-4-4'/%3E%3C/svg%3E") center / 18px no-repeat;
+	}
+}
+
+.ggt-filter-grid .block-filter-grid__empty {
+	padding: 32px;
+	border-radius: var(--wp--custom--radius--panel);
+	background: var(--wp--preset--color--white);
+	color: var(--wp--preset--color--ink-muted);
+	text-align: center;
+}
