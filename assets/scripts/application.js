@@ -3,3 +3,8 @@
  *
  * Usage: `WordPress frontend screen`.
  */
+
+import domReady from '@wordpress/dom-ready';
+import { initRouteScenes } from './route-scene';
+
+domReady(initRouteScenes);

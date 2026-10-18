@@ -1,0 +1,557 @@
+// How It Works: plugin scroll-story layout + the route map scene (src/RouteScene,
+// assets/scripts/route-scene). Values from the comps `GGT How It Works` / `- On-Demand`.
+
+$glass: rgba(255, 255, 255, 0.55);
+$glass-border: rgba(255, 255, 255, 0.75);
+$ease: cubic-bezier(0.2, 0, 0, 1);
+
+.ggt-scroll-story {
+	--scroll-story-panel-width: 50%;
+	--scroll-story-gap: 0;
+	--scroll-story-sticky-top: calc(var(--wp--custom--nav--height) + var(--wp-admin--admin-bar--height, 0px));
+	--scroll-story-panel-height: calc(100vh - var(--wp--custom--nav--height) - var(--wp-admin--admin-bar--height, 0px));
+	--scroll-story-step-min-height: 92vh;
+
+	margin-block: 0;
+
+	> .block-scroll-story-panel {
+		z-index: 5;
+		padding: 16px 8px 16px 16px;
+	}
+
+	> .ggt-story-step {
+		max-width: calc(620px + 2 * clamp(20px, 4vw, 64px));
+		padding: 64px clamp(20px, 4vw, 64px);
+		transition: opacity 300ms $ease;
+
+		> * {
+			margin-block: 0;
+		}
+
+		h1,
+		h2 {
+			text-wrap: balance;
+		}
+
+		.is-style-ggt-check li {
+			color: var(--wp--preset--color--green-900);
+			font-family: var(--wp--preset--font-family--heading);
+			font-weight: 600;
+		}
+	}
+
+	// Regional / On-Demand switcher (standalone pages): two card links above the first step.
+	.ggt-story-step > :has(> * > .ggt-card-link),
+	.ggt-story-step > :has(> .ggt-card-link) {
+		margin-block-end: clamp(48px, 12vh, 140px);
+	}
+
+	.ggt-story-step .ggt-card-link {
+		&::after {
+			content: none;
+		}
+
+		a {
+			color: inherit;
+			text-decoration: none;
+		}
+	}
+
+	// Steps other than the active one recede (once the script runs).
+	&[data-active-step] > .ggt-story-step[data-state]:not([data-state='active']) {
+		opacity: 0.3;
+	}
+
+	// Narrow: the map stays as a sticky strip at the top; the steps scroll under it.
+	@media (max-width: 899px) {
+		&:not(.block-scroll-story--editor) > .block-scroll-story-panel {
+			position: sticky;
+			top: var(--scroll-story-sticky-top);
+			height: 46vh;
+			padding: 8px 16px;
+			background: var(--wp--preset--color--gray-50);
+		}
+
+		> .ggt-story-step {
+			min-height: 70vh;
+			padding-inline: 16px;
+		}
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.ggt-scroll-story > .ggt-story-step,
+	.ggt-route-scene * {
+		transition: none !important;
+	}
+}
+
+// Scene panel.
+.ggt-route-scene {
+	position: relative;
+	height: 100%;
+	overflow: hidden;
+	border-radius: var(--wp--custom--radius--panel);
+	background: var(--wp--preset--color--gray-100);
+
+	// Editor hint paragraph (replaced on the front end by RouteScene.php).
+	.ggt-route-scene__note {
+		padding: 24px;
+		color: var(--wp--preset--color--gray-600);
+	}
+}
+
+.ggt-rs__stage {
+	position: absolute;
+	inset: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 140px 6% 4%;
+}
+
+.ggt-rs__box {
+	position: relative;
+	height: 100%;
+	max-width: 100%;
+	aspect-ratio: 71.55 / 79.77;
+}
+
+.ggt-rs__cam {
+	--ggt-rs-s: 1;
+
+	position: absolute;
+	inset: 0;
+	transform-origin: 0 0;
+	transition: transform 700ms $ease;
+}
+
+.ggt-rs__layer {
+	position: absolute;
+	inset: 0;
+	display: block;
+	width: 100%;
+	height: 100%;
+	max-width: none;
+	overflow: visible;
+}
+
+.ggt-rs__region {
+	opacity: 0;
+	pointer-events: none;
+	transition: opacity 400ms $ease;
+}
+
+.ggt-rs__ghost {
+	fill: none;
+	stroke: var(--wp--preset--color--green-900);
+	stroke-width: 0.75;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+}
+
+.ggt-rs__ghost-dash {
+	fill: none;
+	stroke: var(--wp--preset--color--lime-500);
+	stroke-width: 0.2;
+	stroke-dasharray: 0.4 0.5;
+	stroke-linecap: round;
+}
+
+.ggt-rs__draw {
+	fill: none;
+	stroke: var(--wp--preset--color--lime-500);
+	stroke-width: 0.48;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+	stroke-dasharray: 1 1;
+
+	// stroke-dashoffset is set inline by the script (a stylesheet value would override it).
+}
+
+// Markers on the map keep a constant on-screen size: divide by the camera scale.
+@function rs($px) {
+	@return calc(#{$px} / var(--ggt-rs-s));
+}
+
+.ggt-rs__city,
+.ggt-rs__pin,
+.ggt-rs__end,
+.ggt-rs__end-card,
+.ggt-rs__stop,
+.ggt-rs__van {
+	position: absolute;
+	pointer-events: none;
+	transition: opacity 300ms;
+}
+
+.ggt-rs__city {
+	display: flex;
+	align-items: center;
+	gap: rs(4px);
+	opacity: 0;
+	transform: translate(-3px, -50%);
+
+	&.is-flipped {
+		flex-direction: row-reverse;
+		transform: translate(calc(-100% + 3px), -50%);
+	}
+}
+
+.ggt-rs__city-dot {
+	flex: none;
+	width: rs(6px);
+	height: rs(6px);
+	border-radius: 50%;
+	background: var(--wp--preset--color--cream-100);
+}
+
+.ggt-rs__city-label {
+	padding: rs(3px) rs(7px);
+	border-radius: rs(6px);
+	background: var(--wp--preset--color--green-800);
+	color: var(--wp--preset--color--cream-50);
+	font-family: var(--wp--preset--font-family--heading);
+	font-size: rs(12px);
+	font-weight: 600;
+	white-space: nowrap;
+}
+
+.ggt-rs__pin {
+	padding: 4px 10px;
+	border-radius: var(--wp--custom--radius--pill);
+	background: var(--wp--preset--color--lime-500);
+	color: var(--wp--preset--color--green-900);
+	font-family: var(--wp--preset--font-family--heading);
+	font-size: 12px;
+	font-weight: 800;
+	letter-spacing: 0.06em;
+	transform: translate(-50%, -50%);
+	transition-duration: 400ms;
+}
+
+.ggt-rs__end {
+	width: rs(16px);
+	height: rs(16px);
+	border: rs(3px) solid var(--wp--preset--color--lime-500);
+	border-radius: 50%;
+	background: var(--wp--preset--color--green-800);
+	opacity: 0;
+	transform: translate(-50%, -50%);
+
+	&--dropoff {
+		border-color: var(--wp--preset--color--gold-500);
+	}
+}
+
+.ggt-rs__end-card {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: rs(4px);
+	padding: rs(8px) rs(10px);
+	border: 1px solid $glass-border;
+	border-radius: rs(10px);
+	background: $glass;
+	box-shadow: 0 8px 20px rgba(20, 25, 20, 0.12);
+	opacity: 0;
+	white-space: nowrap;
+	transform: translate(rs(14px), -50%);
+	backdrop-filter: blur(12px) saturate(140%);
+
+	&--dropoff {
+		align-items: flex-end;
+		transform: translate(calc(-100% - #{rs(14px)}), -50%);
+	}
+}
+
+.ggt-rs__end-city {
+	color: var(--wp--preset--color--green-900);
+	font-family: var(--wp--preset--font-family--heading);
+	font-size: rs(15px);
+	font-weight: 700;
+	line-height: 1.1;
+}
+
+.ggt-rs__end-tag {
+	padding: rs(3px) rs(7px);
+	border-radius: rs(6px);
+	background: var(--wp--preset--color--lime-500);
+	color: var(--wp--preset--color--green-900);
+	font-family: var(--wp--preset--font-family--heading);
+	font-size: rs(10px);
+	font-weight: 800;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+
+	.ggt-rs__end-card--dropoff & {
+		background: var(--wp--preset--color--gold-500);
+	}
+}
+
+.ggt-rs__stop {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: rs(20px);
+	height: rs(20px);
+	border: rs(3px) solid var(--wp--preset--color--green-800);
+	border-radius: 50%;
+	background: var(--wp--preset--color--cream-50);
+	color: var(--wp--preset--color--green-900);
+	font-family: var(--wp--preset--font-family--heading);
+	font-size: rs(10px);
+	font-weight: 800;
+	opacity: 0;
+	transform: translate(-50%, -50%);
+}
+
+.ggt-rs__van {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: rs(28px);
+	height: rs(28px);
+	border-radius: 50%;
+	background: rgba(187, 253, 106, 0.3);
+	opacity: 0;
+	transform: translate(-50%, -50%);
+}
+
+.ggt-rs__van-core {
+	width: rs(14px);
+	height: rs(14px);
+	border: rs(2px) solid var(--wp--preset--color--green-900);
+	border-radius: 50%;
+	background: var(--wp--preset--color--lime-500);
+}
+
+// Email columns: pickup contact top left, drop-off contact bottom right.
+.ggt-rs__col {
+	position: absolute;
+	z-index: 3;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	opacity: 0;
+	pointer-events: none;
+	transition: opacity 300ms;
+
+	&--pickup {
+		left: 12px;
+	}
+
+	&--dropoff {
+		right: 12px;
+		bottom: 12px;
+		justify-content: flex-end;
+	}
+}
+
+.ggt-rs__tip {
+	display: flex;
+	flex: none;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 8px;
+	padding: 12px;
+	border: 1px solid $glass-border;
+	border-radius: 18px;
+	background: $glass;
+	box-shadow: 0 8px 24px rgba(20, 25, 20, 0.12);
+	backdrop-filter: blur(14px) saturate(140%);
+
+	&[hidden] {
+		display: none;
+	}
+}
+
+.ggt-rs__chip {
+	flex: none;
+	padding: 4px 9px;
+	border-radius: var(--wp--custom--radius--pill);
+	color: var(--wp--preset--color--green-900);
+	font-family: var(--wp--preset--font-family--heading);
+	font-size: var(--wp--preset--font-size--micro);
+	font-weight: 800;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+
+	&--pickup {
+		align-self: flex-end;
+		background: var(--wp--preset--color--lime-500);
+	}
+
+	&--dropoff {
+		background: var(--wp--preset--color--gold-500);
+	}
+}
+
+.ggt-rs__msg {
+	flex: none;
+	width: 100%;
+	padding: 16px;
+	border-radius: 12px;
+	background: rgba(255, 255, 255, 0.88);
+	opacity: 0;
+	transform: translateY(16px);
+
+	&.is-in {
+		opacity: 1;
+		transform: none;
+		transition: opacity 420ms $ease, transform 420ms $ease;
+	}
+}
+
+.ggt-rs__msg-head {
+	display: flex;
+	justify-content: space-between;
+	gap: 8px;
+	margin-bottom: 4px;
+	color: var(--wp--preset--color--green-800);
+	font-family: var(--wp--preset--font-family--mono);
+	font-size: 10px;
+}
+
+.ggt-rs__msg-subject {
+	color: var(--wp--preset--color--green-900);
+	font-family: var(--wp--preset--font-family--heading);
+	font-size: 13px;
+	font-weight: 700;
+	line-height: 1.3;
+}
+
+.ggt-rs__msg-lines {
+	display: flex;
+	flex-direction: column;
+	gap: 3px;
+	margin-top: 4px;
+
+	.ggt-route-scene.is-compact & {
+		display: none;
+	}
+}
+
+.ggt-rs__msg-line {
+	display: flex;
+	color: var(--wp--preset--color--ink-muted);
+	font-size: 12.5px;
+	line-height: 1.5;
+}
+
+.ggt-rs__msg-num {
+	flex: none;
+	width: 22px;
+	color: var(--wp--preset--color--green-900);
+	font-weight: 700;
+}
+
+// HUD.
+.ggt-rs__hud {
+	position: absolute;
+	top: 16px;
+	right: 16px;
+	left: 16px;
+	z-index: 4;
+	padding: 14px 18px;
+	border: 1px solid rgba(255, 255, 255, 0.7);
+	border-radius: 16px;
+	background: $glass;
+	box-shadow: 0 8px 24px rgba(20, 25, 20, 0.08);
+	backdrop-filter: blur(14px) saturate(140%);
+}
+
+.ggt-rs__hud-top {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 8px 12px;
+	min-width: 0;
+}
+
+.ggt-rs__hud-status {
+	display: inline-flex;
+	flex: none;
+	align-items: center;
+	gap: 8px;
+	padding: 5px 10px;
+	border-radius: var(--wp--custom--radius--pill);
+	background: rgba(255, 255, 255, 0.7);
+	color: var(--wp--preset--color--green-800);
+	font-family: var(--wp--preset--font-family--heading);
+	font-size: var(--wp--preset--font-size--micro);
+	font-weight: 800;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+}
+
+.ggt-rs__hud-dot {
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	background: var(--wp--preset--color--gray-500);
+}
+
+.ggt-rs__hud-time {
+	flex: none;
+	order: 2;
+	margin-left: auto;
+	color: var(--wp--preset--color--green-900);
+	font-family: var(--wp--preset--font-family--mono);
+	font-size: var(--wp--preset--font-size--caption);
+	font-weight: 600;
+	white-space: nowrap;
+}
+
+.ggt-rs__hud-line {
+	display: -webkit-box;
+	flex: 1 1 100%;
+	order: 3;
+	min-width: 0;
+	min-height: 2.6em;
+	overflow: hidden;
+	color: var(--wp--preset--color--green-900);
+	font-family: var(--wp--preset--font-family--heading);
+	font-size: var(--wp--preset--font-size--body-md);
+	font-weight: 700;
+	line-height: 1.3;
+	letter-spacing: -0.01em;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+}
+
+.ggt-rs__hud-progress {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	margin-top: 10px;
+}
+
+.ggt-rs__hud-track {
+	flex: 1;
+	height: 5px;
+	overflow: hidden;
+	border-radius: var(--wp--custom--radius--pill);
+	background: rgba(19, 63, 45, 0.12);
+}
+
+.ggt-rs__hud-bar {
+	width: 0;
+	height: 100%;
+	border-radius: var(--wp--custom--radius--pill);
+	background: var(--wp--preset--color--green-800);
+	transition: width 200ms;
+}
+
+.ggt-rs__hud-step {
+	color: var(--wp--preset--color--green-900);
+	font-family: var(--wp--preset--font-family--mono);
+	font-size: var(--wp--preset--font-size--caption);
+	font-weight: 700;
+	white-space: nowrap;
+}
+
+// Without the script only the base map shows (no HUD, no markers).
+.ggt-route-scene:not(.is-live) .ggt-rs__stage {
+	padding-top: 4%;
+}
