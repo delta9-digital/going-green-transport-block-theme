@@ -240,3 +240,80 @@
 		min-height: 0 !important;
 	}
 }
+
+// ---------- Plugin blocks, GGT look ----------
+
+// Tabs (Compliance): icon in a 56px circle above the label; lime when selected.
+.block-tabs {
+	--tabs-gap: 28px;
+	--tabs-list-spacing: 24px;
+	--tabs-tab-inactive-opacity: 0.45;
+	--tabs-icon-size: 28px;
+
+	&__tab {
+		gap: 10px;
+		color: var(--wp--preset--color--green-900);
+		font-family: var(--wp--preset--font-family--heading);
+		font-size: var(--wp--preset--font-size--body);
+		font-weight: 700;
+
+		&::before {
+			content: none;
+		}
+	}
+
+	&__tab-icon {
+		box-sizing: content-box;
+		padding: 14px;
+		border-radius: 50%;
+		background: var(--wp--preset--color--gray-100);
+		transition: background var(--wp--custom--motion--base) var(--wp--custom--motion--ease);
+	}
+
+	&__tab[aria-selected='true'] &__tab-icon {
+		background: var(--wp--preset--color--lime-500);
+	}
+}
+
+.block-tab > :where(h3) {
+	margin-block-start: 0;
+}
+
+// Testimonials carousel: round arrows top-right (comp: beside the section heading).
+.ggt-sec--testimonials .block-carousel {
+	grid-template-columns: 1fr auto auto;
+	grid-template-areas: '. prev next' 'images images images' 'pagination pagination pagination';
+	column-gap: 8px;
+	row-gap: 0;
+	overflow: visible;
+
+	> .swiper-wrapper {
+		margin-block-start: 48px;
+	}
+
+	&__button {
+		width: 48px;
+		height: 48px;
+		border: 1.5px solid var(--wp--preset--color--green-800);
+		color: var(--wp--preset--color--green-800);
+
+		svg {
+			width: 22px;
+			height: 22px;
+		}
+
+		&--next {
+			background: var(--wp--preset--color--green-800);
+			color: var(--wp--preset--color--lime-500);
+		}
+	}
+
+	// Pull the arrows up into the heading row on wide screens.
+	@media (min-width: 782px) {
+		margin-block-start: -104px;
+	}
+}
+
+.ggt-sec--testimonials .block-carousel-item--content > .wp-block-group {
+	height: 100%;
+}

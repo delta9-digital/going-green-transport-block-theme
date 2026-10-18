@@ -34,3 +34,5 @@
 - Round 1 (Home v2): section CSS for converted comps (photo frames, decor, icon plates,
   whole-card links, vertical steps, FAQ accordion, sticky intro column, placeholders), button
   styles ggt-pill and ggt-ghost-light, icon links.
+- GGT look for the plugin tabs (icon circles, lime when selected) and the testimonials carousel
+  (round arrows beside the heading, content slides).
