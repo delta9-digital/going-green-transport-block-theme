@@ -32,6 +32,8 @@ class BlockStyles implements ServiceInterface
 			'ggt-outline' => 'Outline pill',
 			'ggt-outline-light' => 'Outline pill (on dark)',
 			'ggt-text' => 'Underlined text link',
+			'ggt-pill' => 'Pill (lime, no arrow)',
+			'ggt-ghost-light' => 'Ghost pill (on dark)',
 		],
 		'core/paragraph' => [
 			'ggt-label' => 'Eyebrow label',

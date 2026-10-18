@@ -31,3 +31,6 @@
   permalink), `region` taxonomy with route-day term meta, location meta (city, lat, lng, nearby),
   `testimonial` post type with attribution/source meta, `ggt/location` block bindings source,
   single-location template.
+- Round 1 (Home v2): section CSS for converted comps (photo frames, decor, icon plates,
+  whole-card links, vertical steps, FAQ accordion, sticky intro column, placeholders), button
+  styles ggt-pill and ggt-ghost-light, icon links.

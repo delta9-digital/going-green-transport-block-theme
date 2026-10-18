@@ -88,6 +88,27 @@ $ggt-check: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' vi
 	text-underline-offset: 4px;
 }
 
+// Large pills without the arrow circle (design system .btn-pill), solid and ghost-on-dark.
+.wp-block-button.is-style-ggt-pill .wp-block-button__link,
+.wp-block-button.is-style-ggt-ghost-light .wp-block-button__link {
+	padding: 16px 32px;
+	border-radius: var(--wp--custom--radius--pill);
+	font-size: var(--wp--preset--font-size--lead-lg);
+	font-weight: 700;
+	line-height: 1;
+}
+
+.wp-block-button.is-style-ggt-pill .wp-block-button__link {
+	background: var(--wp--preset--color--lime-500);
+	color: var(--wp--preset--color--green-800);
+}
+
+.wp-block-button.is-style-ggt-ghost-light .wp-block-button__link {
+	border: 1px solid var(--wp--preset--color--gray-500);
+	background: transparent;
+	color: var(--wp--preset--color--cream-50);
+}
+
 // ---------- Labels, chips, tags ----------
 
 .is-style-ggt-label {
@@ -213,4 +234,17 @@ $ggt-check: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' vi
 
 .wp-block-image.is-style-ggt-rounded img {
 	border-radius: var(--wp--custom--radius--panel);
+}
+
+// Icon + text link (contact rows).
+.ggt-icon-link a {
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+	color: inherit;
+	text-decoration: none;
+}
+
+.ggt-icon-link .ggt-inline-icon {
+	height: auto;
 }

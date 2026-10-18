@@ -1,0 +1,242 @@
+// Section-level pieces the converted comps rely on (block-runner rules in handoff/).
+
+// Photo slots: the image fills its rounded frame (group with min-height + radius).
+.wp-block-group:has(> .ggt-photo) {
+	position: relative;
+	overflow: hidden;
+}
+
+.wp-block-column > .wp-block-group:has(> .ggt-photo) {
+	height: 100%;
+}
+
+.wp-block-image.ggt-photo {
+	position: absolute;
+	inset: 0;
+	margin: 0;
+
+	img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+}
+
+// Decorative artwork (e.g. the Minnesota silhouette behind the locations panel).
+.wp-block-group:has(> .ggt-decor) {
+	position: relative;
+	overflow: hidden;
+}
+
+.wp-block-image.ggt-decor {
+	position: absolute;
+	right: 12px;
+	bottom: 12px;
+	width: min(420px, 55%);
+	margin: 0;
+	opacity: 0.12;
+	pointer-events: none;
+
+	img {
+		display: block;
+		width: 100%;
+		height: auto;
+	}
+}
+
+.wp-block-group:has(> .ggt-decor) > :not(.ggt-decor) {
+	position: relative;
+}
+
+// Icons keep their exported size.
+.wp-block-image.ggt-icon {
+	margin: 0;
+
+	img {
+		display: block;
+	}
+}
+
+// Whole-card link: the heading link stretches over the card; arrow circle at the bottom.
+.ggt-card-link {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	transition: transform var(--wp--custom--motion--base) var(--wp--custom--motion--ease), box-shadow var(--wp--custom--motion--base) var(--wp--custom--motion--ease), background var(--wp--custom--motion--base) var(--wp--custom--motion--ease);
+
+	:where(h1, h2, h3, h4) a {
+		color: inherit;
+		text-decoration: none;
+
+		&::after {
+			content: '';
+			position: absolute;
+			inset: 0;
+			border-radius: inherit;
+		}
+	}
+
+	&::after {
+		content: '';
+		width: 44px;
+		height: 44px;
+		margin-block-start: auto;
+		border: 1.5px solid var(--wp--preset--color--green-800);
+		border-radius: 50%;
+		background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23133F2D' stroke-width='2' stroke-linecap='square'%3E%3Cpath d='M7 17 17 7M9 7h8v8'/%3E%3C/svg%3E") center / 18px no-repeat;
+	}
+
+	&:hover,
+	&:focus-within {
+		background-color: var(--wp--preset--color--lime-500) !important;
+		box-shadow: var(--wp--preset--shadow--lg);
+		transform: translateY(-2px);
+	}
+}
+
+// Vertical process steps: 96px numbered circle with a forest connector to the next step.
+.ggt-steps > .ggt-step {
+	margin: 0;
+
+	> .wp-block-column:first-child {
+		position: relative;
+		display: flex;
+		justify-content: center;
+	}
+
+	&:not(:last-child) > .wp-block-column:first-child::after {
+		content: '';
+		position: absolute;
+		top: 96px;
+		bottom: 0;
+		left: 50%;
+		width: 2px;
+		background: var(--wp--preset--color--green-800);
+		transform: translateX(-50%);
+	}
+
+}
+
+.ggt-step__num {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 96px;
+	height: 96px;
+	margin: 0;
+	border: 1px solid var(--wp--preset--color--green-800);
+	border-radius: 50%;
+	background: var(--wp--preset--color--lime-500);
+	color: var(--wp--preset--color--green-900);
+	font-family: var(--wp--preset--font-family--heading);
+	font-size: 28px;
+	font-weight: 600;
+}
+
+.ggt-steps > .ggt-step:last-child .ggt-step__num {
+	background: var(--wp--preset--color--gray-100);
+}
+
+// Pills keep their shape inside flex rows.
+.ggt-pill {
+	display: inline-flex;
+	width: fit-content;
+	margin: 0;
+}
+
+// FAQ accordion (comp: white rounded items, 17px Roboto questions, +/− toggles).
+.ggt-faq {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+
+	.wp-block-accordion-item {
+		border-radius: 16px;
+		background: transparent;
+		transition: background var(--wp--custom--motion--base) var(--wp--custom--motion--ease);
+
+		&.is-open {
+			background: var(--wp--preset--color--white);
+		}
+	}
+
+	.wp-block-accordion-heading {
+		margin: 0;
+		font-size: var(--wp--preset--font-size--lead);
+		letter-spacing: 0;
+		line-height: 1.4;
+	}
+
+	.wp-block-accordion-item {
+		margin: 0;
+	}
+
+	.wp-block-accordion-heading__toggle {
+		padding: 22px 24px;
+		color: var(--wp--preset--color--green-900);
+	}
+
+	// Comp: a 32px circled +/-.
+	.wp-block-accordion-heading__toggle-icon {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 32px;
+		height: 32px;
+		border: 1.5px solid var(--wp--preset--color--green-800);
+		border-radius: 50%;
+		font-size: 18px;
+		line-height: 1;
+	}
+
+	.wp-block-accordion-panel {
+		margin: 0;
+		padding: 0 72px 24px 24px;
+		color: var(--wp--preset--color--ink-muted);
+		line-height: 1.65;
+
+		p {
+			margin: 0;
+		}
+	}
+}
+
+// Placeholders until the plugin tabs/carousel blocks replace them (round 1).
+.ggt-placeholder--tabs > .ggt-placeholder--tab + .ggt-placeholder--tab {
+	margin-block-start: 24px;
+	padding-block-start: 24px;
+	border-block-start: 1px solid var(--wp--preset--color--gray-200);
+}
+
+// Sticky intro column (comp: the left column follows the numbered rows).
+@media (min-width: 782px) {
+	.ggt-sticky {
+		position: sticky;
+		top: calc(var(--wp--custom--nav--height) + 24px + var(--wp-admin--admin-bar--height, 0px));
+		align-self: start;
+	}
+}
+
+// Fixed-size circles from the comps (icon plates, avatars, badges); see plateClass() in
+// handoff/block-runner.config.mjs.
+.ggt-plate {
+	display: flex !important;
+	flex: none;
+	align-items: center;
+	justify-content: center;
+	overflow: hidden;
+	box-sizing: border-box;
+	padding: 0 !important;
+
+	> * {
+		margin: 0 !important;
+	}
+}
+
+@each $size in (40, 44, 48, 52, 56, 64, 68, 72, 80, 96) {
+	.ggt-plate--#{$size} {
+		width: #{$size}px;
+		height: #{$size}px;
+		min-height: 0 !important;
+	}
+}
