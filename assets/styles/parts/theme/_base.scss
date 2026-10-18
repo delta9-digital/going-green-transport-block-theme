@@ -32,3 +32,8 @@ html body {
 .wp-block-group.has-background {
 	padding: 0;
 }
+
+// In-page anchors (e.g. /services/#lab) land below the sticky header.
+:where(h1, h2, h3, h4, h5, h6, section)[id] {
+	scroll-margin-top: calc(var(--wp--custom--nav--height) + 24px + var(--wp-admin--admin-bar--height, 0px));
+}
