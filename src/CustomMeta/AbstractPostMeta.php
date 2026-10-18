@@ -169,6 +169,41 @@ abstract class AbstractPostMeta implements ServiceInterface
 	}
 
 	/**
+	 * Array-of-strings meta field (e.g. nearby city names).
+	 *
+	 * @return array<string, mixed>
+	 */
+	protected static function stringListField(): array
+	{
+		return [
+			'type' => 'array',
+			'default' => [],
+			'sanitize_callback' => static fn($value): array => \array_values(\array_filter(\array_map('sanitize_text_field', \is_array($value) ? $value : []))),
+			'show_in_rest' => [
+				'schema' => [
+					'type' => 'array',
+					'items' => ['type' => 'string'],
+				],
+			],
+		];
+	}
+
+	/**
+	 * Float meta field (coordinates).
+	 *
+	 * @return array<string, mixed>
+	 */
+	protected static function numberField(): array
+	{
+		return [
+			'type' => 'number',
+			'default' => 0,
+			'sanitize_callback' => static fn($value): float => (float) $value,
+			'show_in_rest' => true,
+		];
+	}
+
+	/**
 	 * List of integers (e.g. related post IDs).
 	 *
 	 * @return array<string, mixed>

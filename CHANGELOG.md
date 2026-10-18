@@ -26,3 +26,8 @@
 - Block styles from the comps: split-pill CTA (lime, and white for lime backgrounds), outline
   pills, text link, eyebrow and mono labels, chips, tag, card and panel surfaces (white, forest,
   lime), check list, rounded image.
+- Data model: `location` post type served at /cannabis-transport-in-{city}-mn/ (routed only when
+  a published location exists, so the current city pages keep working; other URLs 301 to the
+  permalink), `region` taxonomy with route-day term meta, location meta (city, lat, lng, nearby),
+  `testimonial` post type with attribution/source meta, `ggt/location` block bindings source,
+  single-location template.
