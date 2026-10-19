@@ -75,7 +75,7 @@ class SignupForm implements ServiceInterface
 			$options .= '<option value="' . \esc_attr($value) . '">' . \esc_html__($label, 'going-green-transport') . '</option>'; // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
 		}
 
-		// One row: labels are for screen readers, placeholders show the field names.
+		// Compact: labels are for screen readers, placeholders show the field names.
 		$field = static fn(string $name, string $label, string $control): string =>
 			'<p class="ggt-signup__field ggt-signup__field--' . $name . '"><label class="screen-reader-text" for="ggt-signup-' . $name . '">' . \esc_html($label) . '</label>' . $control . '</p>';
 		$input = static fn(string $name, string $type, string $autocomplete, string $label): string =>
@@ -87,14 +87,12 @@ class SignupForm implements ServiceInterface
 			. $field('business', \__('Business name', 'going-green-transport'), $input('business', 'text', 'organization', \__('Business name', 'going-green-transport')))
 			. $field('license', \__('License type', 'going-green-transport'), '<select id="ggt-signup-license" name="license" required>' . $options . '</select>')
 			. $field('email', \__('Email', 'going-green-transport'), $input('email', 'email', 'email', \__('Email', 'going-green-transport')))
+			. '<p class="ggt-signup__check"><input id="ggt-signup-newsletter" name="newsletter" type="checkbox" value="1" checked><label for="ggt-signup-newsletter">'
+			. \esc_html__('Subscribe to our newsletter', 'going-green-transport') . '</label></p>'
 			. '<button class="ggt-signup__submit" type="submit">' . \esc_html__('Sign Up', 'going-green-transport') . '</button>'
 			. '</div>'
 			. '<p class="ggt-signup__hp" aria-hidden="true"><label for="ggt-signup-website">Website</label><input id="ggt-signup-website" name="website" type="text" tabindex="-1" autocomplete="off"></p>'
-			. '<div class="ggt-signup__actions">'
-			. '<p class="ggt-signup__check"><input id="ggt-signup-newsletter" name="newsletter" type="checkbox" value="1" checked><label for="ggt-signup-newsletter">'
-			. \esc_html__('Subscribe to our newsletter', 'going-green-transport') . '</label></p>'
 			. '<p class="ggt-signup__status" role="status" aria-live="polite"></p>'
-			. '</div>'
 			. '</form>';
 	}
 

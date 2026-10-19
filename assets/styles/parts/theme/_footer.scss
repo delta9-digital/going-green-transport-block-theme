@@ -8,7 +8,7 @@
 	}
 }
 
-// Lime sign-up band: intro beside the form (src/Signup/SignupForm.php).
+// Lime band: sign-up form (src/Signup/SignupForm.php) left, email and call links right.
 .ggt-ftr__band {
 	margin-block: 0;
 	color: var(--wp--preset--color--green-900);
@@ -20,19 +20,22 @@
 
 	.ggt-ftr__band-inner {
 		display: grid;
-		gap: 24px;
-		padding-block: 48px;
+		grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+		gap: 40px 64px;
+		align-items: center;
+		padding-block: 56px;
+
+		@media (max-width: 899.98px) { /* stylelint-disable-line media-feature-range-notation */
+			grid-template-columns: minmax(0, 1fr);
+		}
 	}
 
 	.ggt-ftr__band-intro {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 8px 32px;
-		align-items: baseline;
+		margin-block-end: 24px;
 	}
 
 	.ggt-ftr__band-title {
-		margin: 0;
+		margin: 0 0 8px;
 		font-size: clamp(32px, 3.6vw, 48px);
 		letter-spacing: -0.02em;
 		line-height: 1.05;
@@ -45,6 +48,70 @@
 	}
 }
 
+// Email and call: icon plate left, label and value right.
+.ggt-ftr__contact-list {
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
+
+	@media (min-width: 900px) { /* stylelint-disable-line media-feature-range-notation */
+		padding-inline-start: 48px;
+		border-inline-start: 1px solid rgb(19 63 45 / 0.25);
+	}
+}
+
+.ggt-ftr__contact {
+	display: flex;
+	gap: 16px;
+	align-items: center;
+	min-width: 0;
+	color: var(--wp--preset--color--green-900);
+
+	&:hover .ggt-ftr__contact-value,
+	&:focus-visible .ggt-ftr__contact-value {
+		text-decoration: underline;
+		text-underline-offset: 4px;
+	}
+}
+
+.ggt-ftr__contact-icon {
+	display: flex;
+	flex: none;
+	align-items: center;
+	justify-content: center;
+	width: 56px;
+	height: 56px;
+	border-radius: 50%;
+	background: var(--wp--preset--color--green-800);
+
+	img {
+		width: 24px;
+		height: 24px;
+	}
+}
+
+.ggt-ftr__contact-text {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	min-width: 0;
+}
+
+.ggt-ftr__contact-label {
+	font-family: var(--wp--preset--font-family--heading);
+	font-size: var(--wp--preset--font-size--small);
+	font-weight: 600;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+}
+
+.ggt-ftr__contact-value {
+	font-family: var(--wp--preset--font-family--heading);
+	font-size: clamp(17px, 1.4vw, 20px);
+	font-weight: 700;
+	line-height: 1.3;
+}
+
 .ggt-signup {
 	margin: 0;
 
@@ -52,22 +119,19 @@
 		margin: 0;
 	}
 
-	// Fields and the button on one line; two columns on tablets, stacked on phones.
+	// Fields two by two; the newsletter opt-in and the button share the last row.
 	&__row {
 		display: grid;
-		grid-template-columns: repeat(4, minmax(0, 1fr)) auto;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
 		gap: 12px;
-
-		@media (max-width: 1099.98px) { /* stylelint-disable-line media-feature-range-notation */
-			grid-template-columns: repeat(2, minmax(0, 1fr));
-
-			.ggt-signup__submit {
-				grid-column: 1 / -1;
-			}
-		}
+		align-items: center;
 
 		@media (max-width: 600px) { /* stylelint-disable-line media-feature-range-notation */
 			grid-template-columns: minmax(0, 1fr);
+
+			.ggt-signup__submit {
+				justify-self: stretch;
+			}
 		}
 	}
 
@@ -105,16 +169,9 @@
 		outline-offset: 2px;
 	}
 
-	&__actions {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 8px 32px;
-		align-items: center;
-		margin-block-start: 14px;
-	}
-
 	&__check {
 		display: flex;
+		margin-block-start: 4px;
 		gap: 10px;
 		align-items: center;
 		font-weight: 600;
@@ -128,6 +185,8 @@
 	}
 
 	&__submit {
+		justify-self: end;
+		margin-block-start: 4px;
 		height: 52px;
 		padding: 0 36px;
 		border: 0;
@@ -152,6 +211,7 @@
 	}
 
 	&__status {
+		margin-block-start: 12px;
 		font-weight: 600;
 
 		&:empty {

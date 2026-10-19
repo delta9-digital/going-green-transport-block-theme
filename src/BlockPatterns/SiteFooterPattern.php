@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Pattern: site footer (comp `Site Footer`): lime sign-up band (form: src/Signup/SignupForm.php),
- * then logo/contacts, three link columns and the legal row.
+ * Pattern: site footer (comp `Site Footer`): lime band with the sign-up form (src/Signup/SignupForm.php)
+ * beside email and call links, then logo/contacts, three link columns and the legal row.
  *
  * Core blocks only, pulled into parts/footer.html with a pattern block so the logo uses the theme
  * URL and the year stays current. Styles: assets/styles/parts/theme/_footer.scss.
@@ -187,9 +187,25 @@ class SiteFooterPattern extends AbstractBlockPattern
 
 		$form = "<!-- wp:html -->\n" . SignupForm::markup() . "\n<!-- /wp:html -->\n";
 
+		// Right column: email and call, icon plate left, label and value right.
+		$contact = fn(string $icon, string $label, string $value, string $href): string =>
+			'<a class="ggt-ftr__contact" href="' . \esc_url($href) . '"><span class="ggt-ftr__contact-icon"><img src="'
+			. \esc_url(\get_theme_file_uri("assets/images/icons/{$icon}")) . '" alt="" width="24" height="24"></span>'
+			. '<span class="ggt-ftr__contact-text"><span class="ggt-ftr__contact-label">' . \esc_html($label) . '</span>'
+			// A narrow column breaks the address after the @, not mid-word.
+			. '<span class="ggt-ftr__contact-value">' . \str_replace('@', '@<wbr>', \esc_html($value)) . '</span></span></a>';
+		$contacts = "<!-- wp:html -->\n<div class=\"ggt-ftr__contact-list\">"
+			. $contact('mail-lime.svg', \__('Email us', 'going-green-transport'), $email, $mailto)
+			. $contact('phone-lime.svg', \__('Call us', 'going-green-transport'), SiteLinks::PHONE, 'tel:' . \str_replace('-', '', SiteLinks::PHONE))
+			. "</div>\n<!-- /wp:html -->\n";
+
 		$band = $this->group(
 			$this->group(
-				$this->group($intro, ['className' => 'ggt-ftr__band-intro', 'layout' => ['type' => 'default']]) . $form,
+				$this->group(
+					$this->group($intro, ['className' => 'ggt-ftr__band-intro', 'layout' => ['type' => 'default']]) . $form,
+					['className' => 'ggt-ftr__band-form', 'layout' => ['type' => 'default']]
+				)
+				. $contacts,
 				['align' => 'wide', 'className' => 'ggt-ftr__band-inner', 'layout' => ['type' => 'default']]
 			),
 			['align' => 'full', 'className' => 'ggt-ftr__band', 'backgroundColor' => 'lime-500', 'layout' => ['type' => 'constrained']]
