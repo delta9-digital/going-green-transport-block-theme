@@ -187,15 +187,15 @@ class SiteFooterPattern extends AbstractBlockPattern
 
 		$form = "<!-- wp:html -->\n" . SignupForm::markup() . "\n<!-- /wp:html -->\n";
 
-		// Right column: email and call, icon plate left, label and value right.
+		// Right column: call and email, icon plate left, label and value right.
 		$contact = fn(string $icon, string $label, string $value, string $href): string =>
 			'<a class="ggt-ftr__contact" href="' . \esc_url($href) . '"><span class="ggt-ftr__contact-icon"><img src="'
 			. \esc_url(\get_theme_file_uri("assets/images/icons/{$icon}")) . '" alt="" width="24" height="24"></span>'
 			. '<span class="ggt-ftr__contact-text"><span class="ggt-ftr__contact-label">' . \esc_html($label) . '</span>'
 			. '<span class="ggt-ftr__contact-value">' . \esc_html($value) . '</span></span></a>';
 		$contacts = "<!-- wp:html -->\n<div class=\"ggt-ftr__contact-list\">"
-			. $contact('mail-lime.svg', \__('Email us', 'going-green-transport'), $email, $mailto)
 			. $contact('phone-lime.svg', \__('Call us', 'going-green-transport'), SiteLinks::PHONE, 'tel:' . \str_replace('-', '', SiteLinks::PHONE))
+			. $contact('mail-lime.svg', \__('Email us', 'going-green-transport'), $email, $mailto)
 			. "</div>\n<!-- /wp:html -->\n";
 
 		$band = $this->group(
