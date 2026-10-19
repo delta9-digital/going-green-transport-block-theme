@@ -20,25 +20,25 @@
 
 	.ggt-ftr__band-inner {
 		display: grid;
-		grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
-		gap: 32px 64px;
-		align-items: start;
-		padding-block: 56px;
+		gap: 24px;
+		padding-block: 48px;
+	}
 
-		@media (max-width: 899.98px) { /* stylelint-disable-line media-feature-range-notation */
-			grid-template-columns: minmax(0, 1fr);
-		}
+	.ggt-ftr__band-intro {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px 32px;
+		align-items: baseline;
 	}
 
 	.ggt-ftr__band-title {
-		margin: 0 0 12px;
+		margin: 0;
 		font-size: clamp(32px, 3.6vw, 48px);
 		letter-spacing: -0.02em;
 		line-height: 1.05;
 	}
 
 	.ggt-ftr__band-text {
-		max-width: 360px;
 		margin: 0;
 		font-size: var(--wp--preset--font-size--body-md);
 		line-height: 1.5;
@@ -52,28 +52,27 @@
 		margin: 0;
 	}
 
-	&__fields {
+	// Fields and the button on one line; two columns on tablets, stacked on phones.
+	&__row {
 		display: grid;
-		grid-template-columns: repeat(2, minmax(0, 1fr));
-		gap: 16px 20px;
+		grid-template-columns: repeat(4, minmax(0, 1fr)) auto;
+		gap: 12px;
 
-		@media (max-width: 600px) {
+		@media (max-width: 1099.98px) { /* stylelint-disable-line media-feature-range-notation */
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+
+			.ggt-signup__submit {
+				grid-column: 1 / -1;
+			}
+		}
+
+		@media (max-width: 600px) { /* stylelint-disable-line media-feature-range-notation */
 			grid-template-columns: minmax(0, 1fr);
 		}
 	}
 
 	&__field {
-		display: flex;
-		flex-direction: column;
-		gap: 6px;
 		min-width: 0;
-
-		label {
-			font-family: var(--wp--preset--font-family--heading);
-			font-size: var(--wp--preset--font-size--small);
-			font-weight: 700;
-			letter-spacing: 0.04em;
-		}
 	}
 
 	input:not([type='checkbox']),
@@ -90,6 +89,11 @@
 		font-size: 16px;
 	}
 
+	::placeholder,
+	select:invalid {
+		color: var(--wp--preset--color--gray-600);
+	}
+
 	select {
 		appearance: none;
 		padding-inline-end: 44px;
@@ -104,10 +108,9 @@
 	&__actions {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 16px 24px;
+		gap: 8px 32px;
 		align-items: center;
-		justify-content: space-between;
-		margin-block-start: 20px;
+		margin-block-start: 14px;
 	}
 
 	&__check {
@@ -125,7 +128,8 @@
 	}
 
 	&__submit {
-		padding: 16px 36px;
+		height: 52px;
+		padding: 0 36px;
 		border: 0;
 		border-radius: var(--wp--custom--radius--pill);
 		background: var(--wp--preset--color--green-800);
@@ -148,7 +152,6 @@
 	}
 
 	&__status {
-		margin-block-start: 12px;
 		font-weight: 600;
 
 		&:empty {
