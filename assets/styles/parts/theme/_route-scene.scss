@@ -33,6 +33,11 @@ $ease: cubic-bezier(0.2, 0, 0, 1);
 			text-wrap: balance;
 		}
 
+		// Mock dashboard / email cards are narrow on phones: long names and addresses wrap.
+		p {
+			overflow-wrap: anywhere;
+		}
+
 		.is-style-ggt-check li {
 			color: var(--wp--preset--color--green-900);
 			font-family: var(--wp--preset--font-family--heading);
