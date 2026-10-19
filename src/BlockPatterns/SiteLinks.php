@@ -39,7 +39,7 @@ final class SiteLinks
 		'how-it-works' => '/how-it-works/',
 		'about' => '/about-us/',
 		'resources' => '/cannabis-transport-resources/',
-		'quote' => '/contact-us/',
+		'quote' => '/get-a-quote/',
 		'faq' => '/#faq',
 		'privacy' => '/privacy-policy-2/',
 		'terms' => '/terms-and-conditions/',
