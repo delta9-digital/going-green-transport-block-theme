@@ -3,8 +3,8 @@
 /**
  * Single post and Guide templates (comp `GGT Blog Post`).
  *
- * - Featured image fallback: a post without one shows its category's icon on a plate, so the
- *   hero keeps its two-column layout until real photos land.
+ * - Featured image fallback: a post without one gets its category's icon as a faint background
+ *   graphic behind the full-width hero text.
  * - "More Posts" (Query Loop queryId 3) leaves out the post being read.
  *
  * @package GoingGreenTransportTheme\Blog
@@ -79,8 +79,9 @@ class PostTemplates implements ServiceInterface
 			}
 		}
 
+		// Decorative: the icon is a CSS mask (tinted in the theme), drawn behind the hero text.
 		return \sprintf(
-			'<figure class="wp-block-post-featured-image %1$s ggt-post-hero__image--fallback"><img src="%2$s" alt="" /></figure>',
+			'<figure class="wp-block-post-featured-image %1$s ggt-post-hero__image--fallback" aria-hidden="true" style="--ggt-hero-icon:url(%2$s)"></figure>',
 			\esc_attr($className),
 			\esc_url(\get_theme_file_uri("assets/images/icons/{$icon}"))
 		);

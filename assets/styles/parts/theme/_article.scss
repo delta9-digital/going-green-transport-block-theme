@@ -9,12 +9,16 @@
 }
 
 // Hero: dark card, text + image.
+// Post hero: full-width text; the featured image (or the category icon) sits behind it.
 .ggt-post-hero {
+	position: relative;
+	isolation: isolate;
 	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
-	gap: 40px;
+	grid-template-columns: minmax(0, 1fr);
 	align-items: end;
+	min-height: clamp(320px, 34vw, 440px);
 	padding: clamp(32px, 5vw, 64px);
+	overflow: hidden;
 	border-radius: var(--wp--custom--radius--panel);
 	background: var(--wp--preset--color--green-800);
 	color: var(--wp--preset--color--cream-50);
@@ -65,6 +69,7 @@
 
 		@media (max-width: 600px) {
 			flex-direction: column;
+			align-items: flex-start;
 			gap: 4px;
 
 			> * + *::before {
@@ -73,12 +78,17 @@
 		}
 	}
 
+	&__text {
+		position: relative;
+		z-index: 1;
+	}
+
 	&__image {
-		height: 100%;
-		min-height: 280px;
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+		height: auto;
 		margin: 0;
-		overflow: hidden;
-		border-radius: var(--wp--custom--radius--card);
 
 		img {
 			width: 100%;
@@ -86,17 +96,29 @@
 			object-fit: cover;
 		}
 
-		&--fallback {
-			display: grid;
-			place-items: center;
-			background: var(--wp--preset--color--lime-500);
+		// Photo: a green fade keeps the title readable.
+		&::after {
+			content: '';
+			position: absolute;
+			inset: 0;
+			background: linear-gradient(90deg, var(--wp--preset--color--green-800) 35%, rgb(19 63 45 / 0.55));
+		}
 
-			img {
-				width: 45%;
-				height: auto;
+		// No photo: the category icon, tinted lime, large in the lower right.
+		&--fallback {
+			inset: auto clamp(-48px, -3vw, -16px) clamp(-64px, -5vw, -24px) auto;
+			width: clamp(240px, 40%, 520px);
+			aspect-ratio: 1;
+			background: var(--wp--preset--color--lime-500);
+			opacity: 0.12;
+			mask: var(--ggt-hero-icon) center / contain no-repeat;
+
+			&::after {
+				content: none;
 			}
 		}
 	}
+
 }
 
 .ggt-term-chip--lime a {
