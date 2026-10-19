@@ -2,7 +2,7 @@
 
 /**
  * Location meta (keys prefixed ggt_): city name as shown in copy, coordinates for maps, and the
- * nearby towns listed under "Service area". The region and its route day come from the
+ * nearby towns listed under "Service area". The region and its zone come from the
  * `region` taxonomy.
  *
  * @package GoingGreenTransportTheme\CustomMeta

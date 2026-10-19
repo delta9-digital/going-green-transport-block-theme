@@ -4,7 +4,7 @@
  * Block bindings source `ggt/location`: location data for core blocks in the city template.
  *
  * Usage: {"metadata":{"bindings":{"content":{"source":"ggt/location","args":{"key":"city"}}}}}
- * Keys: city, region, route_day, route (e.g. "Southeast Route · Wed"), nearby (comma list).
+ * Keys: city, region, zone, route (e.g. "Southeast · Zone 3"), nearby (comma list).
  * Optional `format` arg: a sprintf pattern with one %s, e.g. "Cannabis transport in %s, MN".
  *
  * @package GoingGreenTransportTheme\Location
@@ -73,17 +73,17 @@ class LocationBindings implements ServiceInterface
 
 		$meta = static fn(string $key) => \get_post_meta($postId, AbstractPostMeta::PREFIX . $key, true);
 		$region = $this->region($postId);
-		$day = $region ? (string) \get_term_meta($region->term_id, RegionTaxonomy::ROUTE_DAY_META, true) : '';
+		$zone = $region ? (string) \get_term_meta($region->term_id, RegionTaxonomy::ZONE_META, true) : '';
 
 		$value = match ((string) ($args['key'] ?? '')) {
 			'city' => (string) ($meta('city') ?: \get_the_title($postId)),
 			'region' => $region->name ?? '',
-			'route_day' => $day,
+			'zone' => $zone,
 			'route' => $region ? \trim(\sprintf(
-				/* translators: 1: region name, 2: route day. */
-				\__('%1$s Route · %2$s', 'going-green-transport'),
+				/* translators: 1: region name, 2: zone. */
+				\__('%1$s · %2$s', 'going-green-transport'),
 				$region->name,
-				$day
+				$zone
 			), ' ·') : '',
 			'nearby' => \implode(', ', (array) $meta('nearby')),
 			default => null,

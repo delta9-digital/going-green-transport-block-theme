@@ -2,7 +2,7 @@
 
 /**
  * Region taxonomy for locations: the five regional routes (Central Minnesota, Northeast,
- * Southeast, Northwest, Southwest). Each term carries its route day in `ggt_route_day`.
+ * Southeast, Northwest, Southwest). Each term carries its zone label in `ggt_zone`.
  *
  * @package GoingGreenTransportTheme\CustomTaxonomy
  */
@@ -22,7 +22,7 @@ class RegionTaxonomy extends AbstractTaxonomy
 {
 	public const TAXONOMY_SLUG = 'region';
 	public const REST_API_ENDPOINT_SLUG = 'regions';
-	public const ROUTE_DAY_META = AbstractPostMeta::PREFIX . 'route_day';
+	public const ZONE_META = AbstractPostMeta::PREFIX . 'zone';
 
 	/**
 	 * Register the taxonomy and its term meta.
@@ -63,7 +63,7 @@ class RegionTaxonomy extends AbstractTaxonomy
 	}
 
 	/**
-	 * Route day per region (e.g. "Wed"), shown on location cards.
+	 * Zone per region (e.g. "Zone 3"), shown on location cards.
 	 *
 	 * @return void
 	 */
@@ -71,7 +71,7 @@ class RegionTaxonomy extends AbstractTaxonomy
 	{
 		\register_term_meta(
 			self::TAXONOMY_SLUG,
-			self::ROUTE_DAY_META,
+			self::ZONE_META,
 			[
 				'type' => 'string',
 				'single' => true,

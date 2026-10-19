@@ -9,8 +9,8 @@ export const sceneData = {
 		const PICK = 'Northshore Cultivation Co.', PICK_ADDR = '1450 Harbor View Rd, Duluth, MN 55802', LAB = 'Twin Cities Analytical Lab', LAB_ADDR = '845 Industrial Blvd NE, Minneapolis, MN 55413', DRIVER = 'Marcus';
 		return {
 			hud: [
-      ['Regional routes', 'Five regions · five route days', 'var(--wp--preset--color--gray-500)', ''],
-      ['Route day', 'Duluth · Northeast route · Tuesday', 'var(--wp--preset--color--gold-500)', 'MON 09:00'],
+      ['Regional routes', 'Five regions · five zones', 'var(--wp--preset--color--gray-500)', ''],
+      ['Zone 2', 'Duluth · Northeast route', 'var(--wp--preset--color--gold-500)', 'MON 09:00'],
       ['Stop booked', 'Booked before 3pm · both facilities notified', 'var(--wp--preset--color--gold-500)', 'MON 11:02'],
       ['Route departed', 'Stop 1 of 4 · pickup contact emailed', 'var(--wp--preset--color--lime-700)', 'TUE 07:40'],
       ['At stop 1', 'Manifest verified · 1 of 4 stops complete', 'var(--wp--preset--color--lime-700)', 'TUE 08:31'],
