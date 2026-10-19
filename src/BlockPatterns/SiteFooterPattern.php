@@ -1,12 +1,11 @@
 <?php
 
 /**
- * Pattern: site footer (comp `Site Footer`): lime email band, then logo/contacts, three link
- * columns and the legal row.
+ * Pattern: site footer (comp `Site Footer`): lime sign-up band (form: src/Signup/SignupForm.php),
+ * then logo/contacts, three link columns and the legal row.
  *
  * Core blocks only, pulled into parts/footer.html with a pattern block so the logo uses the theme
- * URL and the year stays current. The "Contact us" ring is inline SVG (an <img> could not use the
- * webfont for its text path). Styles: assets/styles/parts/theme/_footer.scss.
+ * URL and the year stays current. Styles: assets/styles/parts/theme/_footer.scss.
  *
  * @package GoingGreenTransportTheme\BlockPatterns
  */
@@ -15,6 +14,7 @@ declare(strict_types=1);
 
 namespace GoingGreenTransportTheme\BlockPatterns;
 
+use GoingGreenTransportTheme\Signup\SignupForm;
 use GoingGreenTransportThemeVendor\EightshiftLibs\BlockPatterns\AbstractBlockPattern;
 
 /**
@@ -98,7 +98,7 @@ class SiteFooterPattern extends AbstractBlockPattern
 	 */
 	protected function getDescription(): string
 	{
-		return \esc_html__('Lime email band, logo and contacts, Company / Services / Guide links, legal row.', 'going-green-transport');
+		return \esc_html__('Lime sign-up band, logo and contacts, Company / Services / Guide links, legal row.', 'going-green-transport');
 	}
 
 	/**
@@ -181,15 +181,16 @@ class SiteFooterPattern extends AbstractBlockPattern
 		$email = SiteLinks::EMAIL;
 		$mailto = 'mailto:' . $email;
 
-		$ring = \esc_html__('CONTACT US · CONTACT US · ', 'going-green-transport');
-		$badge = "<!-- wp:html -->\n<a class=\"ggt-ftr__badge\" href=\"" . \esc_url($mailto) . '" aria-hidden="true" tabindex="-1">'
-			. '<svg viewBox="0 0 120 120" width="120" height="120"><defs><path id="ggt-ring" d="M60,60 m-42,0 a42,42 0 1,1 84,0 a42,42 0 1,1 -84,0"/></defs>'
-			. "<text><textPath href=\"#ggt-ring\">{$ring}</textPath></text></svg><span class=\"ggt-ftr__badge-dot\"></span></a>\n<!-- /wp:html -->\n";
+		$intro = "<!-- wp:heading {\"level\":2,\"className\":\"ggt-ftr__band-title\"} -->\n<h2 class=\"wp-block-heading ggt-ftr__band-title\">"
+			. \esc_html__('Stay in the Loop.', 'going-green-transport') . "</h2>\n<!-- /wp:heading -->\n"
+			. $this->paragraph(\esc_html__('Route updates, compliance news and new zones for licensed Minnesota operators.', 'going-green-transport'), 'ggt-ftr__band-text');
+
+		$form = "<!-- wp:html -->\n" . SignupForm::markup() . "\n<!-- /wp:html -->\n";
 
 		$band = $this->group(
 			$this->group(
-				$this->paragraph($this->a($email, $mailto), 'ggt-ftr__email') . $badge,
-				['align' => 'wide', 'className' => 'ggt-ftr__band-inner', 'layout' => ['type' => 'flex', 'flexWrap' => 'wrap', 'justifyContent' => 'space-between']]
+				$this->group($intro, ['className' => 'ggt-ftr__band-intro', 'layout' => ['type' => 'default']]) . $form,
+				['align' => 'wide', 'className' => 'ggt-ftr__band-inner', 'layout' => ['type' => 'default']]
 			),
 			['align' => 'full', 'className' => 'ggt-ftr__band', 'backgroundColor' => 'lime-500', 'layout' => ['type' => 'constrained']]
 		);
