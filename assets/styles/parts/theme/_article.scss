@@ -16,8 +16,10 @@
 	display: grid;
 	grid-template-columns: minmax(0, 1fr);
 	align-items: end;
+	--ggt-hero-pad: clamp(32px, 5vw, 64px);
+
 	min-height: clamp(320px, 34vw, 440px);
-	padding: clamp(32px, 5vw, 64px);
+	padding: var(--ggt-hero-pad);
 	overflow: hidden;
 	border-radius: var(--wp--custom--radius--panel);
 	background: var(--wp--preset--color--green-800);
@@ -104,14 +106,13 @@
 			background: linear-gradient(90deg, var(--wp--preset--color--green-800) 35%, rgb(19 63 45 / 0.55));
 		}
 
-		// No photo: the category icon, tinted lime, large in the lower right.
+		// No photo: the category icon, tinted lime, large on the right inside the panel's padding.
 		&--fallback {
-			inset: auto clamp(-48px, -3vw, -16px) clamp(-64px, -5vw, -24px) auto;
-			width: clamp(240px, 40%, 520px);
-			aspect-ratio: 1;
+			inset: var(--ggt-hero-pad) var(--ggt-hero-pad) var(--ggt-hero-pad) auto;
+			width: clamp(200px, 36%, 440px);
 			background: var(--wp--preset--color--lime-500);
 			opacity: 0.12;
-			mask: var(--ggt-hero-icon) center / contain no-repeat;
+			mask: var(--ggt-hero-icon) right center / contain no-repeat;
 
 			&::after {
 				content: none;
