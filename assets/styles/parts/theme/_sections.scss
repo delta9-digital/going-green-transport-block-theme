@@ -262,16 +262,18 @@
 		}
 	}
 
+	// The circle is a background, not border-radius: a rounded <img> clips its picture to the inner
+	// curve, which cut the corners off square icons (Metrc clipboard).
 	&__tab-icon {
+		--tab-icon-plate: var(--wp--preset--color--gray-100);
+
 		box-sizing: content-box;
 		padding: 14px;
-		border-radius: 50%;
-		background: var(--wp--preset--color--gray-100);
-		transition: background var(--wp--custom--motion--base) var(--wp--custom--motion--ease);
+		background: radial-gradient(circle closest-side, var(--tab-icon-plate) calc(100% - 0.5px), transparent 100%);
 	}
 
 	&__tab[aria-selected='true'] &__tab-icon {
-		background: var(--wp--preset--color--lime-500);
+		--tab-icon-plate: var(--wp--preset--color--lime-500);
 	}
 }
 
