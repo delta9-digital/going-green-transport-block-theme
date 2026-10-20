@@ -245,16 +245,19 @@
 	font-family: var(--wp--preset--font-family--body);
 }
 
-// Wordmark background: bottom right, faint, behind the columns.
+// Wordmark background: centred and contained, faint, behind the columns.
 .ggt-ftr__main > .ggt-ftr__wordmark {
 	position: absolute;
-	right: -4%;
-	bottom: -12%;
+	inset: 0;
 	z-index: -1;
-	width: clamp(360px, 62vw, 960px);
+	box-sizing: border-box;
+	width: 100%;
 	max-width: none;
-	height: auto;
+	height: 100%;
 	margin: 0;
+	padding: 32px var(--wp--style--root--padding-right) 32px var(--wp--style--root--padding-left);
+	object-fit: contain;
+	object-position: center;
 	opacity: 0.06;
 	pointer-events: none;
 }
