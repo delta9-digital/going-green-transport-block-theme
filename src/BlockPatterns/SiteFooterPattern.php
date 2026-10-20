@@ -2,7 +2,7 @@
 
 /**
  * Pattern: site footer (comp `Site Footer`): lime band with the sign-up form (src/Signup/SignupForm.php)
- * beside call and email links, then three link columns, the logo, a phone/email and social row, and the legal row.
+ * beside call and email links, then the logo, three link columns, a phone/email and social row, and the legal row.
  *
  * Core blocks only, pulled into parts/footer.html with a pattern block so the logo uses the theme
  * URL and the year stays current. Styles: assets/styles/parts/theme/_footer.scss.
@@ -235,12 +235,10 @@ class SiteFooterPattern extends AbstractBlockPattern
 			['className' => 'ggt-ftr__col ggt-ftr__brand', 'layout' => ['type' => 'default']]
 		);
 
-		// Link columns first, the van logo last.
-		$columns = '';
+		$columns = $brand;
 		foreach (self::COLUMNS as $heading => $links) {
 			$columns .= $this->column($heading, $links);
 		}
-		$columns .= $brand;
 
 		$grid = $this->group($columns, ['align' => 'wide', 'className' => 'ggt-ftr__grid', 'layout' => ['type' => 'grid', 'minimumColumnWidth' => '200px']]);
 
