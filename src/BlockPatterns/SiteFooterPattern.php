@@ -216,11 +216,11 @@ class SiteFooterPattern extends AbstractBlockPattern
 		$logoAlt = \esc_attr__('Going Green Transport LLC', 'going-green-transport');
 		$logo = "<!-- wp:image {\"sizeSlug\":\"full\",\"className\":\"ggt-ftr__logo\"} -->\n<figure class=\"wp-block-image size-full ggt-ftr__logo\"><img src=\"{$logoSrc}\" alt=\"{$logoAlt}\" width=\"432\" height=\"216\"/></figure>\n<!-- /wp:image -->\n";
 
-		// Bottom row, right-aligned above the legal line: call and email as icon links (the band's icon
-		// plates), then the social icons (core Social Icons block).
+		// Bottom row, right-aligned above the legal line: call and email as icon links (the band's icons,
+		// tinted with a CSS mask to match), then the social icons (core Social Icons block).
 		$iconLink = fn(string $icon, string $label, string $href): string =>
-			'<a class="ggt-ftr__icon-link" href="' . \esc_url($href) . '" aria-label="' . \esc_attr($label) . '"><img src="'
-			. \esc_url(\get_theme_file_uri("assets/images/icons/{$icon}")) . '" alt="" width="20" height="20"></a>';
+			'<a class="ggt-ftr__icon-link" href="' . \esc_url($href) . '" aria-label="' . \esc_attr($label) . '" style="--ggt-icon:url('
+			. \esc_url(\get_theme_file_uri("assets/images/icons/{$icon}")) . ')"></a>';
 		$reach = "<!-- wp:html -->\n<div class=\"ggt-ftr__reach\">"
 			/* translators: %s: phone number. */
 			. $iconLink('phone-lime.svg', \sprintf(\__('Call us at %s', 'going-green-transport'), SiteLinks::PHONE), 'tel:' . \str_replace('-', '', SiteLinks::PHONE))

@@ -313,7 +313,7 @@
 
 // Bottom row, right-aligned above the legal line: call, email and social icon links.
 .ggt-ftr__bottom {
-	gap: 12px;
+	gap: 16px;
 	margin-block-start: 48px;
 
 	> * {
@@ -330,43 +330,33 @@
 
 .ggt-ftr__reach {
 	display: flex;
-	gap: 12px;
+	gap: 16px;
 }
 
-// Call, email and social: the same 40px green plates with lime icons.
-.ggt-ftr__icon-link,
-.ggt-ftr__social .wp-social-link a {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	width: 40px;
-	height: 40px;
-	border-radius: 50%;
+// Call and email: bare 24px icons in the social icons' colour.
+.ggt-ftr__icon-link {
+	display: block;
+	width: 24px;
+	height: 24px;
 	background: var(--wp--preset--color--green-800);
-	color: var(--wp--preset--color--lime-500);
-	transition: background var(--wp--custom--motion--base) var(--wp--custom--motion--ease);
+	mask: var(--ggt-icon) center / contain no-repeat;
 
 	&:hover,
 	&:focus-visible {
 		background: var(--wp--preset--color--green-900);
 	}
-
-	img {
-		width: 20px;
-		height: 20px;
-	}
 }
 
 .ggt-ftr__social {
-	gap: 12px;
+	gap: 16px;
+	color: var(--wp--preset--color--green-800);
 
 	.wp-social-link {
-		padding: 0;
-		color: var(--wp--preset--color--lime-500);
-		font-size: 20px;
+		color: inherit;
+		font-size: 24px;
 
-		a {
-			padding: 0;
+		&:hover {
+			color: var(--wp--preset--color--green-900);
 		}
 	}
 }
