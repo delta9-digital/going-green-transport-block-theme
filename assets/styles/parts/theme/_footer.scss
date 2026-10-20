@@ -311,20 +311,13 @@
 	font-weight: 700;
 }
 
-// Bottom row, right-aligned above the legal line: call, email and social icon links.
-.ggt-ftr__bottom {
+// Icon row under the tagline: call and email left, social icons right.
+.ggt-ftr__icons {
 	gap: 16px;
-	margin-block-start: 48px;
+	margin-block-start: 24px !important;
 
 	> * {
 		margin-block: 0 !important;
-	}
-
-	// Stacked on phones: everything starts at the left edge.
-	@media (max-width: 600px) { /* stylelint-disable-line media-feature-range-notation */
-		&.is-layout-flex {
-			justify-content: flex-start;
-		}
 	}
 }
 
@@ -363,7 +356,7 @@
 
 .ggt-ftr__legal {
 	gap: 12px 24px;
-	margin-block-start: 24px;
+	margin-block-start: 48px;
 	padding-block-start: 20px;
 	border-block-start: 1px solid var(--wp--preset--color--gray-300);
 	color: var(--wp--preset--color--gray-600);

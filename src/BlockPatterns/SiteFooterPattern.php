@@ -216,8 +216,8 @@ class SiteFooterPattern extends AbstractBlockPattern
 		$logoAlt = \esc_attr__('Going Green Transport LLC', 'going-green-transport');
 		$logo = "<!-- wp:image {\"sizeSlug\":\"full\",\"className\":\"ggt-ftr__logo\"} -->\n<figure class=\"wp-block-image size-full ggt-ftr__logo\"><img src=\"{$logoSrc}\" alt=\"{$logoAlt}\" width=\"432\" height=\"216\"/></figure>\n<!-- /wp:image -->\n";
 
-		// Bottom row, right-aligned above the legal line: call and email as icon links (the band's icons,
-		// tinted with a CSS mask to match), then the social icons (core Social Icons block).
+		// Icon row under the tagline: call and email (left) as icon links (the band's icons,
+		// tinted with a CSS mask to match), social icons right (core Social Icons block).
 		$iconLink = fn(string $icon, string $label, string $href): string =>
 			'<a class="ggt-ftr__icon-link" href="' . \esc_url($href) . '" aria-label="' . \esc_attr($label) . '" style="--ggt-icon:url('
 			. \esc_url(\get_theme_file_uri("assets/images/icons/{$icon}")) . ')"></a>';
@@ -236,7 +236,8 @@ class SiteFooterPattern extends AbstractBlockPattern
 			. "<ul class=\"wp-block-social-links has-normal-icon-size is-style-logos-only ggt-ftr__social\">{$social}</ul>\n<!-- /wp:social-links -->\n";
 
 		$brand = $this->group(
-			$logo . $this->paragraph(\esc_html__('"From seed to sale, we never fail."', 'going-green-transport'), 'ggt-ftr__quote'),
+			$logo . $this->paragraph(\esc_html__('"From seed to sale, we never fail."', 'going-green-transport'), 'ggt-ftr__quote')
+				. $this->group($reach . $social, ['className' => 'ggt-ftr__icons', 'layout' => ['type' => 'flex', 'flexWrap' => 'nowrap', 'justifyContent' => 'space-between', 'verticalAlignment' => 'center']]),
 			['className' => 'ggt-ftr__col ggt-ftr__brand', 'layout' => ['type' => 'default']]
 		);
 
@@ -248,11 +249,6 @@ class SiteFooterPattern extends AbstractBlockPattern
 		$columns .= $brand;
 
 		$grid = $this->group($columns, ['align' => 'wide', 'className' => 'ggt-ftr__grid', 'layout' => ['type' => 'grid', 'minimumColumnWidth' => '200px']]);
-
-		$bottom = $this->group(
-			$reach . $social,
-			['align' => 'wide', 'className' => 'ggt-ftr__bottom', 'layout' => ['type' => 'flex', 'flexWrap' => 'wrap', 'justifyContent' => 'right', 'verticalAlignment' => 'center']]
-		);
 
 		$year = \gmdate('Y');
 		$legal = $this->group(
@@ -277,7 +273,7 @@ class SiteFooterPattern extends AbstractBlockPattern
 		$wordmark = "<!-- wp:html -->\n<img class=\"ggt-ftr__wordmark\" src=\"" . \esc_url(\get_theme_file_uri('assets/images/brand/ggt-wordmark-box.svg'))
 			. "\" alt=\"\" aria-hidden=\"true\" width=\"843\" height=\"431\" loading=\"lazy\" decoding=\"async\">\n<!-- /wp:html -->\n";
 
-		$main = $this->group($wordmark . $grid . $bottom . $legal, ['align' => 'full', 'className' => 'ggt-ftr__main', 'layout' => ['type' => 'constrained']]);
+		$main = $this->group($wordmark . $grid . $legal, ['align' => 'full', 'className' => 'ggt-ftr__main', 'layout' => ['type' => 'constrained']]);
 
 		return $this->group($band . $main, ['align' => 'full', 'className' => 'ggt-ftr', 'layout' => ['type' => 'constrained']]);
 	}
