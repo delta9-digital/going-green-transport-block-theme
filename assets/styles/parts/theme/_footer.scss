@@ -311,30 +311,31 @@
 	font-weight: 700;
 }
 
-// Under the logo: phone and email, then the social icons.
-.ggt-ftr__reach {
-	display: flex;
-	flex-direction: column;
-	gap: 4px;
-	margin-block-start: 20px !important;
-	font-family: var(--wp--preset--font-family--heading);
-	font-size: var(--wp--preset--font-size--body-md);
-	font-weight: 700;
+// Bottom row, right-aligned above the legal line: call, email, social icons.
+.ggt-ftr__bottom {
+	gap: 20px 40px;
+	margin-block-start: 48px;
 
-	a {
-		color: var(--wp--preset--color--green-900);
+	> * {
+		margin-block: 0 !important;
+	}
 
-		&:hover,
-		&:focus-visible {
-			text-decoration: underline;
-			text-underline-offset: 4px;
+	// Stacked on phones: everything starts at the left edge.
+	@media (max-width: 600px) { /* stylelint-disable-line media-feature-range-notation */
+		&.is-layout-flex {
+			justify-content: flex-start;
 		}
 	}
 }
 
+.ggt-ftr__reach {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 20px 40px;
+}
+
 .ggt-ftr__social {
 	gap: 16px;
-	margin-block-start: 20px !important;
 	color: var(--wp--preset--color--green-800);
 
 	.wp-social-link {
@@ -349,7 +350,7 @@
 
 .ggt-ftr__legal {
 	gap: 12px 24px;
-	margin-block-start: 48px;
+	margin-block-start: 24px;
 	padding-block-start: 20px;
 	border-block-start: 1px solid var(--wp--preset--color--gray-300);
 	color: var(--wp--preset--color--gray-600);
