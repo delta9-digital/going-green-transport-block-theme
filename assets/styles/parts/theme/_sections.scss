@@ -340,8 +340,18 @@
 	overflow: hidden;
 }
 
-// Location cards (Locations hub Query Loop): route line left, arrow circle right.
+// Location cards (Locations hub Query Loop): route line left, arrow circle right. Every card is
+// as tall as the tallest one, across rows too.
+.wp-block-post-template.is-layout-grid:has(.ggt-location-card) {
+	grid-auto-rows: 1fr;
+
+	> li {
+		display: flex;
+	}
+}
+
 .ggt-location-card {
+	flex: 1;
 	justify-content: space-between;
 
 	&::after {
