@@ -236,14 +236,36 @@
 }
 
 .ggt-ftr__main {
+	position: relative;
+	isolation: isolate;
+	overflow: hidden;
 	margin-block: 0;
 	padding-block: 72px 32px;
 	color: var(--wp--preset--color--green-900);
 	font-family: var(--wp--preset--font-family--body);
 }
 
+// Wordmark background: bottom right, faint, behind the columns.
+.ggt-ftr__main > .ggt-ftr__wordmark {
+	position: absolute;
+	right: -4%;
+	bottom: -12%;
+	z-index: -1;
+	width: clamp(360px, 62vw, 960px);
+	max-width: none;
+	height: auto;
+	margin: 0;
+	opacity: 0.06;
+	pointer-events: none;
+}
+
 .ggt-ftr__grid {
 	gap: 40px;
+
+	// The wordmark comes first but is out of flow: no layout gap above the columns.
+	.ggt-ftr__wordmark + & {
+		margin-block-start: 0;
+	}
 
 	// Core's grid layout uses auto-fill, which leaves an empty fifth track; the comp uses auto-fit.
 	&.is-layout-grid {

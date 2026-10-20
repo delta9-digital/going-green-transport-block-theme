@@ -257,7 +257,11 @@ class SiteFooterPattern extends AbstractBlockPattern
 			['align' => 'wide', 'className' => 'ggt-ftr__legal', 'layout' => ['type' => 'flex', 'flexWrap' => 'wrap', 'justifyContent' => 'space-between']]
 		);
 
-		$main = $this->group($grid . $reach . $legal, ['align' => 'full', 'className' => 'ggt-ftr__main', 'layout' => ['type' => 'constrained']]);
+		// Decorative wordmark drawn large and faint behind the footer.
+		$wordmark = "<!-- wp:html -->\n<img class=\"ggt-ftr__wordmark\" src=\"" . \esc_url(\get_theme_file_uri('assets/images/brand/ggt-wordmark-box.svg'))
+			. "\" alt=\"\" aria-hidden=\"true\" width=\"843\" height=\"431\" loading=\"lazy\" decoding=\"async\">\n<!-- /wp:html -->\n";
+
+		$main = $this->group($wordmark . $grid . $reach . $legal, ['align' => 'full', 'className' => 'ggt-ftr__main', 'layout' => ['type' => 'constrained']]);
 
 		return $this->group($band . $main, ['align' => 'full', 'className' => 'ggt-ftr', 'layout' => ['type' => 'constrained']]);
 	}
