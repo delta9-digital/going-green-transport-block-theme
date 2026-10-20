@@ -318,17 +318,12 @@
 	font-weight: 700;
 }
 
-// Phone and email, side by side above the legal line.
+// Under the logo: phone and email, then the social icons.
 .ggt-ftr__reach {
-	margin-block: 48px 0;
-}
-
-.ggt-ftr__reach-links {
 	display: flex;
-	flex-wrap: wrap;
-	gap: 8px 32px;
-	justify-content: flex-end;
-	margin: 0;
+	flex-direction: column;
+	gap: 4px;
+	margin-block-start: 20px !important;
 	font-family: var(--wp--preset--font-family--heading);
 	font-size: var(--wp--preset--font-size--body-md);
 	font-weight: 700;
@@ -344,9 +339,24 @@
 	}
 }
 
+.ggt-ftr__social {
+	gap: 16px;
+	margin-block-start: 20px !important;
+	color: var(--wp--preset--color--green-800);
+
+	.wp-social-link {
+		color: inherit;
+		font-size: 24px;
+
+		&:hover {
+			color: var(--wp--preset--color--green-900);
+		}
+	}
+}
+
 .ggt-ftr__legal {
 	gap: 12px 24px;
-	margin-block-start: 20px;
+	margin-block-start: 48px;
 	padding-block-start: 20px;
 	border-block-start: 1px solid var(--wp--preset--color--gray-300);
 	color: var(--wp--preset--color--gray-600);

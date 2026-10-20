@@ -23,6 +23,16 @@ final class SiteLinks
 	public const PHONE = '612-208-9557';
 
 	/**
+	 * Social profiles, core social-link service => URL. Facebook and Instagram are the live site's;
+	 * LinkedIn is the design kit's, unconfirmed.
+	 */
+	public const SOCIAL = [
+		'facebook' => 'https://www.facebook.com/61584143425787',
+		'linkedin' => 'https://www.linkedin.com/company/goinggreentransport',
+		'instagram' => 'https://www.instagram.com/goinggreentransportmn/',
+	];
+
+	/**
 	 * Path per link key.
 	 *
 	 * @var array<string, string>
