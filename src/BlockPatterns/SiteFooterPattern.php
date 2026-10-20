@@ -216,13 +216,8 @@ class SiteFooterPattern extends AbstractBlockPattern
 		$logoAlt = \esc_attr__('Going Green Transport LLC', 'going-green-transport');
 		$logo = "<!-- wp:image {\"sizeSlug\":\"full\",\"className\":\"ggt-ftr__logo\"} -->\n<figure class=\"wp-block-image size-full ggt-ftr__logo\"><img src=\"{$logoSrc}\" alt=\"{$logoAlt}\" width=\"432\" height=\"216\"/></figure>\n<!-- /wp:image -->\n";
 
-		$contacts = $this->paragraph(
-			$this->a('goinggreentransport.com', 'https://goinggreentransport.com/'),
-			'ggt-ftr__contacts'
-		);
-
 		$brand = $this->group(
-			$logo . $this->paragraph(\esc_html__('"From seed to sale, we never fail."', 'going-green-transport'), 'ggt-ftr__quote') . $contacts,
+			$logo . $this->paragraph(\esc_html__('"From seed to sale, we never fail."', 'going-green-transport'), 'ggt-ftr__quote'),
 			['className' => 'ggt-ftr__col ggt-ftr__brand', 'layout' => ['type' => 'default']]
 		);
 
