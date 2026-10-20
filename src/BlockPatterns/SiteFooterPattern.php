@@ -2,7 +2,7 @@
 
 /**
  * Pattern: site footer (comp `Site Footer`): lime band with the sign-up form (src/Signup/SignupForm.php)
- * beside email and call links, then logo/contacts, three link columns and the legal row.
+ * beside call and email links, then logo, three link columns, a phone/email row and the legal row.
  *
  * Core blocks only, pulled into parts/footer.html with a pattern block so the logo uses the theme
  * URL and the year stays current. Styles: assets/styles/parts/theme/_footer.scss.
@@ -217,9 +217,7 @@ class SiteFooterPattern extends AbstractBlockPattern
 		$logo = "<!-- wp:image {\"sizeSlug\":\"full\",\"className\":\"ggt-ftr__logo\"} -->\n<figure class=\"wp-block-image size-full ggt-ftr__logo\"><img src=\"{$logoSrc}\" alt=\"{$logoAlt}\" width=\"432\" height=\"216\"/></figure>\n<!-- /wp:image -->\n";
 
 		$contacts = $this->paragraph(
-			$this->a(SiteLinks::PHONE, 'tel:' . \str_replace('-', '', SiteLinks::PHONE)) . '<br>'
-			. $this->a($email, $mailto) . '<br>'
-			. $this->a('goinggreentransport.com', 'https://goinggreentransport.com/'),
+			$this->a('goinggreentransport.com', 'https://goinggreentransport.com/'),
 			'ggt-ftr__contacts'
 		);
 
@@ -234,6 +232,16 @@ class SiteFooterPattern extends AbstractBlockPattern
 		}
 
 		$grid = $this->group($columns, ['align' => 'wide', 'className' => 'ggt-ftr__grid', 'layout' => ['type' => 'grid', 'minimumColumnWidth' => '200px']]);
+
+		// Phone and email in one row along the bottom, above the legal line.
+		$reach = $this->group(
+			$this->paragraph(
+				$this->a(SiteLinks::PHONE, 'tel:' . \str_replace('-', '', SiteLinks::PHONE))
+				. $this->a($email, $mailto),
+				'ggt-ftr__reach-links'
+			),
+			['align' => 'wide', 'className' => 'ggt-ftr__reach', 'layout' => ['type' => 'default']]
+		);
 
 		$year = \gmdate('Y');
 		$legal = $this->group(
@@ -254,7 +262,7 @@ class SiteFooterPattern extends AbstractBlockPattern
 			['align' => 'wide', 'className' => 'ggt-ftr__legal', 'layout' => ['type' => 'flex', 'flexWrap' => 'wrap', 'justifyContent' => 'space-between']]
 		);
 
-		$main = $this->group($grid . $legal, ['align' => 'full', 'className' => 'ggt-ftr__main', 'layout' => ['type' => 'constrained']]);
+		$main = $this->group($grid . $reach . $legal, ['align' => 'full', 'className' => 'ggt-ftr__main', 'layout' => ['type' => 'constrained']]);
 
 		return $this->group($band . $main, ['align' => 'full', 'className' => 'ggt-ftr', 'layout' => ['type' => 'constrained']]);
 	}

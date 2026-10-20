@@ -293,12 +293,37 @@
 	color: var(--wp--preset--color--green-900);
 	font-family: var(--wp--preset--font-family--body);
 	font-size: var(--wp--preset--font-size--meta);
-	font-weight: 400;
+	font-weight: 700;
+}
+
+// Phone and email, side by side above the legal line.
+.ggt-ftr__reach {
+	margin-block: 48px 0;
+}
+
+.ggt-ftr__reach-links {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px 32px;
+	margin: 0;
+	font-family: var(--wp--preset--font-family--heading);
+	font-size: var(--wp--preset--font-size--body-md);
+	font-weight: 700;
+
+	a {
+		color: var(--wp--preset--color--green-900);
+
+		&:hover,
+		&:focus-visible {
+			text-decoration: underline;
+			text-underline-offset: 4px;
+		}
+	}
 }
 
 .ggt-ftr__legal {
 	gap: 12px 24px;
-	margin-block-start: 48px;
+	margin-block-start: 20px;
 	padding-block-start: 20px;
 	border-block-start: 1px solid var(--wp--preset--color--gray-300);
 	color: var(--wp--preset--color--gray-600);
