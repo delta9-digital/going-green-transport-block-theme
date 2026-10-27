@@ -6,7 +6,8 @@
 	overflow: hidden;
 }
 
-.wp-block-column > .wp-block-group:has(> .ggt-photo) {
+// A carousel set to "Fill the container" takes the photo's place (location heroes).
+.wp-block-column > .wp-block-group:has(> .ggt-photo, > .block-carousel-wrapper--fill) {
 	height: 100%;
 }
 
