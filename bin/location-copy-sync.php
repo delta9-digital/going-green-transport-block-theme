@@ -393,8 +393,13 @@ foreach (get_posts(['post_type' => 'location', 'post_status' => 'publish', 'numb
 	$blocks = parse_blocks($ggtPost->post_content);
 
 	// Hero route badge: zone, not weekday.
-	$terms = wp_get_post_terms($ggtPost->ID, 'region');
-	$zone = $terms && !is_wp_error($terms) ? (string) get_term_meta($terms[0]->term_id, 'ggt_zone', true) : '';
+	// Straight from the term tables: WP Engine's WP-CLI runs without the theme's taxonomies registered.
+	global $wpdb;
+	$regionId = (int) $wpdb->get_var($wpdb->prepare(
+		"SELECT tt.term_id FROM {$wpdb->term_relationships} tr JOIN {$wpdb->term_taxonomy} tt ON tt.term_taxonomy_id = tr.term_taxonomy_id WHERE tr.object_id = %d AND tt.taxonomy = 'region' LIMIT 1",
+		$ggtPost->ID
+	));
+	$zone = $regionId ? (string) get_term_meta($regionId, 'ggt_zone', true) : '';
 	ggt_walk($blocks, static function (&$b) use ($zone) {
 		if ($zone && $b['blockName'] === 'core/button' && preg_match('/Regional Route · (Mon|Tue|Wed|Thu|Fri)\b/', $b['innerHTML'])) {
 			$b['innerHTML'] = preg_replace('/(Regional Route · )(Mon|Tue|Wed|Thu|Fri)\b/', '${1}' . $zone, $b['innerHTML']);
