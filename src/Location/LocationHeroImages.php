@@ -4,7 +4,7 @@
  * Location hero slideshow images: load only what the hero frame needs.
  *
  * The hero is a carousel set to "Fill the container": every slide covers a portrait frame
- * (about 480x760 on desktop, full width x 320 on phones). WordPress would describe each image as
+ * (about 560x770 on desktop, full width x 320 on phones). WordPress would describe each image as
  * 100vw wide and load every slide up front, so the first slide (the LCP image) shared the
  * bandwidth with slide 2 and came down at 1536px. Here:
  *
@@ -35,8 +35,8 @@ class LocationHeroImages implements ServiceInterface
 	/**
 	 * Hero frame on desktop (CSS px), tallest of the 24 location pages.
 	 */
-	private const FRAME_WIDTH = 480;
-	private const FRAME_HEIGHT = 760;
+	private const FRAME_WIDTH = 560;
+	private const FRAME_HEIGHT = 770;
 
 	/**
 	 * Start of every `sizes` value set here (also how they are recognised later): below 782px the
