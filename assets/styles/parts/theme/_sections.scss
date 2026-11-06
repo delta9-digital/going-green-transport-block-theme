@@ -341,6 +341,15 @@
 	overflow: hidden;
 }
 
+// Hero with the quote form (home): the form is much taller than the intro card, so the card stays
+// in view beside it while the visitor scrolls through the form.
+@media (min-width: 782px) {
+	.ggt-sec--hero .wp-block-columns:has(.ggt-hero-quote) > .wp-block-column:first-child > .wp-block-group {
+		position: sticky;
+		top: calc(var(--wp--custom--nav--height) + var(--wp-admin--admin-bar--height, 0px) + 16px);
+	}
+}
+
 // Location cards (Locations hub Query Loop): route line left, arrow circle right. Every card is
 // as tall as the tallest one, across rows too.
 .wp-block-post-template.is-layout-grid:has(.ggt-location-card) {
