@@ -974,3 +974,41 @@
 		}
 	}
 }
+
+// FAQ accordions on phones. GGT accordions (.ggt-faq): the answer kept the desktop 72px right inset
+// (240px of a 342px card) and long questions ran up against the +/× icon. Plain accordions (the FAQ
+// page) inherit the 36px h2 size for every question; they step down to a card-title size.
+@media (max-width: 781px) {
+	.ggt-faq {
+		.wp-block-accordion-heading__toggle {
+			gap: 12px;
+			padding: 18px 16px 18px 20px;
+		}
+
+		.wp-block-accordion-heading__toggle-icon {
+			flex: none;
+		}
+
+		.wp-block-accordion-panel {
+			padding: 0 20px 20px;
+		}
+	}
+
+	.wp-block-accordion:not(.ggt-faq) {
+		.wp-block-accordion-heading {
+			font-size: var(--wp--preset--font-size--heading-xs);
+			letter-spacing: -0.01em;
+			line-height: 1.3;
+		}
+
+		.wp-block-accordion-heading__toggle {
+			gap: 12px;
+			padding-block: 14px;
+		}
+
+		.wp-block-accordion-heading__toggle-icon {
+			flex: none;
+			font-size: 28px;
+		}
+	}
+}

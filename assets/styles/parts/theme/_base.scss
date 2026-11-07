@@ -41,8 +41,10 @@ html body {
 // Phones and tablets: balanced heading lines, so narrow headings don't strand one word or split a
 // hyphenated word at its hyphen ("Flat-/Rate?") just to fill the first line. Hyphens are already
 // manual; the break was the hyphen's own wrap opportunity. Desktop line breaks are left as designed.
+// Accordion questions are left to wrap normally: balancing them beside the +/× icon only made
+// narrower lines.
 @media (max-width: 1023px) {
-	:where(h1, h2, h3) {
+	:where(h1, h2, h3):not(.wp-block-accordion-heading) {
 		text-wrap: balance;
 	}
 }
