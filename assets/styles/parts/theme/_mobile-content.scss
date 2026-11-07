@@ -1,2 +1,289 @@
 // Mobile/tablet fixes for content templates (posts, guides, resources hub, search, 404, thank-you, legal).
 // Loaded after sections/article so it can override them without editing those files.
+
+// ---------- Core Search block (404, search results) ----------
+
+// Same field as the site's forms (48px, forest hairline, 12px corners). The font never drops
+// below 16px: iOS zooms the page when a smaller input takes focus.
+.wp-block-search {
+	.wp-block-search__inside-wrapper {
+		gap: 8px;
+	}
+
+	.wp-block-search__input {
+		min-height: 48px;
+		margin: 0;
+		padding: 0 16px;
+		border: 1px solid var(--wp--preset--color--green-800);
+		border-radius: var(--wp--custom--radius--md);
+		background: var(--wp--preset--color--white);
+		color: var(--wp--preset--color--green-900);
+		font-family: var(--wp--preset--font-family--body);
+		font-size: max(16px, 1em);
+
+		&::placeholder {
+			color: var(--wp--preset--color--gray-600);
+		}
+
+		&:focus-visible {
+			outline: 2px solid var(--wp--preset--color--green-500);
+			outline-offset: 2px;
+		}
+	}
+
+	.wp-block-search__button {
+		min-height: 48px;
+		margin: 0;
+		padding-inline: 24px;
+	}
+}
+
+// ---------- Pages (page.html): space under the header ----------
+
+// Marketing pages open with a full-bleed hero section, so content starts flush under the header.
+// Pages that open with a heading, a paragraph or a card (legal pages, thank-you) had their title
+// or card touching the header. Give those the same top space as search and 404. An inline
+// margin set in the editor (FAQ) still wins.
+.ggt-main > .entry-content > :first-child:not(.alignfull, .ggt-sec) {
+	margin-block-start: var(--wp--preset--spacing--110);
+}
+
+// Thank-you page (/quote-thank-you/): a white card with a centred "Thank You" and a lone
+// left-aligned link. Centre the card's content, add a success mark and room inside the card.
+.page-id-1397 .entry-content > :first-child {
+	padding-block: 48px !important; // stylelint-disable-line declaration-no-important
+	text-align: center;
+
+	&::before {
+		content: '';
+		display: block;
+		width: 64px;
+		height: 64px;
+		margin: 0 auto 20px;
+		border-radius: 50%;
+		background: var(--wp--preset--color--lime-500) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23133F2D' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m7 12.5 3.2 3.2L17 9'/%3E%3C/svg%3E") center / 36px no-repeat;
+	}
+
+	> h1 {
+		margin-block-start: 0;
+	}
+
+	a {
+		display: inline-flex;
+		align-items: center;
+		min-height: 44px;
+		font-weight: 600;
+	}
+}
+
+// ---------- Resources hub post cards ----------
+
+// One or two cards a row: 18 cards were ~470px each, mostly a 7-line 14px excerpt. Show three
+// lines at 16px and tighten the card (padding and min-height are inline block styles).
+@media (max-width: 781px) {
+	.ggt-post-card:not(.ggt-post-card--compact) {
+		min-height: 0 !important; // stylelint-disable-line declaration-no-important
+		padding: 24px !important; // stylelint-disable-line declaration-no-important
+
+		> .wp-block-group:first-child {
+			margin-block-end: 16px;
+		}
+
+		.wp-block-post-excerpt {
+			font-size: var(--wp--preset--font-size--body-md) !important; // stylelint-disable-line declaration-no-important
+			line-height: 1.55 !important; // stylelint-disable-line declaration-no-important
+		}
+
+		.wp-block-post-excerpt__excerpt {
+			display: -webkit-box;
+			overflow: hidden;
+			-webkit-box-orient: vertical;
+			-webkit-line-clamp: 3;
+		}
+
+		.ggt-read-more {
+			margin-block-start: 20px;
+		}
+	}
+}
+
+// ---------- Search results and archives (search.html, archive.html, home.html) ----------
+
+.ggt-search-form {
+	margin-block-start: 24px;
+
+	.wp-block-search {
+		max-width: 560px;
+	}
+}
+
+.ggt-search .wp-block-query,
+.ggt-archive .wp-block-query {
+	margin-block-start: 40px;
+}
+
+.wp-block-post-template.ggt-results {
+	gap: 20px;
+
+	> li {
+		display: flex;
+	}
+}
+
+// Each result is a white card; the title link covers the card, the category chip stays tappable.
+.ggt-result-card {
+	position: relative;
+	flex: 1;
+	gap: 12px;
+	padding: 24px;
+	border-radius: var(--wp--custom--radius--panel);
+	background: var(--wp--preset--color--white);
+	transition: box-shadow var(--wp--custom--motion--base, 240ms) ease;
+
+	&:hover,
+	&:focus-within {
+		box-shadow: var(--wp--preset--shadow--md);
+	}
+
+	> * {
+		margin: 0;
+	}
+
+	.ggt-term-chip {
+		position: relative;
+		z-index: 1;
+		align-self: flex-start;
+	}
+
+	.wp-block-post-title {
+		font-size: var(--wp--preset--font-size--heading-sm);
+		line-height: 1.25;
+		letter-spacing: -0.01em;
+
+		a {
+			color: var(--wp--preset--color--green-900);
+			text-decoration: none;
+
+			&::after {
+				content: '';
+				position: absolute;
+				inset: 0;
+				border-radius: inherit;
+			}
+		}
+	}
+
+	// The stretched link's focus ring goes round the whole card.
+	.wp-block-post-title a:focus-visible {
+		outline: none;
+	}
+
+	&:has(.wp-block-post-title a:focus-visible) {
+		outline: 2px solid var(--wp--preset--color--green-500);
+		outline-offset: 2px;
+	}
+
+	.wp-block-post-excerpt {
+		color: var(--wp--preset--color--ink-muted);
+		font-size: var(--wp--preset--font-size--body-md);
+		line-height: 1.55;
+
+		.wp-block-post-excerpt__excerpt {
+			display: -webkit-box;
+			margin: 0;
+			overflow: hidden;
+			-webkit-box-orient: vertical;
+			-webkit-line-clamp: 3;
+		}
+
+		.wp-block-post-excerpt__more-text {
+			display: none;
+		}
+	}
+
+	.wp-block-post-date {
+		margin-block-start: auto;
+		color: var(--wp--preset--color--gray-600);
+		font-family: var(--wp--preset--font-family--mono);
+		font-size: var(--wp--preset--font-size--caption);
+	}
+}
+
+// Pages have no meaningful publish date (it is the migration date).
+.ggt-results > .type-page .wp-block-post-date {
+	display: none;
+}
+
+// Pagination: the numbers were 9x19px text links.
+.ggt-search,
+.ggt-archive {
+	.wp-block-query-pagination {
+		gap: 8px;
+		margin-block-start: 40px;
+
+		> * {
+			margin: 0;
+		}
+	}
+
+	.wp-block-query-pagination-numbers {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 4px;
+	}
+
+	.page-numbers,
+	.wp-block-query-pagination-previous,
+	.wp-block-query-pagination-next {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-width: 44px;
+		min-height: 44px;
+		padding: 0 12px;
+		border-radius: var(--wp--custom--radius--pill);
+		color: var(--wp--preset--color--green-900);
+		font-family: var(--wp--preset--font-family--heading);
+		font-weight: 600;
+		text-decoration: none;
+	}
+
+	a.page-numbers:hover,
+	.wp-block-query-pagination-previous:hover,
+	.wp-block-query-pagination-next:hover {
+		background: var(--wp--preset--color--white);
+	}
+
+	.page-numbers.current {
+		background: var(--wp--preset--color--green-800);
+		color: var(--wp--preset--color--white);
+	}
+
+	.page-numbers.dots {
+		min-width: 24px;
+		padding: 0;
+	}
+}
+
+// ---------- 404 ----------
+
+.ggt-404 {
+	.ggt-404__actions {
+		gap: 16px 28px;
+		margin-block-start: 32px;
+	}
+
+	// The text-and-circle button is 40px tall; make the whole row a 48px target.
+	.is-style-ggt-arrow .wp-block-button__link {
+		min-height: 48px;
+	}
+
+	// The constrained layout centres a narrower block, so cap the field row, not the block.
+	.wp-block-search {
+		margin-block-start: 40px;
+	}
+
+	.wp-block-search__inside-wrapper {
+		max-width: 560px;
+	}
+}
