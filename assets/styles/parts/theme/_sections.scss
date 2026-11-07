@@ -877,3 +877,42 @@
 		filter: none;
 	}
 }
+
+// Locations hub on phones: 24 cards of ~180px (about 5,000px) become compact rows (city, region ·
+// zone, arrow on the right). The one-line description repeats the city name on every card, so it
+// is left out at this size. Padding and min-height are inline styles.
+@media (max-width: 781px) {
+	.wp-block-post-template.is-layout-grid:has(.ggt-location-card) {
+		gap: 10px;
+	}
+
+	.ggt-location-card {
+		justify-content: center;
+		min-height: 0 !important; // stylelint-disable-line declaration-no-important
+		padding: 16px 64px 16px 20px !important; // stylelint-disable-line declaration-no-important
+
+		&::after {
+			top: 50%;
+			right: 16px;
+			bottom: auto;
+			width: 36px;
+			height: 36px;
+			background-size: 16px;
+			transform: translateY(-50%);
+		}
+
+		.wp-block-post-title {
+			margin: 0 0 2px !important; // stylelint-disable-line declaration-no-important
+			font-size: var(--wp--preset--font-size--heading-xs) !important; // stylelint-disable-line declaration-no-important
+		}
+
+		> .wp-block-post-title + p:not(:last-child) {
+			display: none;
+		}
+
+		> :last-child {
+			margin: 0;
+			padding-inline-end: 0;
+		}
+	}
+}
