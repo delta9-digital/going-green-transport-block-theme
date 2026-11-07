@@ -79,6 +79,16 @@ header.wp-block-template-part:has(.ggt-hdr) {
 		background-color: var(--wp--preset--color--white) !important;
 		box-shadow: var(--wp--preset--shadow--lg);
 
+		// Invisible bridge over the 12px gap above the panel: it belongs to the submenu, so the
+		// pointer stays inside the Pricing item (which keeps the panel open) on the way down.
+		&::before {
+			content: '';
+			position: absolute;
+			inset-inline: 0;
+			bottom: 100%;
+			height: 14px;
+		}
+
 		.wp-block-navigation-item__content {
 			display: flex;
 			flex-direction: column;
