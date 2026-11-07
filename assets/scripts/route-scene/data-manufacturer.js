@@ -1,70 +1,92 @@
 /**
- * Route map variant `manufacturer` (hand-written; data.js is generated from the comps): a
- * manufacturer in St. Cloud with three dispensary drop-offs on the Zone 1 Central route. Same
- * shape as data.js: (prog) => { hud: [[status, line, dot colour, time] per step], texts: { step:
- * [{ who, at, time, subject, lines, chip? }] } }. `chip` names the drop-off contact an email went
- * to; each dispensary gets its own ETA window.
+ * Route map variant `manufacturer` (hand-written; data.js is generated from the comps): the Zone 2
+ * Northeast route from a manufacturer in Duluth, through the Hinckley and North Branch stops, to
+ * three dispensaries in Minneapolis. Same shape as data.js: (prog) => { hud: [[status, line, dot
+ * colour, time] per step], texts: { step: [{ who, at, time, subject, lines, chip? }] } }. `chip`
+ * names the drop-off contact an email went to; each dispensary gets its own ETA window.
+ *
+ * prog runs 0 -> 0.9486 over the drive (step 5, ending at the first dispensary) and on to 1 over
+ * the Minneapolis deliveries (step 6); see `legs` in scene.js. `at` is the step's own progress.
  */
 
 const DRIVER = 'Marcus';
-const PICK = 'Granite City Infusions';
+const PICK = 'Lake Superior Infusions';
 const STOPS = [
-	{ name: 'Mill City Cannabis Co.', city: 'Minneapolis', contact: 'Jordan', window: '9:30–10:15 AM', done: '9:55 AM', at: 0.71 },
-	{ name: 'Capitol Green Dispensary', city: 'St. Paul', contact: 'Priya', window: '10:15–10:45 AM', done: '10:28 AM', at: 0.815 },
-	{ name: 'St. Croix Valley Cannabis', city: 'Stillwater', contact: 'Sam', window: '10:50–11:30 AM', done: '11:08 AM', at: 1 },
+	{ name: 'Mill City Cannabis Co.', area: 'Northeast Minneapolis', contact: 'Jordan', window: '10:45–11:15 AM', done: '11:05 AM' },
+	{ name: 'North Loop Dispensary', area: 'North Loop, Minneapolis', contact: 'Priya', window: '11:10–11:40 AM', done: '11:23 AM' },
+	{ name: 'Lake Street Cannabis Co.', area: 'South Minneapolis', contact: 'Sam', window: '11:30 AM–12:00 PM', done: '11:48 AM' },
 ];
-const chip = (stop) => `${stop.contact} · ${stop.city}`;
-
+const chip = (stop) => `${stop.contact} · ${stop.name}`;
+// End a sentence after a name that may already end with a period ("Co.").
+const stop = (text) => (text.endsWith('.') ? text : `${text}.`);
 const color = (name) => `var(--wp--preset--color--${name})`;
 
-// Clock time on the route: pickup done at 8:40, last drop-off at 11:05.
-const clock = (prog) => {
-	const minutes = 8 * 60 + 40 + Math.round(prog * 145);
-	return `TUE ${String(Math.floor(minutes / 60)).padStart(2, '0')}:${String(minutes % 60).padStart(2, '0')}`;
-};
+// Route progress where each stop is reached (scene.js route points 3, 5, 7, 8, 9).
+const AT = { hinckley: 0.4781, northBranch: 0.7059, first: 0.9486, second: 0.972 };
 
-const nextStop = (prog) => STOPS.find((stop) => prog < stop.at) || STOPS[STOPS.length - 1];
+const time = (minutes) => `TUE ${String(Math.floor(minutes / 60)).padStart(2, '0')}:${String(minutes % 60).padStart(2, '0')}`;
 
 export const manufacturer = (prog) => {
-	const [mpls, stp, stw] = STOPS;
+	const [first, second, third] = STOPS;
+
+	// Drive: 8:40 at the pickup to 11:05 at the first dispensary; deliveries: 11:05 to 11:48.
+	const driving = Math.min(1, prog / AT.first);
+	const delivering = Math.max(0, (prog - AT.first) / (1 - AT.first));
+	const driveClock = time(8 * 60 + 40 + Math.round(driving * 145));
+	const deliverClock = time(11 * 60 + 5 + Math.round(delivering * 43));
+
+	let nextStop = `Minneapolis · ${first.name}`;
+	if (prog < AT.hinckley) {
+		nextStop = 'Hinckley';
+	} else if (prog < AT.northBranch) {
+		nextStop = 'North Branch';
+	}
+
+	let delivery = ['Delivering', `Stop 4 of 6 · next: ${second.name}`];
+	if (prog >= 1) {
+		delivery = ['Delivered', 'Stop 6 of 6 · every contact emailed'];
+	} else if (prog >= AT.second) {
+		delivery = ['Delivering', `Stop 5 of 6 · next: ${third.name}`];
+	}
 
 	return {
 		hud: [
 			['Regional routes', 'Five regions · five zones', color('gray-500'), ''],
-			['Zone 1', 'St. Cloud · Central route', color('gold-500'), 'MON 09:00'],
-			['Stops booked', '3 drop-offs booked before 3pm · all facilities notified', color('gold-500'), 'MON 11:02'],
-			['Route departed', 'Stop 1 of 4 · ETA windows sent', color('lime-700'), 'TUE 07:40'],
-			['At pickup', 'Manifests verified · 1 of 4 stops complete', color('lime-700'), 'TUE 08:31'],
-			['On route', `Next stop: ${nextStop(prog).city} · GPS live`, color('green-500'), clock(prog)],
-			['Delivered', 'Stop 4 of 4 · every contact emailed', color('green-800'), 'TUE 11:08'],
-			['Documented', 'Route record stored in CRM', color('green-800'), 'TUE 11:10'],
+			['Zone 2', 'Duluth · Northeast route', color('gold-500'), 'MON 09:00'],
+			['Stops booked', '3 Minneapolis drop-offs booked before 3pm', color('gold-500'), 'MON 11:02'],
+			['Route departed', 'Stop 1 of 6 · ETA windows sent', color('lime-700'), 'TUE 07:40'],
+			['At pickup', 'Manifests verified · 1 of 6 stops complete', color('lime-700'), 'TUE 08:31'],
+			['On route', `Next stop: ${nextStop} · GPS live`, color('green-500'), driveClock],
+			[delivery[0], delivery[1], color(prog >= 1 ? 'green-800' : 'green-500'), deliverClock],
+			['Documented', 'Route record stored in CRM', color('green-800'), 'TUE 11:50'],
 		],
 		texts: {
 			3: [
-				{ who: 'both', at: 0, time: '7:30 AM', subject: 'Route dispatched', lines: [`Going Green Transport dispatched the Central route to ${DRIVER} (4 stops).`, `1. Pickup: ${PICK} · St. Cloud`, `2. Dropoff: ${mpls.name} · Minneapolis`, `3. Dropoff: ${stp.name} · St. Paul`, `4. Dropoff: ${stw.name} · Stillwater`] },
-				{ who: 'pickup', at: 0.25, time: '7:40 AM', subject: 'On the way · ETA window', lines: [`Hi Dana, ${DRIVER} is on the way to ${PICK}.`, 'Pickup ETA window: 8:15–8:45 AM.'] },
-				{ who: 'dropoff', chip: chip(mpls), at: 0.4, time: '7:40 AM', subject: 'Your ETA window', lines: [`Hi ${mpls.contact}, your delivery from ${PICK} is on today's Central route.`, `ETA window: ${mpls.window}.`] },
+				{ who: 'both', at: 0, time: '7:30 AM', subject: 'Route dispatched', lines: [`Going Green Transport dispatched the Northeast route to ${DRIVER} (6 stops).`, `1. Pickup: ${PICK} · Duluth`, '2. Stop · Hinckley', '3. Stop · North Branch', `4. Dropoff: ${first.name} · Minneapolis`, `5. Dropoff: ${second.name} · Minneapolis`, `6. Dropoff: ${third.name} · Minneapolis`] },
+				{ who: 'pickup', at: 0.25, time: '7:40 AM', subject: 'On the way · ETA window', lines: [`Hi Dana, ${DRIVER} is on the way. You are stop 1 of 6 on today's Northeast route.`, 'Pickup ETA window: 8:15–8:45 AM.'] },
+				{ who: 'dropoff', chip: chip(first), at: 0.4, time: '7:40 AM', subject: 'Your ETA window', lines: [`Hi ${first.contact}, your delivery from ${PICK} is on today's Northeast route.`, `ETA window: ${first.window}.`] },
 				{ who: 'pickup', at: 0.55, time: '8:10 AM', subject: '15 minutes away', lines: [`Hi Dana, ${DRIVER} is about 15 minutes from ${PICK}.`] },
 				{ who: 'pickup', at: 0.8, time: '8:20 AM', subject: '5 minutes away', lines: [`Hi Dana, ${DRIVER} is about 5 minutes away.`, 'Please have product staged for handoff.'] },
 			],
 			4: [
-				{ who: 'both', at: 0.25, time: '8:31 AM', subject: '✓ Pickup completed', lines: [`${DRIVER} completed the pickup at St. Cloud, MN at 8:31 AM.`, 'Manifests verified for 3 drop-offs.', 'Progress: 1 of 4 stops complete.'] },
-				{ who: 'dropoff', chip: chip(stp), at: 0.55, time: '8:33 AM', subject: 'Your ETA window', lines: [`Hi ${stp.contact}, your delivery from ${PICK} is on the way.`, `ETA window: ${stp.window}.`] },
-				{ who: 'dropoff', chip: chip(stw), at: 0.8, time: '8:33 AM', subject: 'Your ETA window', lines: [`Hi ${stw.contact}, your delivery from ${PICK} is on the way.`, `ETA window: ${stw.window}.`] },
+				{ who: 'both', at: 0.25, time: '8:31 AM', subject: '✓ Pickup completed', lines: [`${DRIVER} completed the pickup at Duluth, MN at 8:31 AM.`, 'Manifests verified for 3 drop-offs.', 'Progress: 1 of 6 stops complete.'] },
+				{ who: 'dropoff', chip: chip(second), at: 0.55, time: '8:33 AM', subject: 'Your ETA window', lines: [`Hi ${second.contact}, your delivery from ${PICK} is on the way.`, `ETA window: ${second.window}.`] },
+				{ who: 'dropoff', chip: chip(third), at: 0.8, time: '8:33 AM', subject: 'Your ETA window', lines: [`Hi ${third.contact}, your delivery from ${PICK} is on the way.`, `ETA window: ${third.window}.`] },
 			],
 			5: [
-				{ who: 'dropoff', chip: chip(mpls), at: 0.55, time: '9:40 AM', subject: '15 minutes away', lines: [`Hi ${mpls.contact}, ${DRIVER} is about 15 minutes from ${mpls.name}.`, `Inside your ETA window (${mpls.window}).`] },
-				{ who: 'dropoff', chip: chip(mpls), at: 0.71, time: mpls.done, subject: '✓ Delivered', lines: [`Hi ${mpls.contact}, your delivery is complete at ${mpls.done} by ${DRIVER}.`, 'Product delivered: See the manifest for details.'] },
-				{ who: 'pickup', at: 0.72, time: mpls.done, subject: '✓ Stop 2 of 4 delivered', lines: [`${mpls.name} · Minneapolis · ${mpls.done}.`] },
-				{ who: 'dropoff', chip: chip(stp), at: 0.75, time: '9:58 AM', subject: "You're next · ETA window", lines: [`Hi ${stp.contact}, ${DRIVER} just completed the Minneapolis stop. You're next.`, `ETA window: ${stp.window} (on time).`] },
-				{ who: 'dropoff', chip: chip(stp), at: 0.815, time: stp.done, subject: '✓ Delivered', lines: [`Hi ${stp.contact}, your delivery is complete at ${stp.done} by ${DRIVER}.`, 'Product delivered: See the manifest for details.'] },
-				{ who: 'pickup', at: 0.825, time: stp.done, subject: '✓ Stop 3 of 4 delivered', lines: [`${stp.name} · St. Paul · ${stp.done}.`] },
-				{ who: 'dropoff', chip: chip(stw), at: 0.9, time: '10:50 AM', subject: '15 minutes away', lines: [`Hi ${stw.contact}, ${DRIVER} is about 15 minutes from ${stw.name}.`, `Inside your ETA window (${stw.window}).`] },
+				{ who: 'dropoff', chip: chip(first), at: 0.5, time: '9:42 AM', subject: 'Route update', lines: [`Hi ${first.contact}, ${DRIVER} completed stop 2 of 6 in Hinckley.`, `Your delivery is on schedule (ETA window ${first.window}).`] },
+				{ who: 'dropoff', chip: chip(first), at: 0.9, time: '10:50 AM', subject: '15 minutes away', lines: [stop(`Hi ${first.contact}, ${DRIVER} is about 15 minutes from ${first.name}`), `Inside your ETA window (${first.window}).`] },
 			],
 			6: [
-				{ who: 'dropoff', chip: chip(stw), at: 0, time: '11:05 AM', subject: 'Arrived', lines: [`${DRIVER} has arrived at ${stw.name}.`] },
-				{ who: 'dropoff', chip: chip(stw), at: 0.4, time: stw.done, subject: '✓ Delivered', lines: [`Hi ${stw.contact}, your delivery is complete at ${stw.done} by ${DRIVER}.`, 'Product delivered: See the manifest for details.'] },
-				{ who: 'pickup', at: 0.4, time: stw.done, subject: '✓ All stops delivered', lines: ['Hi Dana, all 3 deliveries on today\'s route are complete.', `1. ${mpls.name} · ${mpls.done}`, `2. ${stp.name} · ${stp.done}`, `3. ${stw.name} · ${stw.done}`] },
+				{ who: 'dropoff', chip: chip(first), at: 0, time: first.done, subject: '✓ Delivered', lines: [`Hi ${first.contact}, your delivery is complete at ${first.done} by ${DRIVER}.`, 'Product delivered: See the manifest for details.'] },
+				{ who: 'pickup', at: 0.03, time: first.done, subject: '✓ Stop 4 of 6 delivered', lines: [`${first.name} · ${first.area} · ${first.done}.`] },
+				{ who: 'dropoff', chip: chip(second), at: 0.1, time: '11:06 AM', subject: "You're next · ETA window", lines: [`Hi ${second.contact}, ${DRIVER} just completed the ${first.name} stop. You're next.`, `ETA window: ${second.window} (on time).`] },
+				{ who: 'dropoff', chip: chip(second), at: 0.46, time: second.done, subject: '✓ Delivered', lines: [`Hi ${second.contact}, your delivery is complete at ${second.done} by ${DRIVER}.`, 'Product delivered: See the manifest for details.'] },
+				{ who: 'pickup', at: 0.48, time: second.done, subject: '✓ Stop 5 of 6 delivered', lines: [`${second.name} · ${second.area} · ${second.done}.`] },
+				{ who: 'dropoff', chip: chip(third), at: 0.52, time: '11:24 AM', subject: "You're next · ETA window", lines: [`Hi ${third.contact}, ${DRIVER} just completed the ${second.name} stop. You're next.`, `ETA window: ${third.window} (on time).`] },
+				{ who: 'dropoff', chip: chip(third), at: 0.8, time: '11:43 AM', subject: '5 minutes away', lines: [`Hi ${third.contact}, ${DRIVER} is about 5 minutes away.`, 'Please have intake ready.'] },
+				{ who: 'dropoff', chip: chip(third), at: 0.97, time: third.done, subject: '✓ Delivered', lines: [`Hi ${third.contact}, your delivery is complete at ${third.done} by ${DRIVER}.`, 'Product delivered: See the manifest for details.'] },
+				{ who: 'pickup', at: 0.98, time: third.done, subject: '✓ All stops delivered', lines: ['Hi Dana, all 3 Minneapolis deliveries on today\'s route are complete.', `1. ${first.name} · ${first.done}`, `2. ${second.name} · ${second.done}`, `3. ${third.name} · ${third.done}`] },
 			],
 		},
 	};

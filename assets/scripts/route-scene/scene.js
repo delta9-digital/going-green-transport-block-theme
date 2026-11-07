@@ -45,17 +45,28 @@ const VARIANTS = {
 		regionFor: ['all', 'northeast', 'northeast', 'northeast', 'northeast', 'northeast', 'metro', 'all'],
 		chips: ['Mary · Pickup', 'Jane · Drop-off'],
 	},
-	// A manufacturer in St. Cloud with three dispensary drop-offs on the Zone 1 Central route.
+	// The regional Duluth route with a manufacturer pickup and three dispensary drop-offs in
+	// Minneapolis. The drive (step 5) ends at the first dispensary; the delivery step (6) zooms into
+	// Minneapolis for the dispensary-to-dispensary leg.
 	manufacturer: {
-		route: [[-94.16, 45.56], [-94.05, 45.42], [-93.79, 45.31], [-93.55, 45.19], [-93.36, 45.07], [-93.27, 44.98], [-93.09, 44.95], [-92.96, 44.98], [-92.81, 45.06]],
-		cities: [['St. Cloud', -94.16, 45.56, true], ['Minneapolis', -93.27, 44.98, true], ['St. Paul', -93.09, 44.95, true], ['Stillwater', -92.81, 45.06, true], ['Monticello', -93.79, 45.31, true], ['Duluth', -92.10, 46.78], ['Rochester', -92.47, 44.02], ['Moorhead', -96.77, 46.87], ['Bemidji', -94.88, 47.47], ['Mankato', -94.0, 44.16], ['Hibbing', -92.94, 47.43], ['Worthington', -95.60, 43.62]],
-		ends: [[0, 'pickup', 'St. Cloud', 'Manufacturer', 'left'], [5, 'dropoff', 'Minneapolis', 'Dispensary 1'], [6, 'dropoff', 'St. Paul', 'Dispensary 2', 'below'], [8, 'dropoff', 'Stillwater', 'Dispensary 3', 'right']],
-		stops: [],
+		route: [...DULUTH_ROUTE.slice(0, 7), [-93.23, 45.025], [-93.285, 44.99], [-93.245, 44.935]],
+		cities: DULUTH_CITIES,
+		// [route index, kind, title, tag, card side, [first step, last step] the card shows].
+		ends: [
+			[0, 'pickup', 'Duluth', 'Manufacturer'],
+			[8, 'dropoff', 'Minneapolis', '3 dispensaries', '', [1, 5]],
+			[7, 'dropoff', 'Mill City Cannabis Co.', 'Stop 4 · Dispensary', 'right', [6, 6]],
+			[8, 'dropoff', 'North Loop Dispensary', 'Stop 5 · Dispensary', 'left', [6, 6]],
+			[9, 'dropoff', 'Lake Street Cannabis Co.', 'Stop 6 · Dispensary', 'below', [6, 6]],
+		],
+		stops: [[3, '2'], [5, '3']],
 		pins: [['ZONE 4', 21, 22.6], ['ZONE 2', 55.3, 31.6], ['ZONE 1', 34, 62], ['ZONE 5', 25.2, 85], ['ZONE 3', 57.9, 88]],
-		regionFor: ['all', 'central', 'central', 'central', 'central', 'central', 'metro', 'all'],
+		regionFor: ['all', 'northeast', 'northeast', 'northeast', 'northeast', 'northeast', 'metro', 'all'],
 		chips: ['Dana · Pickup', 'Dispensaries · Drop-offs'],
-		// Step 1 frames the whole (short) route rather than zooming in on the pickup.
-		startView: 'route',
+		// Route progress per step: [from, to] over the step's scroll progress.
+		legs: { 5: [0, 0.9486], 6: [0.9486, 1] },
+		// Camera [lon, lat, scale] for a step instead of the fitted route.
+		views: { 6: [-93.255, 44.98, 6] },
 	},
 };
 
@@ -183,16 +194,16 @@ export class RouteScene {
 			return el;
 		});
 
-		const end = (point, kind, city, tag, side) => {
+		const end = (point, kind, city, tag, side, range) => {
 			const dot = node('span', `ggt-rs__end ggt-rs__end--${kind}`, cam);
 			Object.assign(dot.style, pct(point));
 			const card = node('div', `ggt-rs__end-card ggt-rs__end-card--${kind}${side ? ` ggt-rs__end-card--${side}` : ''}`, cam);
 			Object.assign(card.style, pct(point));
 			node('span', 'ggt-rs__end-city', card, city);
 			node('span', 'ggt-rs__end-tag', card, tag);
-			return [dot, card];
+			return { dot, card, range };
 		};
-		this.ends = this.config.ends.flatMap(([index, kind, city, tag, side]) => end(this.g.route[index], kind, city, tag, side));
+		this.ends = this.config.ends.map(([index, kind, city, tag, side, range]) => end(this.g.route[index], kind, city, tag, side, range));
 
 		this.stops = this.config.stops.map(([index, label]) => {
 			const el = node('span', 'ggt-rs__stop', cam, label);
@@ -310,7 +321,12 @@ export class RouteScene {
 
 	render = () => {
 		const { step, local } = this.state;
-		const prog = step < TRANSIT ? 0 : (step > TRANSIT ? 1 : local);
+		const legs = this.config.legs || { [TRANSIT]: [0, 1] };
+		let prog = step < TRANSIT ? 0 : 1;
+		if (legs[step]) {
+			const [from, to] = legs[step];
+			prog = from + (to - from) * local;
+		}
 		const { hud, texts } = this.data(prog);
 
 		// Emails each contact has received so far (the latest one shows).
@@ -363,6 +379,9 @@ export class RouteScene {
 		const mid = [(box.x0 + box.x1) / 2, (box.y0 + box.y1) / 2];
 		const start = this.config.startView === 'route' ? [mid[0], mid[1], 2.2] : [A[0], A[1], 2.2];
 		const views = [[W / 2, H / 2, 1], start, [mid[0], mid[1], 1.7], fit, fit, fit, fit, [W / 2, H / 2, 1]];
+		Object.entries(this.config.views || {}).forEach(([i, [lon, lat, scale]]) => {
+			views[i] = [...P(lon, lat), scale];
+		});
 		const [fx, fy, s] = views[step] || views[0];
 		const tx = (0.5 - (fx / W) * s) * 100;
 		const ty = (0.5 - (fy / H) * s) * 100;
@@ -395,8 +414,9 @@ export class RouteScene {
 		this.pins.forEach((pin) => {
 			pin.style.opacity = pinsOn ? '1' : '0';
 		});
-		this.ends.forEach((el) => {
-			el.style.opacity = step >= 1 ? '1' : '0';
+		this.ends.forEach(({ dot, card, range }) => {
+			dot.style.opacity = step >= 1 ? '1' : '0';
+			card.style.opacity = (range ? step >= range[0] && step <= range[1] : step >= 1) ? '1' : '0';
 		});
 		this.stops.forEach((el) => {
 			el.style.opacity = live ? '1' : '0';

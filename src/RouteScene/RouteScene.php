@@ -55,7 +55,7 @@ class RouteScene implements ServiceInterface
 
 		[$map, $alt] = match ($variant) {
 			'on-demand' => ['mn-counties.svg', \__('Map of Minnesota: a direct run from Duluth to a Minneapolis testing lab.', 'going-green-transport')],
-			'manufacturer' => ['mn-regions-outlined.svg', \__('Map of Minnesota\'s five route regions: an example Central route from a St. Cloud manufacturer to dispensaries in Minneapolis, St. Paul, and Stillwater.', 'going-green-transport')],
+			'manufacturer' => ['mn-regions-outlined.svg', \__('Map of Minnesota\'s five route regions: an example Northeast route from a Duluth manufacturer to three dispensaries in Minneapolis.', 'going-green-transport')],
 			default => ['mn-regions-outlined.svg', \__('Map of Minnesota\'s five route regions: an example Northeast route from Duluth to a Minneapolis testing lab.', 'going-green-transport')],
 		};
 
