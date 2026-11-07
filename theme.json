@@ -157,16 +157,6 @@
 								"file:./assets/fonts/Roboto-VariableFont_wdth_wght.latin.woff2"
 							],
 							"fontStretch": "75% 100%"
-						},
-						{
-							"fontFamily": "Roboto",
-							"fontStyle": "italic",
-							"fontWeight": "100 900",
-							"fontDisplay": "swap",
-							"src": [
-								"file:./assets/fonts/Roboto-Italic-VariableFont_wdth_wght.latin.woff2"
-							],
-							"fontStretch": "75% 100%"
 						}
 					]
 				},
@@ -184,16 +174,6 @@
 								"file:./assets/fonts/Roboto-VariableFont_wdth_wght.latin.woff2"
 							],
 							"fontStretch": "75%"
-						},
-						{
-							"fontFamily": "Roboto Condensed",
-							"fontStyle": "italic",
-							"fontWeight": "100 900",
-							"fontDisplay": "swap",
-							"src": [
-								"file:./assets/fonts/Roboto-Italic-VariableFont_wdth_wght.latin.woff2"
-							],
-							"fontStretch": "75%"
 						}
 					]
 				},
@@ -209,15 +189,6 @@
 							"fontDisplay": "swap",
 							"src": [
 								"file:./assets/fonts/Inter-VariableFont_opsz_wght.latin.woff2"
-							]
-						},
-						{
-							"fontFamily": "Inter",
-							"fontStyle": "italic",
-							"fontWeight": "100 900",
-							"fontDisplay": "swap",
-							"src": [
-								"file:./assets/fonts/Inter-Italic-VariableFont_opsz_wght.latin.woff2"
 							]
 						}
 					]
