@@ -639,3 +639,55 @@
 	color: var(--wp--preset--color--ink-muted);
 	text-align: center;
 }
+
+// ---------- Mobile / tablet ----------
+
+// Stat cards (home About, Services "Why choose us", About stats): white tiles that open with a
+// centred number. The core grid's minimum column width leaves one tile per row on phones (about
+// 1,000px for four numbers), so phones get two per row with tighter padding and a smaller number;
+// an odd last tile spans the row. Paddings and the About number size are inline styles.
+.ggt-sec .is-layout-grid:has(> .wp-block-group.has-background > p.has-text-align-center:first-child) {
+	@media (max-width: 781px) {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 12px;
+
+		> .wp-block-group {
+			padding: 24px 12px !important; // stylelint-disable-line declaration-no-important
+		}
+
+		> :last-child:nth-child(odd) {
+			grid-column: 1 / -1;
+		}
+
+		> * > p:first-child {
+			font-size: clamp(36px, 10vw, 44px) !important; // stylelint-disable-line declaration-no-important
+		}
+
+		> * > p:nth-child(2) {
+			margin-block-start: 10px;
+			font-size: var(--wp--preset--font-size--body) !important; // stylelint-disable-line declaration-no-important
+			line-height: 1.35 !important; // stylelint-disable-line declaration-no-important
+		}
+
+		> * > p:nth-child(3) {
+			margin-block-start: 4px;
+			font-size: var(--wp--preset--font-size--small) !important; // stylelint-disable-line declaration-no-important
+		}
+	}
+
+	// Five tiles (About) break 3 + 2 on tablets: two rows of equal-width tiles instead of an orphan
+	// gap (six-column track, the first three span 2, the last two span 3).
+	@media (min-width: 600px) and (max-width: 1023px) {
+		&:has(> :nth-child(5):last-child) {
+			grid-template-columns: repeat(6, minmax(0, 1fr));
+
+			> * {
+				grid-column: span 2;
+			}
+
+			> :nth-child(n + 4) {
+				grid-column: span 3;
+			}
+		}
+	}
+}
