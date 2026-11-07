@@ -88,6 +88,20 @@ $ggt-check: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' vi
 	text-underline-offset: 4px;
 }
 
+// The text link is ~15px tall; below 1024px an invisible ::after makes it a 44px touch target
+// without moving anything.
+@media (max-width: 1023px) {
+	.wp-block-button.is-style-ggt-text .wp-block-button__link {
+		position: relative;
+
+		&::after {
+			content: '';
+			position: absolute;
+			inset: min(0px, calc(50% - 22px)) -6px; // stylelint-disable-line length-zero-no-unit
+		}
+	}
+}
+
 // Text link followed by an outlined 40px arrow circle ("Learn More").
 .wp-block-button.is-style-ggt-arrow .wp-block-button__link {
 	display: inline-flex;

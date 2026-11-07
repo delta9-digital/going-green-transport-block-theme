@@ -818,3 +818,62 @@
 
 	}
 }
+
+// Touch targets below 1024px. The visible size stays as designed; an invisible ::after grows the
+// hit area to at least 44px tall (top/bottom insets resolve against the control's own height).
+@media (max-width: 1023px) {
+	.ggt-filter-chips .block-filter-chips__chip,
+	.ggt-term-chip a {
+		position: relative;
+
+		&::after {
+			content: '';
+			position: absolute;
+			inset: min(0px, calc(50% - 22px)) 0; // stylelint-disable-line length-zero-no-unit
+		}
+	}
+
+	// Carousel dots (location hero photos, testimonials): 8px dots, white on a bright sky. Each dot
+	// becomes a 24px button with the dot drawn in its centre, and photo carousels put the row on a
+	// dark translucent pill so the dots read on any picture. (Extra class: the plugin sheet loads
+	// after the theme's.)
+	.block-carousel .block-carousel__pagination {
+		gap: 0;
+
+		.swiper-pagination-bullet {
+			position: relative;
+			width: 24px;
+			height: 24px;
+			margin: 0 !important; // stylelint-disable-line declaration-no-important
+			border: 0;
+			background: none;
+			opacity: 1;
+
+			&::after {
+				content: '';
+				position: absolute;
+				inset: 0;
+				width: 8px;
+				height: 8px;
+				margin: auto;
+				border: 1px solid;
+				border-radius: 50%;
+			}
+
+			&.swiper-pagination-bullet-active {
+				background: none;
+
+				&::after {
+					background: currentcolor;
+				}
+			}
+		}
+	}
+
+	.block-carousel-wrapper--fill .block-carousel .block-carousel__pagination {
+		bottom: 12px;
+		padding: 2px 6px;
+		background: rgba(10, 36, 24, 0.45);
+		filter: none;
+	}
+}
