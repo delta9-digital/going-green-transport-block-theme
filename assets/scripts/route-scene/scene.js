@@ -49,14 +49,14 @@ const VARIANTS = {
 	// Minneapolis. The drive (step 5) ends at the first dispensary; the delivery step (6) zooms into
 	// Minneapolis for the dispensary-to-dispensary leg.
 	manufacturer: {
-		route: [...DULUTH_ROUTE.slice(0, 7), [-93.23, 45.025], [-93.285, 44.99], [-93.245, 44.935]],
+		route: [...DULUTH_ROUTE.slice(0, 7), [-93.22, 45.045], [-93.33, 44.94], [-93.205, 44.905]],
 		cities: DULUTH_CITIES,
 		// [route index, kind, title, tag, card side, [first step, last step] the card shows].
 		ends: [
 			[0, 'pickup', 'Duluth', 'Manufacturer'],
 			[8, 'dropoff', 'Minneapolis', '3 dispensaries', '', [1, 5]],
 			[7, 'dropoff', 'Mill City Cannabis Co.', 'Stop 4 · Dispensary', 'right', [6, 6]],
-			[8, 'dropoff', 'North Loop Dispensary', 'Stop 5 · Dispensary', 'left', [6, 6]],
+			[8, 'dropoff', 'Linden Hills Dispensary', 'Stop 5 · Dispensary', 'left', [6, 6]],
 			[9, 'dropoff', 'Lake Street Cannabis Co.', 'Stop 6 · Dispensary', 'below', [6, 6]],
 		],
 		stops: [[3, '2'], [5, '3']],
@@ -64,9 +64,9 @@ const VARIANTS = {
 		regionFor: ['all', 'northeast', 'northeast', 'northeast', 'northeast', 'northeast', 'metro', 'all'],
 		chips: ['Dana · Pickup', 'Dispensaries · Drop-offs'],
 		// Route progress per step: [from, to] over the step's scroll progress.
-		legs: { 5: [0, 0.9486], 6: [0.9486, 1] },
+		legs: { 5: [0, 0.9029], 6: [0.9029, 1] },
 		// Camera [lon, lat, scale] for a step instead of the fitted route.
-		views: { 6: [-93.255, 44.98, 6] },
+		views: { 6: [-93.26, 44.905, 10] },
 	},
 };
 
