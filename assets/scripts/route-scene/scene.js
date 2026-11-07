@@ -3,12 +3,13 @@
  * scroll-story block: each `scroll-story:change` ({ step, progress }) re-renders the panel.
  *
  * Ported from the comps' renderVals(): a camera (translate + scale) over the Minnesota map,
- * region highlights, the Duluth -> Minneapolis route drawn with progress, the van, city labels,
+ * region highlights, the variant's route (VARIANTS) drawn with progress, the van, city labels,
  * the HUD, and the emails each contact has received so far. Map space is the comps'
  * 71.55 x 79.77 viewBox; P() projects lon/lat into it. Labels keep a constant on-screen size
  * via --ggt-rs-s (the camera scale), see _route-scene.scss.
  */
 import { sceneData } from './data';
+import { manufacturer } from './data-manufacturer';
 
 const W = 71.55;
 const H = 79.77;
@@ -16,30 +17,65 @@ const P = (lon, lat) => [10.7 + (lon + 96.25) * 8.85, 75.2 - (lat - 43.67) * 12.
 const TRANSIT = 5;
 const LAST = 7;
 
-const ROUTE = [[-92.10, 46.78], [-92.46, 46.72], [-92.76, 46.45], [-92.94, 46.01], [-92.97, 45.83], [-92.98, 45.51], [-92.99, 45.28], [-93.27, 44.98]].map(([lon, lat]) => P(lon, lat));
-const CITIES = [['Duluth', -92.10, 46.78, true], ['Minneapolis', -93.27, 44.98, true], ['St. Cloud', -94.16, 45.56], ['Rochester', -92.47, 44.02], ['Moorhead', -96.77, 46.87], ['Bemidji', -94.88, 47.47], ['Mankato', -94.0, 44.16], ['Hibbing', -92.94, 47.43], ['Hinckley', -92.94, 46.01, true], ['Worthington', -95.60, 43.62]];
-const PINS = [['THU', 21, 22.6], ['TUE', 55.3, 31.6], ['MON', 34, 62], ['FRI', 25.2, 85], ['WED', 57.9, 88]];
+const DATA = { ...sceneData, manufacturer };
+
+const DULUTH_ROUTE = [[-92.10, 46.78], [-92.46, 46.72], [-92.76, 46.45], [-92.94, 46.01], [-92.97, 45.83], [-92.98, 45.51], [-92.99, 45.28], [-93.27, 44.98]];
+const DULUTH_CITIES = [['Duluth', -92.10, 46.78, true], ['Minneapolis', -93.27, 44.98, true], ['St. Cloud', -94.16, 45.56], ['Rochester', -92.47, 44.02], ['Moorhead', -96.77, 46.87], ['Bemidji', -94.88, 47.47], ['Mankato', -94.0, 44.16], ['Hibbing', -92.94, 47.43], ['Hinckley', -92.94, 46.01, true], ['Worthington', -95.60, 43.62]];
+const DAY_PINS = [['THU', 21, 22.6], ['TUE', 55.3, 31.6], ['MON', 34, 62], ['FRI', 25.2, 85], ['WED', 57.9, 88]];
 const REGIONS = ['central', 'northeast', 'northwest', 'southeast', 'southwest', 'metro'];
-const REGION_FOR = ['all', 'northeast', 'northeast', 'northeast', 'northeast', 'northeast', 'metro', 'all'];
 
-const SEGMENTS = ROUTE.slice(1).map((p, i) => Math.hypot(p[0] - ROUTE[i][0], p[1] - ROUTE[i][1]));
-const TOTAL = SEGMENTS.reduce((a, b) => a + b, 0);
-const A = ROUTE[0];
-const B = ROUTE[ROUTE.length - 1];
-const pct = (point) => ({ left: `${(point[0] / W) * 100}%`, top: `${(point[1] / H) * 100}%` });
-
-// Point at fraction t along the route.
-const along = (t) => {
-	let d = t * TOTAL;
-	for (let i = 0; i < SEGMENTS.length; i++) {
-		if (d <= SEGMENTS[i]) {
-			const k = d / SEGMENTS[i];
-			return [ROUTE[i][0] + (ROUTE[i + 1][0] - ROUTE[i][0]) * k, ROUTE[i][1] + (ROUTE[i + 1][1] - ROUTE[i][1]) * k];
-		}
-		d -= SEGMENTS[i];
-	}
-	return B;
+// Per variant: the route (lon/lat), its pickup and drop-off markers (route index, card side),
+// numbered stops, region pins, the region highlighted at each step and the email column labels.
+const VARIANTS = {
+	'on-demand': {
+		route: DULUTH_ROUTE,
+		cities: DULUTH_CITIES,
+		ends: [[0, 'pickup', 'Duluth', 'Pickup'], [7, 'dropoff', 'Minneapolis', 'Testing lab']],
+		stops: [],
+		pins: [],
+		regionFor: ['all', 'northeast', 'northeast', 'northeast', 'northeast', 'northeast', 'metro', 'all'],
+		chips: ['Mary · Pickup', 'Jane · Drop-off'],
+	},
+	regional: {
+		route: DULUTH_ROUTE,
+		cities: DULUTH_CITIES,
+		ends: [[0, 'pickup', 'Duluth', 'Pickup'], [7, 'dropoff', 'Minneapolis', 'Testing lab']],
+		stops: [[3, '2'], [5, '3']],
+		pins: DAY_PINS,
+		regionFor: ['all', 'northeast', 'northeast', 'northeast', 'northeast', 'northeast', 'metro', 'all'],
+		chips: ['Mary · Pickup', 'Jane · Drop-off'],
+	},
+	// A manufacturer in St. Cloud with three dispensary drop-offs on the Zone 1 Central route.
+	manufacturer: {
+		route: [[-94.16, 45.56], [-94.05, 45.42], [-93.79, 45.31], [-93.55, 45.19], [-93.36, 45.07], [-93.27, 44.98], [-93.09, 44.95], [-92.96, 44.98], [-92.81, 45.06]],
+		cities: [['St. Cloud', -94.16, 45.56, true], ['Minneapolis', -93.27, 44.98, true], ['St. Paul', -93.09, 44.95, true], ['Stillwater', -92.81, 45.06, true], ['Monticello', -93.79, 45.31, true], ['Duluth', -92.10, 46.78], ['Rochester', -92.47, 44.02], ['Moorhead', -96.77, 46.87], ['Bemidji', -94.88, 47.47], ['Mankato', -94.0, 44.16], ['Hibbing', -92.94, 47.43], ['Worthington', -95.60, 43.62]],
+		ends: [[0, 'pickup', 'St. Cloud', 'Manufacturer', 'left'], [5, 'dropoff', 'Minneapolis', 'Dispensary 1'], [6, 'dropoff', 'St. Paul', 'Dispensary 2', 'below'], [8, 'dropoff', 'Stillwater', 'Dispensary 3', 'right']],
+		stops: [],
+		pins: [['ZONE 4', 21, 22.6], ['ZONE 2', 55.3, 31.6], ['ZONE 1', 34, 62], ['ZONE 5', 25.2, 85], ['ZONE 3', 57.9, 88]],
+		regionFor: ['all', 'central', 'central', 'central', 'central', 'central', 'metro', 'all'],
+		chips: ['Dana · Pickup', 'Dispensaries · Drop-offs'],
+		// Step 1 frames the whole (short) route rather than zooming in on the pickup.
+		startView: 'route',
+	},
 };
+
+// Projected route geometry: points, segment lengths, start, end and bounding box.
+const geometry = (lonLat) => {
+	const route = lonLat.map(([lon, lat]) => P(lon, lat));
+	const segments = route.slice(1).map((p, i) => Math.hypot(p[0] - route[i][0], p[1] - route[i][1]));
+	const xs = route.map((p) => p[0]);
+	const ys = route.map((p) => p[1]);
+	return {
+		route,
+		segments,
+		total: segments.reduce((a, b) => a + b, 0),
+		A: route[0],
+		B: route[route.length - 1],
+		box: { x0: Math.min(...xs), x1: Math.max(...xs), y0: Math.min(...ys), y1: Math.max(...ys) },
+	};
+};
+
+const pct = (point) => ({ left: `${(point[0] / W) * 100}%`, top: `${(point[1] / H) * 100}%` });
 
 const node = (tag, className, parent, text) => {
 	const el = document.createElement(tag);
@@ -62,14 +98,30 @@ const lineParts = (line) => {
 export class RouteScene {
 	constructor(element) {
 		this.el = element;
-		this.variant = element.dataset.variant === 'on-demand' ? 'on-demand' : 'regional';
+		this.variant = VARIANTS[element.dataset.variant] ? element.dataset.variant : 'regional';
+		this.config = VARIANTS[this.variant];
+		this.g = geometry(this.config.route);
 		this.base = element.dataset.mapBase || '';
 		this.story = element.closest('.js-block-scroll-story');
-		this.data = sceneData[this.variant];
+		this.data = DATA[this.variant];
 		this.state = { step: 0, local: 0 };
 		this.tipIds = { pick: '', drop: '' };
 		this.geo = null;
 	}
+
+	// Point at fraction t along the route.
+	along = (t) => {
+		const { route, segments, total, B } = this.g;
+		let d = t * total;
+		for (let i = 0; i < segments.length; i++) {
+			if (d <= segments[i]) {
+				const k = d / segments[i];
+				return [route[i][0] + (route[i + 1][0] - route[i][0]) * k, route[i][1] + (route[i + 1][1] - route[i][1]) * k];
+			}
+			d -= segments[i];
+		}
+		return B;
+	};
 
 	init = () => {
 		this.build();
@@ -101,7 +153,7 @@ export class RouteScene {
 		svg.setAttribute('preserveAspectRatio', 'none');
 		svg.setAttribute('class', 'ggt-rs__layer ggt-rs__route');
 		svg.setAttribute('aria-hidden', 'true');
-		const d = `M${ROUTE.map((p) => p.map((n) => n.toFixed(1)).join(',')).join(' L')}`;
+		const d = `M${this.g.route.map((p) => p.map((n) => n.toFixed(1)).join(',')).join(' L')}`;
 		const path = (className, extra = {}) => {
 			const p = document.createElementNS(svgNs, 'path');
 			p.setAttribute('d', d);
@@ -114,38 +166,39 @@ export class RouteScene {
 		this.draw = path('ggt-rs__draw', { pathLength: '1' });
 		cam.append(svg);
 
-		this.cities = CITIES.map(([name, lon, lat, onRoute]) => {
+		const endCities = this.config.ends.map(([, , city]) => city);
+		this.cities = this.config.cities.map(([name, lon, lat, onRoute]) => {
 			const [x, y] = P(lon, lat);
 			const flip = x > W * 0.6 || name === 'Rochester' || name === 'Hinckley';
 			const el = node('div', `ggt-rs__city${flip ? ' is-flipped' : ''}`, cam);
 			Object.assign(el.style, pct([x, y]));
 			node('span', 'ggt-rs__city-dot', el);
 			node('span', 'ggt-rs__city-label', el, name);
-			return { el, name, onRoute: Boolean(onRoute) };
+			return { el, name, onRoute: Boolean(onRoute), isEnd: endCities.includes(name) };
 		});
 
-		this.pins = this.variant === 'regional' ? PINS.map(([day, left, top]) => {
-			const el = node('div', 'ggt-rs__pin', cam, day);
+		this.pins = this.config.pins.map(([label, left, top]) => {
+			const el = node('div', 'ggt-rs__pin', cam, label);
 			Object.assign(el.style, { left: `${left}%`, top: `${top}%` });
 			return el;
-		}) : [];
+		});
 
-		const end = (point, kind, city, tag) => {
+		const end = (point, kind, city, tag, side) => {
 			const dot = node('span', `ggt-rs__end ggt-rs__end--${kind}`, cam);
 			Object.assign(dot.style, pct(point));
-			const card = node('div', `ggt-rs__end-card ggt-rs__end-card--${kind}`, cam);
+			const card = node('div', `ggt-rs__end-card ggt-rs__end-card--${kind}${side ? ` ggt-rs__end-card--${side}` : ''}`, cam);
 			Object.assign(card.style, pct(point));
 			node('span', 'ggt-rs__end-city', card, city);
 			node('span', 'ggt-rs__end-tag', card, tag);
 			return [dot, card];
 		};
-		this.ends = [...end(A, 'pickup', 'Duluth', 'Pickup'), ...end(B, 'dropoff', 'Minneapolis', 'Testing lab')];
+		this.ends = this.config.ends.flatMap(([index, kind, city, tag, side]) => end(this.g.route[index], kind, city, tag, side));
 
-		this.stops = this.variant === 'regional' ? [[ROUTE[3], '2'], [ROUTE[5], '3']].map(([point, label]) => {
+		this.stops = this.config.stops.map(([index, label]) => {
 			const el = node('span', 'ggt-rs__stop', cam, label);
-			Object.assign(el.style, pct(point));
+			Object.assign(el.style, pct(this.g.route[index]));
 			return el;
-		}) : [];
+		});
 
 		this.van = node('span', 'ggt-rs__van', cam);
 		node('span', 'ggt-rs__van-core', this.van);
@@ -153,17 +206,17 @@ export class RouteScene {
 		const column = (kind, label) => {
 			const col = node('div', `ggt-rs__col ggt-rs__col--${kind}`, this.el);
 			const tip = node('div', 'ggt-rs__tip', col);
-			node('span', `ggt-rs__chip ggt-rs__chip--${kind}`, tip, label);
+			const chip = node('span', `ggt-rs__chip ggt-rs__chip--${kind}`, tip, label);
 			const msg = node('div', 'ggt-rs__msg', tip);
 			const head = node('div', 'ggt-rs__msg-head', msg);
 			node('span', '', head, 'Email');
 			const time = node('span', '', head);
 			const subject = node('div', 'ggt-rs__msg-subject', msg);
 			const lines = node('div', 'ggt-rs__msg-lines', msg);
-			return { col, tip, msg, time, subject, lines };
+			return { col, tip, msg, chip, label, time, subject, lines };
 		};
-		this.pick = column('pickup', 'Mary · Pickup');
-		this.drop = column('dropoff', 'Jane · Drop-off');
+		this.pick = column('pickup', this.config.chips[0]);
+		this.drop = column('dropoff', this.config.chips[1]);
 
 		const hud = node('div', 'ggt-rs__hud', this.el);
 		const top = node('div', 'ggt-rs__hud-top', hud);
@@ -205,11 +258,10 @@ export class RouteScene {
 	fitRoute = (G) => {
 		const padX = 120;
 		const half = 34;
-		const mx0 = Math.min(A[0], B[0]);
-		const mx1 = Math.max(A[0], B[0]);
+		const { x0: mx0, x1: mx1, y0, y1 } = this.g.box;
 		const cx = (mx0 + mx1) / 2;
 		const spanX = (G.bw * (mx1 - mx0)) / W;
-		const spanY = (G.bh * Math.abs(B[1] - A[1])) / H;
+		const spanY = (G.bh * (y1 - y0)) / H;
 		const yMlo = G.pB + 8 + half;
 		const yMhi = G.ph - 12 - half;
 		const yDlo = G.hb + 16 + half;
@@ -222,7 +274,7 @@ export class RouteScene {
 		const hi = Math.min(yMhi, yDhi + dist);
 		const yM = lo <= hi ? (lo + hi) / 2 : Math.min(yMhi, Math.max(yMlo, yDlo + dist));
 		const fx = cx - (((G.pw / 2 - G.bx) / G.bw) - 0.5) * (W / sc);
-		const fy = B[1] - (((yM - G.by) / G.bh) - 0.5) * (H / sc);
+		const fy = y1 - (((yM - G.by) / G.bh) - 0.5) * (H / sc);
 		return [fx, fy, sc];
 	};
 
@@ -237,6 +289,8 @@ export class RouteScene {
 			return false;
 		}
 		this.tipIds[key] = id;
+		// An email can name its own recipient (e.g. one of several drop-off contacts).
+		col.chip.textContent = msg.chip || col.label;
 		col.time.textContent = msg.time;
 		col.subject.textContent = msg.subject;
 		col.lines.replaceChildren(...msg.lines.map((line) => {
@@ -305,8 +359,10 @@ export class RouteScene {
 		const G = this.measure();
 		this.geo = G;
 		const fit = this.fitRoute(G);
-		const mid = [(A[0] + B[0]) / 2, (A[1] + B[1]) / 2];
-		const views = [[W / 2, H / 2, 1], [A[0], A[1], 2.2], [mid[0], mid[1], 1.7], fit, fit, fit, fit, [W / 2, H / 2, 1]];
+		const { A, box } = this.g;
+		const mid = [(box.x0 + box.x1) / 2, (box.y0 + box.y1) / 2];
+		const start = this.config.startView === 'route' ? [mid[0], mid[1], 2.2] : [A[0], A[1], 2.2];
+		const views = [[W / 2, H / 2, 1], start, [mid[0], mid[1], 1.7], fit, fit, fit, fit, [W / 2, H / 2, 1]];
 		const [fx, fy, s] = views[step] || views[0];
 		const tx = (0.5 - (fx / W) * s) * 100;
 		const ty = (0.5 - (fy / H) * s) * 100;
@@ -314,7 +370,7 @@ export class RouteScene {
 		this.cam.style.setProperty('--ggt-rs-s', String(s));
 
 		// Map layers.
-		const rf = REGION_FOR[step] || 'all';
+		const rf = this.config.regionFor[step] || 'all';
 		this.regions.forEach((img) => {
 			const on = rf !== 'all' && img.dataset.region === rf;
 			img.style.opacity = on ? String(step === 6 ? 0.9 : 0.55) : '0';
@@ -329,9 +385,9 @@ export class RouteScene {
 		this.draw.style.strokeDashoffset = (1 - prog).toFixed(4);
 
 		const pinsOn = step === 0 || step === LAST;
-		this.cities.forEach(({ el, name, onRoute }) => {
+		this.cities.forEach(({ el, onRoute, isEnd }) => {
 			let op = onRoute ? 1 : 0.55;
-			if (pinsOn || name === 'Duluth' || name === 'Minneapolis') {
+			if (pinsOn || isEnd) {
 				op = 0;
 			}
 			el.style.opacity = String(op);
@@ -345,7 +401,7 @@ export class RouteScene {
 		this.stops.forEach((el) => {
 			el.style.opacity = live ? '1' : '0';
 		});
-		const van = along(prog);
+		const van = this.along(prog);
 		Object.assign(this.van.style, pct(van), { opacity: live ? '1' : '0' });
 	};
 }

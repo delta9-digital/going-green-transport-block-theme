@@ -45,12 +45,19 @@ class RouteScene implements ServiceInterface
 			return $content;
 		}
 
-		$variant = \str_contains($className, 'ggt-route-scene--on-demand') ? 'on-demand' : 'regional';
+		$variant = 'regional';
+		if (\str_contains($className, 'ggt-route-scene--manufacturer')) {
+			$variant = 'manufacturer';
+		} elseif (\str_contains($className, 'ggt-route-scene--on-demand')) {
+			$variant = 'on-demand';
+		}
 		$base = \trailingslashit(\get_theme_file_uri('assets/images/map'));
 
-		[$map, $alt] = $variant === 'on-demand'
-			? ['mn-counties.svg', \__('Map of Minnesota: a direct run from Duluth to a Minneapolis testing lab.', 'going-green-transport')]
-			: ['mn-regions-outlined.svg', \__('Map of Minnesota\'s five route regions: an example Northeast route from Duluth to a Minneapolis testing lab.', 'going-green-transport')];
+		[$map, $alt] = match ($variant) {
+			'on-demand' => ['mn-counties.svg', \__('Map of Minnesota: a direct run from Duluth to a Minneapolis testing lab.', 'going-green-transport')],
+			'manufacturer' => ['mn-regions-outlined.svg', \__('Map of Minnesota\'s five route regions: an example Central route from a St. Cloud manufacturer to dispensaries in Minneapolis, St. Paul, and Stillwater.', 'going-green-transport')],
+			default => ['mn-regions-outlined.svg', \__('Map of Minnesota\'s five route regions: an example Northeast route from Duluth to a Minneapolis testing lab.', 'going-green-transport')],
+		};
 
 		return \sprintf(
 			'<div class="wp-block-group %1$s" data-variant="%2$s" data-map-base="%3$s"><div class="ggt-rs__stage"><div class="ggt-rs__box"><div class="ggt-rs__cam"><img class="ggt-rs__layer ggt-rs__base" src="%4$s" alt="%5$s" /></div></div></div></div>',

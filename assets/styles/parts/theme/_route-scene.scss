@@ -268,6 +268,22 @@ $ease: cubic-bezier(0.2, 0, 0, 1);
 		align-items: flex-end;
 		transform: translate(calc(-100% - #{rs(14px)}), -50%);
 	}
+
+	// Several drop-offs close together (variant `manufacturer`): each card takes a side.
+	&--left {
+		align-items: flex-end;
+		transform: translate(calc(-100% - #{rs(14px)}), -50%);
+	}
+
+	&--right {
+		align-items: flex-start;
+		transform: translate(rs(14px), -50%);
+	}
+
+	&--below {
+		align-items: center;
+		transform: translate(-50%, rs(14px));
+	}
 }
 
 .ggt-rs__end-city {
