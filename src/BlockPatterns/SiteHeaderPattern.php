@@ -138,7 +138,9 @@ class SiteHeaderPattern extends AbstractBlockPattern
 			. "<div class=\"wp-block-button\"><a class=\"wp-block-button__link wp-element-button\" href=\"{$quote}\">{$ctaText}</a></div>\n"
 			. "<!-- /wp:button --></div>\n<!-- /wp:buttons -->\n";
 
-		return "<!-- wp:group {\"anchor\":\"top\",\"align\":\"full\",\"className\":\"ggt-hdr\",\"layout\":{\"type\":\"constrained\"}} -->\n<div id=\"top\" class=\"wp-block-group alignfull ggt-hdr\">"
+		// No id="top" here: the header is sticky, so a #top link aimed at it would never scroll. With no
+		// element called "top", the footer's Back to Top link scrolls to the top of the document.
+		return "<!-- wp:group {\"align\":\"full\",\"className\":\"ggt-hdr\",\"layout\":{\"type\":\"constrained\"}} -->\n<div class=\"wp-block-group alignfull ggt-hdr\">"
 			. "<!-- wp:group {\"align\":\"wide\",\"className\":\"ggt-hdr__bar\",\"layout\":{\"type\":\"flex\",\"flexWrap\":\"nowrap\",\"justifyContent\":\"space-between\"}} -->\n<div class=\"wp-block-group alignwide ggt-hdr__bar\">"
 			. $logo
 			. "<!-- wp:group {\"className\":\"ggt-hdr__right\",\"layout\":{\"type\":\"flex\",\"flexWrap\":\"nowrap\",\"justifyContent\":\"right\"}} -->\n<div class=\"wp-block-group ggt-hdr__right\">"
