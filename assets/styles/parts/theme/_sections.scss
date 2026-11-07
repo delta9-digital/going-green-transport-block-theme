@@ -748,3 +748,64 @@
 		grid-column: 1 / -1;
 	}
 }
+
+// Process timeline on phones: the 96px circles and the boxed step titles left ~210px for the copy
+// (and the boxed titles read as buttons). Smaller circles, the title as a plain heading level with
+// the circle, and the copy gets the width back. The column basis is an inline style.
+@media (max-width: 781px) {
+	.ggt-steps > .ggt-step {
+		gap: 16px;
+
+		> .wp-block-column:first-child {
+			flex-basis: 56px !important; // stylelint-disable-line declaration-no-important
+		}
+
+		&:not(:last-child) > .wp-block-column:first-child::after {
+			top: 56px;
+		}
+
+		.ggt-pill {
+			margin-block: 14px 8px !important; // stylelint-disable-line declaration-no-important
+			padding: 0 !important; // stylelint-disable-line declaration-no-important
+			border: 0 !important; // stylelint-disable-line declaration-no-important
+			font-size: var(--wp--preset--font-size--heading-xs) !important; // stylelint-disable-line declaration-no-important
+			line-height: 1.4;
+		}
+
+		// The step's bottom padding (56px, inline) is the gap to the next circle.
+		.wp-block-column:last-child > .wp-block-group {
+			padding-block-end: 40px !important; // stylelint-disable-line declaration-no-important
+		}
+	}
+
+	.ggt-step__num {
+		width: 56px;
+		height: 56px;
+		font-size: 20px;
+	}
+
+	// Numbered rows (Why GGT, Before your first run, location "Why choose us"): a 64px number
+	// column (inline flex-basis) plus the gap left ~260px of text; 40px is enough for "01".
+	.ggt-sec .wp-block-columns.is-not-stacked-on-mobile:not(.ggt-step) > .wp-block-column:first-child[style*='flex-basis:64px'] {
+		flex-basis: 40px !important; // stylelint-disable-line declaration-no-important
+	}
+}
+
+// Location pages, "Our simple process": the intro column carries an aside card (helpful links,
+// social updates) that lands between the heading and Step 01 once the columns stack. Unwrap the
+// intro so its card can follow the steps.
+@media (max-width: 959px) {
+	.ggt-sec--process .is-layout-grid:has(> .ggt-steps) {
+		row-gap: 0;
+
+		> :first-child:has(> .wp-block-group.has-background) {
+			display: contents;
+
+			> .wp-block-group.has-background {
+				order: 1;
+				margin-block-start: var(--wp--preset--spacing--40);
+			}
+		}
+
+	}
+}
