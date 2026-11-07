@@ -916,3 +916,61 @@
 		}
 	}
 }
+
+// About, "A Team Built for This Industry": the list is a plain core list whose items are a number
+// span and a text span, so it showed disc bullets with the number run into the text ("• 01Background-
+// checked"). Number column + text, like the numbered list style. (Broken at every width.)
+.ggt-sec--leadership ul.wp-block-list:not([class*='is-style-']) {
+	list-style: none;
+
+	li {
+		display: grid;
+		grid-template-columns: 40px minmax(0, 1fr);
+	}
+
+	li + li {
+		margin-block-start: 14px;
+	}
+
+	@media (max-width: 781px) {
+		li {
+			grid-template-columns: 32px minmax(0, 1fr);
+		}
+	}
+}
+
+@media (max-width: 781px) {
+	// The stacked panel kept the desktop column gap above the list.
+	.ggt-sec--leadership .is-layout-grid.has-background {
+		row-gap: var(--wp--preset--spacing--60);
+	}
+
+	// On-Demand "On-Demand or Flat-Rate?" table (core Columns rows inside .ggt-clip). Stacked, each
+	// value lost its column heading. Phones keep the two value cells side by side under their
+	// headings, with the row label spanning above them; the header row drops its empty label cell.
+	.ggt-sec--compare .ggt-clip > .wp-block-columns {
+		gap: 0;
+
+		> .wp-block-column {
+			flex-basis: 50% !important; // stylelint-disable-line declaration-no-important
+			min-width: 0;
+		}
+
+		> .wp-block-column:first-child {
+			flex-basis: 100% !important; // stylelint-disable-line declaration-no-important
+		}
+
+		> .wp-block-column:first-child:empty {
+			display: none;
+		}
+
+		p {
+			height: 100%;
+			padding: 12px 16px !important; // stylelint-disable-line declaration-no-important
+		}
+
+		> .wp-block-column:first-child p {
+			padding-block-end: 4px !important; // stylelint-disable-line declaration-no-important
+		}
+	}
+}
