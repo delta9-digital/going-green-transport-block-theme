@@ -422,8 +422,22 @@
 	}
 }
 
-// Post cards (Resources Query Loop): category chip, date, read more with arrow circle.
+// Post cards (Resources Query Loop): category chip, date, read more with arrow circle. Every card is
+// as tall as the tallest one, across rows too (once they sit side by side), with Read More along
+// the bottom.
+@media (min-width: 600px) {
+	.wp-block-post-template.is-layout-grid:has(.ggt-post-card) {
+		grid-auto-rows: 1fr;
+	}
+}
+
+.wp-block-post-template.is-layout-grid:has(.ggt-post-card) > li {
+	display: flex;
+}
+
 .ggt-post-card {
+	flex: 1;
+
 	&::after {
 		content: none;
 	}
@@ -448,6 +462,24 @@
 		.wp-block-post-excerpt__more-text {
 			display: none;
 		}
+	}
+}
+
+// Full cards: a column with room between the chip/date row, the title and the excerpt.
+.ggt-post-card:not(.ggt-post-card--compact) {
+	display: flex;
+	flex-direction: column;
+
+	> .wp-block-group:first-child {
+		margin-block-end: 20px;
+	}
+
+	.wp-block-post-title {
+		margin-block-end: 12px;
+	}
+
+	.ggt-read-more {
+		margin-block-start: 24px;
 	}
 }
 
