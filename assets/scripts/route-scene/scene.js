@@ -46,26 +46,26 @@ const VARIANTS = {
 		regionFor: ['all', 'northeast', 'northeast', 'northeast', 'northeast', 'northeast', 'metro', 'all'],
 		chips: ['Mary · Pickup', 'Jane · Drop-off'],
 	},
-	// The regional Duluth route with a manufacturer pickup and three dispensary drop-offs in
+	// The regional Duluth route with a manufacturer pickup and two dispensary drop-offs in
 	// Minneapolis. The drive (step 5) ends at the first dispensary; the delivery step (6) covers the
 	// dispensary-to-dispensary leg.
 	manufacturer: {
-		route: [...DULUTH_ROUTE.slice(0, 7), [-93.22, 45.045], [-93.33, 44.94], [-93.205, 44.905]],
+		route: [...DULUTH_ROUTE.slice(0, 7), [-93.22, 45.045], [-93.22, 44.935]],
 		cities: DULUTH_CITIES,
 		// [route index, kind, title, tag, card side, [first step, last step] the card shows]; no
-		// title = a dot only. The three dispensaries are too close for a card each: one card.
+		// title = a dot only. The dispensaries are too close for a card each: one card.
 		ends: [
 			[0, 'pickup', 'Duluth', 'Manufacturer'],
-			[8, 'dropoff', 'Minneapolis', '3 dispensaries'],
+			[8, 'dropoff', 'Minneapolis', '2 dispensaries'],
 			[7, 'dropoff'],
-			[9, 'dropoff'],
 		],
 		stops: [[3, '2'], [5, '3']],
 		pins: ZONE_PINS,
 		regionFor: ['all', 'northeast', 'northeast', 'northeast', 'northeast', 'northeast', 'metro', 'all'],
 		chips: ['Dana · Pickup', 'Dispensaries · Drop-offs'],
-		// Route progress per step: [from, to] over the step's scroll progress.
-		legs: { 5: [0, 0.9029], 6: [0.9029, 1] },
+		// Route progress per step: [from, to, arrive] over the step's scroll progress; the van
+		// reaches `to` at `arrive` (default 1) and waits there.
+		legs: { 5: [0, 0.9495], 6: [0.9495, 1, 0.5] },
 	},
 };
 
@@ -297,7 +297,7 @@ export class RouteScene {
 			this.tipIds[key] = '';
 			return false;
 		}
-		const id = msg.subject + msg.time;
+		const id = (msg.chip || '') + msg.subject + msg.time;
 		if (id === this.tipIds[key]) {
 			return false;
 		}
@@ -326,8 +326,8 @@ export class RouteScene {
 		const legs = this.config.legs || { [TRANSIT]: [0, 1] };
 		let prog = step < TRANSIT ? 0 : 1;
 		if (legs[step]) {
-			const [from, to] = legs[step];
-			prog = from + (to - from) * local;
+			const [from, to, arrive = 1] = legs[step];
+			prog = from + (to - from) * Math.min(1, local / arrive);
 		}
 		const { hud, texts } = this.data(prog);
 
