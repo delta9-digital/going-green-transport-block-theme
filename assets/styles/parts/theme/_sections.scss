@@ -212,8 +212,9 @@
 	border-block-start: 1px solid var(--wp--preset--color--gray-200);
 }
 
-// Sticky intro column (comp: the left column follows the numbered rows).
-@media (min-width: 782px) {
+// Sticky intro column (comp: the left column follows the numbered rows). Only while the intro
+// sits beside the rows; below 960px those sections stack (see Mobile / tablet).
+@media (min-width: 960px) {
 	.ggt-sticky {
 		position: sticky;
 		top: calc(var(--wp--custom--nav--height) + 24px + var(--wp-admin--admin-bar--height, 0px));
@@ -722,5 +723,28 @@
 		> :nth-child(n + 3) {
 			grid-column: 1 / -1;
 		}
+	}
+}
+
+// Intro left / content right sections (home Why GGT, Process, FAQ; How It Works compare, first run;
+// Services; About; location pages). On tablets the two 320px columns squeeze numbered rows, steps
+// and the accordion into ~240px of text beside a mostly empty intro column, so they stack below
+// 960px, and the 80px desktop column gap becomes a modest gap under the heading.
+.ggt-sec:is(.ggt-sec--why-ggt, .ggt-sec--process, .ggt-sec--about, .ggt-sec--faq, .ggt-sec--why-choose-us, .ggt-sec--why-it-matters, .ggt-sec--compare, .ggt-sec--first-run) .is-layout-grid:has(> :first-child > h2):has(> :nth-child(2):last-child) {
+	@media (max-width: 959px) {
+		grid-template-columns: minmax(0, 1fr);
+		row-gap: var(--wp--preset--spacing--90);
+	}
+
+	@media (max-width: 781px) {
+		row-gap: var(--wp--preset--spacing--70);
+	}
+}
+
+// Three service cards in a two-column grid (home, Services) leave the third alone beside an empty
+// cell on tablets; it takes the full row instead.
+@media (min-width: 600px) and (max-width: 1023px) {
+	.ggt-sec--services .is-layout-grid:has(> :nth-child(3):last-child) > :nth-child(3) {
+		grid-column: 1 / -1;
 	}
 }
