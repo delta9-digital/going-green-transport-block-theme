@@ -1012,3 +1012,15 @@
 		}
 	}
 }
+
+// Testimonials below 1024px: every slide stretched to the tallest of the nine quotes, so short
+// quotes sat on ~130-190px of empty card. Each card is as tall as its own quote.
+@media (max-width: 1023px) {
+	.ggt-sec--testimonials .block-carousel > .swiper-wrapper {
+		align-items: flex-start;
+	}
+
+	.ggt-sec--testimonials .block-carousel-item--content > .wp-block-group {
+		height: auto;
+	}
+}
