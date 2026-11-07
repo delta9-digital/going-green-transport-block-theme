@@ -691,3 +691,36 @@
 		}
 	}
 }
+
+// Icon cards (About principles, Services / home "who we serve", Flat-rate "Every transport
+// includes"): icon plate, title, copy, with an inline min-height of 280-320px. On phones each card
+// sized to its copy and the icon sits beside the title, which roughly halves the stack.
+@media (max-width: 781px) {
+	.ggt-sec .wp-block-group.has-background:has(> .ggt-plate:first-child + :is(h3, h4)) {
+		display: grid;
+		grid-template-columns: 48px minmax(0, 1fr);
+		align-items: center;
+		gap: 14px 16px;
+		min-height: 0 !important; // stylelint-disable-line declaration-no-important
+		padding: 24px !important; // stylelint-disable-line declaration-no-important
+
+		> * {
+			margin: 0 !important; // stylelint-disable-line declaration-no-important
+		}
+
+		> .ggt-plate {
+			width: 48px;
+			height: 48px;
+
+			img {
+				max-width: 28px;
+				max-height: 28px;
+				object-fit: contain;
+			}
+		}
+
+		> :nth-child(n + 3) {
+			grid-column: 1 / -1;
+		}
+	}
+}
