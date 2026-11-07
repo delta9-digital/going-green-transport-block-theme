@@ -122,6 +122,12 @@ header.wp-block-template-part:has(.ggt-hdr) {
 	background: var(--wp--preset--color--green-800);
 }
 
+// Drawer-only blocks (pattern: logo first, quote/call buttons last inside the navigation). They
+// never show in the desktop bar or the closed drawer; the open drawer turns them on below.
+.ggt-hdr__menu :is(.ggt-hdr__drawer-logo, .ggt-hdr__drawer-cta) {
+	display: none;
+}
+
 // Drawer below 960px: the six links do not fit beside the logo earlier than that. The Get a Quote
 // button stays visible at every width (the comps have no mobile header).
 @media (max-width: 959px) {
@@ -133,6 +139,13 @@ header.wp-block-template-part:has(.ggt-hdr) {
 		display: none;
 	}
 
+	// 44px tap targets around the 24px icons. The negative margin cancels the padding, so the icon
+	// and the 72px bar do not move.
+	.ggt-hdr__menu :is(.wp-block-navigation__responsive-container-open, .wp-block-navigation__responsive-container-close) {
+		padding: 10px;
+		margin: -10px;
+	}
+
 	.ggt-hdr .ggt-hdr__right {
 		gap: 16px;
 	}
@@ -142,29 +155,166 @@ header.wp-block-template-part:has(.ggt-hdr) {
 	}
 }
 
-// Open drawer.
-.ggt-hdr__menu .wp-block-navigation__responsive-container.is-menu-open {
-	padding: 24px;
+// On the quote page the quote buttons link to the page itself: drop the drawer one, and the bar one
+// on phones, where it is most of the bar. The quote form section marks the page whatever its ID;
+// page-id-1480 is a fallback.
+:is(body.page-id-1480, body:has(.ggt-sec--quote-form)) .ggt-hdr .ggt-hdr__drawer-quote {
+	display: none;
+}
 
-	// Left-align the drawer. The desktop bar is right-aligned, and core redefines the alignment
-	// variable on the list itself, so set it there.
+@media (max-width: 781px) {
+	:is(body.page-id-1480, body:has(.ggt-sec--quote-form)) .ggt-hdr .ggt-hdr__cta {
+		display: none;
+	}
+}
+
+// Open drawer. Core's overlay selectors are long (0,5,0 for the submenu), so these hang off the
+// content wrapper to win without !important.
+.ggt-hdr__menu .wp-block-navigation__responsive-container.is-menu-open {
+	// Full-width, left-aligned rows. The desktop bar is right-aligned and core redefines the
+	// alignment variable on the list itself (it carries the nav classes), so set it on both.
+	--navigation-layout-justification-setting: stretch;
+
+	// Side padding = the bar's gutter, no top padding: the logo row below replays the 72px bar, so
+	// the logo and the close icon open exactly where the logo and the hamburger were.
+	padding: 0 var(--wp--style--root--padding-right) 32px var(--wp--style--root--padding-left);
+
 	.wp-block-navigation__container {
-		--navigation-layout-justification-setting: flex-start;
+		--navigation-layout-justification-setting: stretch;
+	}
+
+	// Same spot as the hamburger icon (24px from the top, flush with the gutter), 44px tap area.
+	.wp-block-navigation__responsive-container-close {
+		top: calc((var(--wp--custom--nav--height) - 44px) / 2);
+		right: 0;
+		margin: 0 -10px 0 0;
 	}
 
 	.wp-block-navigation__responsive-container-content {
-		gap: 20px;
-		font-size: var(--wp--preset--font-size--heading-md);
+		gap: 0;
+		padding-block-start: 0;
+
+		// The list carries the nav's own class (15px), so size the links here, not on the wrapper.
+		.wp-block-navigation__container {
+			gap: 0;
+			margin-block-start: 8px;
+			font-size: var(--wp--preset--font-size--heading-md);
+			line-height: 1.2;
+		}
+
+		.wp-block-navigation__container > .wp-block-navigation-item {
+			border-block-end: 1px solid var(--wp--preset--color--line);
+		}
+
+		.wp-block-navigation__container > .wp-block-navigation-item > .wp-block-navigation-item__content {
+			display: flex;
+			align-items: center;
+			min-height: 56px;
+			padding: 0;
+			border: 0;
+		}
+
+		// Current page: lime underline, as in the desktop bar.
+		.wp-block-navigation__container > .current-menu-item > .wp-block-navigation-item__content .wp-block-navigation-item__label {
+			text-decoration: underline 2px var(--wp--preset--color--lime-500);
+			text-underline-offset: 6px;
+		}
+
+		// Pricing: the item is a label (no link), its two pages sit under it behind a lime rule.
+		.has-child .wp-block-navigation__submenu-container {
+			min-width: 0;
+			margin: 0 0 12px;
+			padding: 0 0 0 12px;
+			gap: 4px;
+			border-radius: 0;
+
+			// An inset shadow, not a border: the desktop panel zeroes borders with !important.
+			box-shadow: inset 2px 0 0 var(--wp--preset--color--lime-500);
+
+			.wp-block-navigation-item__content {
+				min-height: 48px;
+				padding: 10px 12px;
+				font-size: var(--wp--preset--font-size--lead-lg);
+				line-height: 1.25;
+			}
+
+			.wp-block-navigation-item__description {
+				margin-block-start: 2px;
+				font-size: var(--wp--preset--font-size--meta);
+			}
+		}
+	}
+}
+
+// Drawer logo row, as tall as the bar. Core makes the image link inline-block, which leaves a 7px
+// baseline gap under the bar logo; the bottom padding puts this one at the same height.
+.ggt-hdr__menu .is-menu-open .ggt-hdr__drawer-logo {
+	display: flex;
+	align-items: center;
+	min-height: var(--wp--custom--nav--height);
+	margin: 0;
+	padding-block-end: 7px;
+	box-sizing: border-box;
+
+	a {
+		display: block;
 	}
 
-	.wp-block-navigation__submenu-container {
-		margin: 8px 0 0;
-		padding: 0;
-		box-shadow: none;
+	img {
+		display: block;
+		width: auto;
+		height: 48px;
+	}
+}
 
-		.wp-block-navigation-item__content {
-			padding-inline: 0;
+// Drawer quote button and tap-to-call, full width under the links (capped on tablets).
+.ggt-hdr__menu .is-menu-open .ggt-hdr__drawer-cta {
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+	gap: 12px;
+	width: 100%;
+	max-width: 480px;
+	margin-block-start: 28px;
+
+	.wp-block-button {
+		width: 100%;
+	}
+
+	.wp-block-button__link {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 10px;
+		box-sizing: border-box;
+		min-height: 52px;
+		padding: 14px 24px;
+		font-size: var(--wp--preset--font-size--lead-lg);
+		font-weight: 700;
+	}
+
+	.ggt-hdr__drawer-quote .wp-block-button__link {
+		background: var(--wp--preset--color--green-800);
+		color: var(--wp--preset--color--white);
+	}
+
+	.ggt-hdr__drawer-call .wp-block-button__link {
+		border: 1.5px solid var(--wp--preset--color--green-800);
+		background: transparent;
+		color: var(--wp--preset--color--green-900);
+
+		&:hover {
+			background: var(--wp--preset--color--lime-500);
 		}
 	}
 
+	// Phone glyph (icons/phone-lime.svg) drawn in the text colour.
+	.ggt-hdr__drawer-call .wp-block-button__link::before {
+		content: '';
+		flex: none;
+		width: 18px;
+		height: 18px;
+		background: currentColor;
+		mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 410 400'%3E%3Cpath d='M64 36 L120 36 C 134 36 144 48 148 60 L 164 116 C 166 128 162 140 152 148 L 124 168 C 120 172 118 178 122 184 C 142 224 188 270 228 290 C 234 294 240 292 244 288 L 264 260 C 272 250 284 246 296 248 L 352 264 C 364 268 376 278 376 292 L 376 348 C 376 364 364 376 348 376 L 308 376 C 156 376 36 256 36 104 L 36 64 C 36 48 48 36 64 36 Z'/%3E%3C/svg%3E") center / contain no-repeat;
+	}
 }
