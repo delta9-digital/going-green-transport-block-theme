@@ -37,3 +37,12 @@ html body {
 :where(h1, h2, h3, h4, h5, h6, section)[id] {
 	scroll-margin-top: calc(var(--wp--custom--nav--height) + 24px + var(--wp-admin--admin-bar--height, 0px));
 }
+
+// Phones and tablets: balanced heading lines, so narrow headings don't strand one word or split a
+// hyphenated word at its hyphen ("Flat-/Rate?") just to fill the first line. Hyphens are already
+// manual; the break was the hyphen's own wrap opportunity. Desktop line breaks are left as designed.
+@media (max-width: 1023px) {
+	:where(h1, h2, h3) {
+		text-wrap: balance;
+	}
+}

@@ -148,6 +148,15 @@
 	margin: 0;
 }
 
+// 11px (micro) pills are below a comfortable reading size on phones: 12px, with less tracking
+// (inline 0.1em) so the pill stays about as wide.
+@media (max-width: 781px) {
+	.ggt-pill.has-micro-font-size {
+		font-size: var(--wp--preset--font-size--caption) !important; // stylelint-disable-line declaration-no-important
+		letter-spacing: 0.06em !important; // stylelint-disable-line declaration-no-important
+	}
+}
+
 // FAQ accordion (comp: white rounded items, 17px Roboto questions, +/− toggles).
 .ggt-faq {
 	display: flex;
