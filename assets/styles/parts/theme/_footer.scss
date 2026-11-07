@@ -29,15 +29,25 @@
 		@media (max-width: 1023.98px) { /* stylelint-disable-line media-feature-range-notation */
 			grid-template-columns: minmax(0, 1fr);
 		}
+
+		// Phones: the band is a full screen tall at the desktop rhythm; tighten it.
+		@media (max-width: 781px) { /* stylelint-disable-line media-feature-range-notation */
+			gap: 24px;
+			padding-block: 40px;
+		}
 	}
 
 	.ggt-ftr__band-intro {
 		margin-block-end: 24px;
+
+		@media (max-width: 781px) { /* stylelint-disable-line media-feature-range-notation */
+			margin-block-end: 16px;
+		}
 	}
 
 	.ggt-ftr__band-title {
 		margin: 0 0 8px;
-		font-size: clamp(32px, 3.6vw, 48px);
+		font-size: clamp(28px, 3.6vw, 48px);
 		letter-spacing: -0.02em;
 		line-height: 1.05;
 	}
@@ -54,6 +64,17 @@
 	display: flex;
 	flex-direction: column;
 	gap: 24px;
+
+	// Single column: the grid gap already separates it from the form (drop the flow-layout margin).
+	@media (max-width: 1023.98px) { /* stylelint-disable-line media-feature-range-notation */
+		.ggt-ftr__band-inner > & {
+			margin-block-start: 0;
+		}
+	}
+
+	@media (max-width: 781px) { /* stylelint-disable-line media-feature-range-notation */
+		gap: 12px;
+	}
 
 	@media (min-width: 1024px) { /* stylelint-disable-line media-feature-range-notation */
 		padding-inline-start: 32px;
@@ -84,6 +105,11 @@
 	height: 48px;
 	border-radius: 50%;
 	background: var(--wp--preset--color--green-800);
+
+	@media (max-width: 781px) { /* stylelint-disable-line media-feature-range-notation */
+		width: 44px;
+		height: 44px;
+	}
 
 	img {
 		width: 22px;
@@ -130,6 +156,7 @@
 
 		@media (max-width: 600px) { /* stylelint-disable-line media-feature-range-notation */
 			grid-template-columns: minmax(0, 1fr);
+			gap: 10px;
 
 			.ggt-signup__submit {
 				justify-self: stretch;
@@ -153,6 +180,10 @@
 		color: var(--wp--preset--color--green-900);
 		font: inherit;
 		font-size: 16px;
+
+		@media (max-width: 600px) { /* stylelint-disable-line media-feature-range-notation */
+			height: 48px;
+		}
 	}
 
 	::placeholder,
@@ -183,6 +214,24 @@
 			height: 20px;
 			margin: 0;
 			accent-color: var(--wp--preset--color--green-800);
+		}
+
+		// Touch: a 24px box and a label row tall enough to tap (the label toggles the box).
+		@media (max-width: 1023.98px) { /* stylelint-disable-line media-feature-range-notation */
+			margin-block-start: 0;
+
+			input {
+				flex: none;
+				width: 24px;
+				height: 24px;
+			}
+
+			label {
+				display: flex;
+				flex: 1;
+				align-items: center;
+				min-height: 44px;
+			}
 		}
 	}
 
@@ -243,6 +292,10 @@
 	padding-block: 72px 32px;
 	color: var(--wp--preset--color--green-900);
 	font-family: var(--wp--preset--font-family--body);
+
+	@media (max-width: 781px) { /* stylelint-disable-line media-feature-range-notation */
+		padding-block: 40px 16px;
+	}
 }
 
 // Wordmark background: centred and contained, faint, behind the columns.
@@ -274,10 +327,92 @@
 	&.is-layout-grid {
 		grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr));
 	}
+
+	// Tablet: auto-fit put the brand column alone under Company at a quarter width (the tagline
+	// broke after "never"). Three link columns, then the brand across the full width.
+	@media (max-width: 1023.98px) { /* stylelint-disable-line media-feature-range-notation */
+		&.is-layout-grid {
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+		}
+
+		> .ggt-ftr__brand {
+			grid-column: 1 / -1;
+		}
+	}
+
+	// Phones: two columns instead of one long list. Company over Guide on the left, Services
+	// (the longest list) on the right, the brand row underneath.
+	@media (max-width: 599.98px) { /* stylelint-disable-line media-feature-range-notation */
+		gap: 24px 16px;
+
+		&.is-layout-grid {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+
+		> .ggt-ftr__col:nth-child(2) {
+			grid-row: 1 / span 2;
+			grid-column: 2;
+		}
+
+		> .ggt-ftr__col:nth-child(3) {
+			grid-row: 2;
+			grid-column: 1;
+		}
+	}
 }
 
 .ggt-ftr__col > * {
 	margin-block: 0;
+}
+
+// Below desktop the brand column is a row: logo left, tagline and icons beside it (tablet) or
+// tagline beside it and icons underneath (phones).
+.ggt-ftr__brand {
+	@media (max-width: 1023.98px) { /* stylelint-disable-line media-feature-range-notation */
+		display: grid;
+		grid-template-columns: auto minmax(0, 1fr);
+		gap: 8px 24px;
+		align-items: center;
+		padding-block-start: 8px;
+
+		> .ggt-ftr__logo {
+			grid-row: 1 / span 2;
+			margin-block-end: 0 !important;
+
+			img {
+				width: 200px;
+			}
+		}
+
+		> .ggt-ftr__quote {
+			align-self: end;
+		}
+
+		> .ggt-ftr__icons {
+			align-self: start;
+			margin-block-start: 0 !important;
+		}
+	}
+
+	@media (max-width: 599.98px) { /* stylelint-disable-line media-feature-range-notation */
+		gap: 12px 16px;
+
+		> .ggt-ftr__logo {
+			grid-row: auto;
+
+			img {
+				width: 128px;
+			}
+		}
+
+		> .ggt-ftr__quote {
+			align-self: center;
+		}
+
+		> .ggt-ftr__icons {
+			grid-column: 1 / -1;
+		}
+	}
 }
 
 .ggt-ftr__logo {
@@ -301,6 +436,11 @@
 .ggt-ftr__heading {
 	margin-block-end: 16px !important;
 	color: var(--wp--preset--color--gray-600);
+
+	// The 44px link rows below carry their own space.
+	@media (max-width: 1023.98px) { /* stylelint-disable-line media-feature-range-notation */
+		margin-block-end: 4px !important;
+	}
 }
 
 .ggt-ftr__links {
@@ -309,6 +449,24 @@
 	font-family: var(--wp--preset--font-family--body);
 	font-size: var(--wp--preset--font-size--meta);
 	font-weight: 700;
+
+	// Touch: 44px rows (padding, same type) instead of 22px links 10px apart.
+	@media (max-width: 1023.98px) { /* stylelint-disable-line media-feature-range-notation */
+		gap: 0;
+
+		.wp-block-navigation-item__content {
+			display: flex;
+			align-items: center;
+			min-height: 44px;
+		}
+	}
+
+	// Phones: Privacy and Terms stay in the legal row only.
+	@media (max-width: 781px) { /* stylelint-disable-line media-feature-range-notation */
+		.ggt-ftr__legal-dup {
+			display: none;
+		}
+	}
 }
 
 // Icon row under the tagline: call and email left, social icons right.
@@ -319,11 +477,21 @@
 	> * {
 		margin-block: 0 !important;
 	}
+
+	// Touch: the icons below get 44px hit areas with no gap between them, so the 24px glyphs
+	// keep their 20px spacing; pull the row out by the 10px padding to keep the edges aligned.
+	@media (max-width: 1023.98px) { /* stylelint-disable-line media-feature-range-notation */
+		margin-inline: -10px;
+	}
 }
 
 .ggt-ftr__reach {
 	display: flex;
 	gap: 16px;
+
+	@media (max-width: 1023.98px) { /* stylelint-disable-line media-feature-range-notation */
+		gap: 0;
+	}
 }
 
 // Call and email: bare 24px icons in the social icons' colour.
@@ -337,6 +505,13 @@
 	&:hover,
 	&:focus-visible {
 		background: var(--wp--preset--color--green-900);
+	}
+
+	// Touch: 44px box, the mask keeps the glyph at 24px.
+	@media (max-width: 1023.98px) { /* stylelint-disable-line media-feature-range-notation */
+		width: 44px;
+		height: 44px;
+		mask-size: 24px 24px;
 	}
 }
 
@@ -352,6 +527,14 @@
 			color: var(--wp--preset--color--green-900);
 		}
 	}
+
+	@media (max-width: 1023.98px) { /* stylelint-disable-line media-feature-range-notation */
+		gap: 0;
+
+		.wp-social-link a {
+			padding: 10px;
+		}
+	}
 }
 
 .ggt-ftr__legal {
@@ -362,6 +545,12 @@
 	color: var(--wp--preset--color--gray-600);
 	font-family: var(--wp--preset--font-family--mono);
 	font-size: var(--wp--preset--font-size--caption);
+
+	@media (max-width: 781px) { /* stylelint-disable-line media-feature-range-notation */
+		gap: 4px;
+		margin-block-start: 32px;
+		padding-block-start: 16px;
+	}
 
 	p {
 		margin: 0;
@@ -375,6 +564,15 @@
 .ggt-ftr__legal-links {
 	display: flex;
 	gap: 16px;
+
+	// Touch: 44px-tall links (they were 19px), same type.
+	@media (max-width: 1023.98px) { /* stylelint-disable-line media-feature-range-notation */
+		a {
+			display: inline-flex;
+			align-items: center;
+			min-height: 44px;
+		}
+	}
 
 	.ggt-ftr__top {
 		color: var(--wp--preset--color--green-800);
