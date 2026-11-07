@@ -77,11 +77,14 @@
 		}
 	}
 
+	// The arrow is decoration: taps fall through to the stretched heading link. Without this a
+	// positioned arrow (location cards) is painted above the link and swallows the tap.
 	&::after {
 		content: '';
 		width: 44px;
 		height: 44px;
 		margin-block-start: auto;
+		pointer-events: none;
 		border: 1.5px solid var(--wp--preset--color--green-800);
 		border-radius: 50%;
 		background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23133F2D' stroke-width='2' stroke-linecap='square'%3E%3Cpath d='M7 17 17 7M9 7h8v8'/%3E%3C/svg%3E") center / 18px no-repeat;
