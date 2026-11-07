@@ -10,6 +10,7 @@
  */
 import { sceneData } from './data';
 import { manufacturer } from './data-manufacturer';
+import { onDemandDispensary } from './data-on-demand-dispensary';
 
 const W = 71.55;
 const H = 79.77;
@@ -17,7 +18,7 @@ const P = (lon, lat) => [10.7 + (lon + 96.25) * 8.85, 75.2 - (lat - 43.67) * 12.
 const TRANSIT = 5;
 const LAST = 7;
 
-const DATA = { ...sceneData, manufacturer };
+const DATA = { ...sceneData, manufacturer, 'on-demand-dispensary': onDemandDispensary };
 
 const DULUTH_ROUTE = [[-92.10, 46.78], [-92.46, 46.72], [-92.76, 46.45], [-92.94, 46.01], [-92.97, 45.83], [-92.98, 45.51], [-92.99, 45.28], [-93.27, 44.98]];
 const DULUTH_CITIES = [['Duluth', -92.10, 46.78, true], ['Minneapolis', -93.27, 44.98, true], ['St. Cloud', -94.16, 45.56], ['Rochester', -92.47, 44.02], ['Moorhead', -96.77, 46.87], ['Bemidji', -94.88, 47.47], ['Mankato', -94.0, 44.16], ['Hibbing', -92.94, 47.43], ['Hinckley', -92.94, 46.01, true], ['Worthington', -95.60, 43.62]];
@@ -65,6 +66,22 @@ const VARIANTS = {
 		chips: ['Dana · Pickup', 'Dispensaries · Drop-offs'],
 		// Route progress per step: [from, to, arrive] over the step's scroll progress; the van
 		// reaches `to` at `arrive` (default 1) and waits there.
+		legs: { 5: [0, 0.9495], 6: [0.9495, 1, 0.5] },
+	},
+	// On-Demand direct run on the same road from a Duluth manufacturer to the two Minneapolis
+	// dispensaries: no other customers' stops, the on-demand map and camera.
+	'on-demand-dispensary': {
+		route: [...DULUTH_ROUTE.slice(0, 7), [-93.22, 45.045], [-93.22, 44.935]],
+		cities: DULUTH_CITIES,
+		ends: [
+			[0, 'pickup', 'Duluth', 'Manufacturer'],
+			[8, 'dropoff', 'Minneapolis', '2 dispensaries'],
+			[7, 'dropoff'],
+		],
+		stops: [],
+		pins: [],
+		regionFor: ['all', 'northeast', 'northeast', 'northeast', 'northeast', 'northeast', 'metro', 'all'],
+		chips: ['Dana · Pickup', 'Dispensaries · Drop-offs'],
 		legs: { 5: [0, 0.9495], 6: [0.9495, 1, 0.5] },
 	},
 };

@@ -46,8 +46,11 @@ class RouteScene implements ServiceInterface
 		}
 
 		$variant = 'regional';
+		// --on-demand-dispensary before --on-demand (it contains it).
 		if (\str_contains($className, 'ggt-route-scene--manufacturer')) {
 			$variant = 'manufacturer';
+		} elseif (\str_contains($className, 'ggt-route-scene--on-demand-dispensary')) {
+			$variant = 'on-demand-dispensary';
 		} elseif (\str_contains($className, 'ggt-route-scene--on-demand')) {
 			$variant = 'on-demand';
 		}
@@ -55,6 +58,7 @@ class RouteScene implements ServiceInterface
 
 		[$map, $alt] = match ($variant) {
 			'on-demand' => ['mn-counties.svg', \__('Map of Minnesota: a direct run from Duluth to a Minneapolis testing lab.', 'going-green-transport')],
+			'on-demand-dispensary' => ['mn-counties.svg', \__('Map of Minnesota: a direct run from a Duluth manufacturer to two Minneapolis dispensaries.', 'going-green-transport')],
 			'manufacturer' => ['mn-regions-outlined.svg', \__('Map of Minnesota\'s five route regions: an example Northeast route from a Duluth manufacturer to three dispensaries in Minneapolis.', 'going-green-transport')],
 			default => ['mn-regions-outlined.svg', \__('Map of Minnesota\'s five route regions: an example Northeast route from Duluth to a Minneapolis testing lab.', 'going-green-transport')],
 		};
