@@ -282,6 +282,11 @@
 // toggle above the scroll stories instead of the icon tabs.
 .ggt-story-tabs {
 	padding-block-start: clamp(48px, 6vw, 88px);
+
+	// Under a section label (e.g. "How an On-Demand Run Works") it belongs with the label.
+	* + & {
+		padding-block-start: var(--wp--preset--spacing--50);
+	}
 }
 
 .ggt-story-tabs .block-tabs {
