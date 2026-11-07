@@ -282,6 +282,45 @@
 	margin-block-start: 0;
 }
 
+// Route story switch (How It Works · Regional Routes: lab run / dispensary run): a centred pill
+// toggle above the scroll stories instead of the icon tabs.
+.ggt-story-tabs {
+	padding-block-start: clamp(48px, 6vw, 88px);
+}
+
+.ggt-story-tabs .block-tabs {
+	--tabs-gap: 4px;
+	--tabs-list-spacing: 40px;
+	--tabs-tab-inactive-opacity: 1;
+	--tabs-tab-direction: row;
+
+	&__list {
+		width: max-content;
+		max-width: 100%;
+		margin-inline: auto;
+		padding: 5px;
+		border-radius: var(--wp--custom--radius--pill);
+		background: var(--wp--preset--color--white);
+		box-shadow: 0 1px 2px rgba(20, 25, 20, 0.06);
+	}
+
+	&__tab {
+		padding: 12px 24px;
+		border-radius: var(--wp--custom--radius--pill);
+		color: var(--wp--preset--color--green-800);
+		transition: background-color 0.2s ease-out, color 0.2s ease-out;
+
+		&:hover {
+			background: var(--wp--preset--color--gray-100);
+		}
+
+		&[aria-selected='true'] {
+			background: var(--wp--preset--color--green-800);
+			color: var(--wp--preset--color--lime-500);
+		}
+	}
+}
+
 // Testimonials carousel: round arrows top-right (comp: beside the section heading). The next
 // card bleeds past the container as in the comp; the section clips it so the page never scrolls
 // sideways.

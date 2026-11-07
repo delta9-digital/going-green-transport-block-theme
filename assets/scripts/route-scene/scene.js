@@ -21,7 +21,8 @@ const DATA = { ...sceneData, manufacturer };
 
 const DULUTH_ROUTE = [[-92.10, 46.78], [-92.46, 46.72], [-92.76, 46.45], [-92.94, 46.01], [-92.97, 45.83], [-92.98, 45.51], [-92.99, 45.28], [-93.27, 44.98]];
 const DULUTH_CITIES = [['Duluth', -92.10, 46.78, true], ['Minneapolis', -93.27, 44.98, true], ['St. Cloud', -94.16, 45.56], ['Rochester', -92.47, 44.02], ['Moorhead', -96.77, 46.87], ['Bemidji', -94.88, 47.47], ['Mankato', -94.0, 44.16], ['Hibbing', -92.94, 47.43], ['Hinckley', -92.94, 46.01, true], ['Worthington', -95.60, 43.62]];
-const DAY_PINS = [['THU', 21, 22.6], ['TUE', 55.3, 31.6], ['MON', 34, 62], ['FRI', 25.2, 85], ['WED', 57.9, 88]];
+// Region labels: regions carry a zone (they used to carry a route day).
+const ZONE_PINS = [['ZONE 4', 21, 22.6], ['ZONE 2', 55.3, 31.6], ['ZONE 1', 34, 62], ['ZONE 5', 25.2, 85], ['ZONE 3', 57.9, 88]];
 const REGIONS = ['central', 'northeast', 'northwest', 'southeast', 'southwest', 'metro'];
 
 // Per variant: the route (lon/lat), its pickup and drop-off markers (route index, card side),
@@ -41,7 +42,7 @@ const VARIANTS = {
 		cities: DULUTH_CITIES,
 		ends: [[0, 'pickup', 'Duluth', 'Pickup'], [7, 'dropoff', 'Minneapolis', 'Testing lab']],
 		stops: [[3, '2'], [5, '3']],
-		pins: DAY_PINS,
+		pins: ZONE_PINS,
 		regionFor: ['all', 'northeast', 'northeast', 'northeast', 'northeast', 'northeast', 'metro', 'all'],
 		chips: ['Mary · Pickup', 'Jane · Drop-off'],
 	},
@@ -60,7 +61,7 @@ const VARIANTS = {
 			[9, 'dropoff', 'Lake Street Cannabis Co.', 'Stop 6 · Dispensary', 'below', [6, 6]],
 		],
 		stops: [[3, '2'], [5, '3']],
-		pins: [['ZONE 4', 21, 22.6], ['ZONE 2', 55.3, 31.6], ['ZONE 1', 34, 62], ['ZONE 5', 25.2, 85], ['ZONE 3', 57.9, 88]],
+		pins: ZONE_PINS,
 		regionFor: ['all', 'northeast', 'northeast', 'northeast', 'northeast', 'northeast', 'metro', 'all'],
 		chips: ['Dana · Pickup', 'Dispensaries · Drop-offs'],
 		// Route progress per step: [from, to] over the step's scroll progress.
