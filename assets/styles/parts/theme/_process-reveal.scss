@@ -1,0 +1,106 @@
+// The Process: scroll-reveal animation.
+//
+// JS (initProcessReveal) adds `.ggt-anim` to the section — which turns on this
+// muted/hidden start state — then `.is-in` to the heading and each `.ggt-step`
+// as it enters the viewport (fade in, number still grey), and `.is-active` to a
+// step while it is above the middle of the viewport (number and connector go green;
+// scrolling back up turns them grey again). Without JS the section renders in its normal
+// designed state, so this is pure enhancement. Colours resolve to the designed
+// values once revealed; only the start state and transitions live here.
+
+.ggt-sec--process.ggt-anim {
+	$reveal-dur: 640ms;
+	$reveal-ease: var(--wp--custom--motion--ease);
+
+	// Heading: grey -> brand greens (two-tone preserved).
+	.wp-block-heading {
+		color: var(--wp--preset--color--gray-400);
+		transition: color $reveal-dur $reveal-ease;
+
+		mark {
+			color: var(--wp--preset--color--gray-400);
+			transition: color $reveal-dur $reveal-ease;
+		}
+
+		&.is-in {
+			color: var(--wp--preset--color--green-900);
+
+			mark {
+				color: var(--wp--preset--color--green-500);
+			}
+		}
+	}
+
+	// Steps rise + fade in, one as each scrolls into view (01 -> 02 -> 03).
+	.ggt-step {
+		opacity: 0;
+		transform: translateY(28px);
+		transition:
+			opacity $reveal-dur $reveal-ease,
+			transform $reveal-dur $reveal-ease;
+
+		&.is-in {
+			opacity: 1;
+			transform: none;
+		}
+	}
+
+	// Number circle: muted grey, then colourises once its step reaches the middle of the screen.
+	.ggt-step__num {
+		background: var(--wp--preset--color--gray-100);
+		border-color: var(--wp--preset--color--gray-300);
+		color: var(--wp--preset--color--gray-500);
+		transition:
+			background $reveal-dur $reveal-ease,
+			border-color $reveal-dur $reveal-ease,
+			color $reveal-dur $reveal-ease;
+	}
+
+	.ggt-step.is-active .ggt-step__num {
+		background: var(--wp--preset--color--lime-500);
+		border-color: var(--wp--preset--color--green-800);
+		color: var(--wp--preset--color--green-900);
+	}
+
+	// Connector line draws downward (scaleY) and colourises grey -> forest.
+	.ggt-steps > .ggt-step:not(:last-child) > .wp-block-column:first-child::after {
+		background: var(--wp--preset--color--gray-300);
+		transform: translateX(-50%) scaleY(0);
+		transform-origin: top center;
+		transition:
+			transform $reveal-dur $reveal-ease,
+			background $reveal-dur $reveal-ease;
+	}
+
+	.ggt-steps > .ggt-step.is-active:not(:last-child) > .wp-block-column:first-child::after {
+		background: var(--wp--preset--color--green-800);
+		transform: translateX(-50%) scaleY(1);
+	}
+
+	// Reduced motion: no movement or fade; show the designed state immediately.
+	@media (prefers-reduced-motion: reduce) {
+		.wp-block-heading,
+		.wp-block-heading mark,
+		.ggt-step,
+		.ggt-step__num,
+		.ggt-steps > .ggt-step:not(:last-child) > .wp-block-column:first-child::after {
+			transition: none;
+		}
+
+		.ggt-step {
+			opacity: 1;
+			transform: none;
+		}
+
+		.ggt-steps > .ggt-step:not(:last-child) > .wp-block-column:first-child::after {
+			background: var(--wp--preset--color--green-800);
+			transform: translateX(-50%) scaleY(1);
+		}
+
+		.ggt-step__num {
+			background: var(--wp--preset--color--lime-500);
+			border-color: var(--wp--preset--color--green-800);
+			color: var(--wp--preset--color--green-900);
+		}
+	}
+}
