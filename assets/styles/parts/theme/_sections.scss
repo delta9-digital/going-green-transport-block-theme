@@ -380,6 +380,19 @@
 	overflow: hidden;
 }
 
+// Founder cards (About): until there are photos, a Minnesota mark on a green tile; on phones the
+// card stacks and the tile stays a compact square above the name.
+@media (max-width: 781px) {
+	.ggt-founder-mark {
+		width: 120px;
+		min-height: 120px !important; // stylelint-disable-line declaration-no-important
+
+		img {
+			width: 56px !important; // stylelint-disable-line declaration-no-important
+		}
+	}
+}
+
 // Hero with the quote form (home): the form is much taller than the intro card, so the card stays
 // in view beside it while the visitor scrolls through the form.
 @media (min-width: 782px) {
