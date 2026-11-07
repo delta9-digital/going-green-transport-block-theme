@@ -47,18 +47,18 @@ const VARIANTS = {
 		chips: ['Mary · Pickup', 'Jane · Drop-off'],
 	},
 	// The regional Duluth route with a manufacturer pickup and three dispensary drop-offs in
-	// Minneapolis. The drive (step 5) ends at the first dispensary; the delivery step (6) zooms into
-	// Minneapolis for the dispensary-to-dispensary leg.
+	// Minneapolis. The drive (step 5) ends at the first dispensary; the delivery step (6) covers the
+	// dispensary-to-dispensary leg.
 	manufacturer: {
 		route: [...DULUTH_ROUTE.slice(0, 7), [-93.22, 45.045], [-93.33, 44.94], [-93.205, 44.905]],
 		cities: DULUTH_CITIES,
-		// [route index, kind, title, tag, card side, [first step, last step] the card shows].
+		// [route index, kind, title, tag, card side, [first step, last step] the card shows]; no
+		// title = a dot only. The three dispensaries are too close for a card each: one card.
 		ends: [
 			[0, 'pickup', 'Duluth', 'Manufacturer'],
-			[8, 'dropoff', 'Minneapolis', '3 dispensaries', '', [1, 5]],
-			[7, 'dropoff', 'Mill City Cannabis Co.', 'Stop 4 · Dispensary', 'right', [6, 6]],
-			[8, 'dropoff', 'Linden Hills Dispensary', 'Stop 5 · Dispensary', 'left', [6, 6]],
-			[9, 'dropoff', 'Lake Street Cannabis Co.', 'Stop 6 · Dispensary', 'below', [6, 6]],
+			[8, 'dropoff', 'Minneapolis', '3 dispensaries'],
+			[7, 'dropoff'],
+			[9, 'dropoff'],
 		],
 		stops: [[3, '2'], [5, '3']],
 		pins: ZONE_PINS,
@@ -66,8 +66,6 @@ const VARIANTS = {
 		chips: ['Dana · Pickup', 'Dispensaries · Drop-offs'],
 		// Route progress per step: [from, to] over the step's scroll progress.
 		legs: { 5: [0, 0.9029], 6: [0.9029, 1] },
-		// Camera [lon, lat, scale] for a step instead of the fitted route.
-		views: { 6: [-93.26, 44.905, 10] },
 	},
 };
 
@@ -198,6 +196,9 @@ export class RouteScene {
 		const end = (point, kind, city, tag, side, range) => {
 			const dot = node('span', `ggt-rs__end ggt-rs__end--${kind}`, cam);
 			Object.assign(dot.style, pct(point));
+			if (!city) {
+				return { dot, card: null, range };
+			}
 			const card = node('div', `ggt-rs__end-card ggt-rs__end-card--${kind}${side ? ` ggt-rs__end-card--${side}` : ''}`, cam);
 			Object.assign(card.style, pct(point));
 			node('span', 'ggt-rs__end-city', card, city);
@@ -417,7 +418,9 @@ export class RouteScene {
 		});
 		this.ends.forEach(({ dot, card, range }) => {
 			dot.style.opacity = step >= 1 ? '1' : '0';
-			card.style.opacity = (range ? step >= range[0] && step <= range[1] : step >= 1) ? '1' : '0';
+			if (card) {
+				card.style.opacity = (range ? step >= range[0] && step <= range[1] : step >= 1) ? '1' : '0';
+			}
 		});
 		this.stops.forEach((el) => {
 			el.style.opacity = live ? '1' : '0';

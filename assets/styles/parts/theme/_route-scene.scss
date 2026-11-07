@@ -150,8 +150,8 @@ $ease: cubic-bezier(0.2, 0, 0, 1);
 .ggt-rs__ghost {
 	fill: none;
 	stroke: var(--wp--preset--color--green-900);
-	// Map units; never thicker on screen than at the fitted route's zoom (about 3.2), so a close-up
-	// (e.g. the Minneapolis deliveries) keeps a slim line.
+	// Map units; never thicker on screen than at the fitted route's zoom (about 3.2), so a closer
+	// camera keeps a slim line.
 	stroke-width: min(0.75, calc(2.4 / var(--ggt-rs-s)));
 	stroke-linecap: round;
 	stroke-linejoin: round;
