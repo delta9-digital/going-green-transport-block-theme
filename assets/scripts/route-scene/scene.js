@@ -9,6 +9,7 @@
  * via --ggt-rs-s (the camera scale), see _route-scene.scss.
  */
 import { sceneData } from './data';
+import { regional } from './data-regional';
 import { manufacturer } from './data-manufacturer';
 import { onDemandDispensary } from './data-on-demand-dispensary';
 
@@ -18,7 +19,8 @@ const P = (lon, lat) => [10.7 + (lon + 96.25) * 8.85, 75.2 - (lat - 43.67) * 12.
 const TRANSIT = 5;
 const LAST = 7;
 
-const DATA = { ...sceneData, manufacturer, 'on-demand-dispensary': onDemandDispensary };
+// data.js is generated from the comps; the lab run (regional) is overridden by data-regional.js.
+const DATA = { ...sceneData, regional, manufacturer, 'on-demand-dispensary': onDemandDispensary };
 
 const DULUTH_ROUTE = [[-92.10, 46.78], [-92.46, 46.72], [-92.76, 46.45], [-92.94, 46.01], [-92.97, 45.83], [-92.98, 45.51], [-92.99, 45.28], [-93.27, 44.98]];
 const DULUTH_CITIES = [['Duluth', -92.10, 46.78, true], ['Minneapolis', -93.27, 44.98, true], ['St. Cloud', -94.16, 45.56], ['Rochester', -92.47, 44.02], ['Moorhead', -96.77, 46.87], ['Bemidji', -94.88, 47.47], ['Mankato', -94.0, 44.16], ['Hibbing', -92.94, 47.43], ['Hinckley', -92.94, 46.01, true], ['Worthington', -95.60, 43.62]];
@@ -42,7 +44,7 @@ const VARIANTS = {
 		route: DULUTH_ROUTE,
 		cities: DULUTH_CITIES,
 		ends: [[0, 'pickup', 'Duluth', 'Pickup'], [7, 'dropoff', 'Minneapolis', 'Testing lab']],
-		stops: [[3, '2'], [5, '3']],
+		stops: [[3, '2', 'pickup'], [5, '3', 'pickup']],
 		pins: ZONE_PINS,
 		regionFor: ['all', 'northeast', 'northeast', 'northeast', 'northeast', 'northeast', 'metro', 'all'],
 		chips: ['Mary · Pickup', 'Jane · Drop-off'],
@@ -60,7 +62,7 @@ const VARIANTS = {
 			[8, 'dropoff', 'Minneapolis', '2 dispensaries'],
 			[7, 'dropoff'],
 		],
-		stops: [[3, '2'], [5, '3']],
+		stops: [[3, '2', 'pickup'], [5, '3', 'pickup']],
 		pins: ZONE_PINS,
 		regionFor: ['all', 'northeast', 'northeast', 'northeast', 'northeast', 'northeast', 'metro', 'all'],
 		chips: ['Dana · Pickup', 'Dispensaries · Drop-offs'],
@@ -224,8 +226,8 @@ export class RouteScene {
 		};
 		this.ends = this.config.ends.map(([index, kind, city, tag, side, range]) => end(this.g.route[index], kind, city, tag, side, range));
 
-		this.stops = this.config.stops.map(([index, label]) => {
-			const el = node('span', 'ggt-rs__stop', cam, label);
+		this.stops = this.config.stops.map(([index, label, kind]) => {
+			const el = node('span', `ggt-rs__stop${kind ? ` ggt-rs__stop--${kind}` : ''}`, cam, label);
 			Object.assign(el.style, pct(this.g.route[index]));
 			return el;
 		});
