@@ -64,6 +64,14 @@
 	}
 }
 
+// A heading above a two-column grid that keeps to the first column's width (grid gap: spacing 120).
+// Phones stack the grid, so the heading runs full width there.
+@media (min-width: 768px) {
+	.ggt-col-start {
+		max-width: calc((100% - var(--wp--preset--spacing--120)) / 2);
+	}
+}
+
 // Icons keep their exported size.
 .wp-block-image.ggt-icon {
 	margin: 0;
