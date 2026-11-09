@@ -7,6 +7,8 @@
 import domReady from '@wordpress/dom-ready';
 import { initRouteScenes } from './route-scene';
 import { initProcessReveal } from './process-reveal';
+import { initColStart } from './col-start';
 
 domReady(initRouteScenes);
 domReady(initProcessReveal);
+domReady(initColStart);
