@@ -244,6 +244,14 @@
 	}
 }
 
+// Solid lime check: the tick is cut out of the circle, so the section background shows through.
+// The ✓ character stays in the markup (and for screen readers) but is not painted.
+.ggt-check-solid {
+	color: transparent !important;
+	background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cmask id='c'%3E%3Crect width='40' height='40' fill='white'/%3E%3Cpath d='M12.5 20.5l5 5 10-10.5' fill='none' stroke='black' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/mask%3E%3Ccircle cx='20' cy='20' r='20' fill='%23BBFD6A' mask='url(%23c)'/%3E%3C/svg%3E") center / 100% no-repeat;
+	user-select: none;
+}
+
 // Fixed-size circles from the comps (icon plates, avatars, badges); see plateClass() in
 // handoff/block-runner.config.mjs.
 .ggt-plate {
