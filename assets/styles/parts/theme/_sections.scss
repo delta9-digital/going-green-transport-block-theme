@@ -49,6 +49,21 @@
 	position: relative;
 }
 
+// Short panels (the quote hero): fit the whole silhouette to the panel height instead of cropping
+// it. Phones keep the default corner placement so the mark stays clear of the text.
+@media (min-width: 782px) {
+	.ggt-sec--quote-hero .wp-block-image.ggt-decor {
+		top: 12px;
+		width: auto;
+		height: calc(100% - 24px);
+
+		img {
+			width: auto;
+			height: 100%;
+		}
+	}
+}
+
 // Icons keep their exported size.
 .wp-block-image.ggt-icon {
 	margin: 0;
