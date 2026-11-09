@@ -41,6 +41,7 @@ class SiteFooterPattern extends AbstractBlockPattern
 			'Cultivation & Production' => 'services-cultivation',
 			'Lab Sample Courier' => 'services-lab',
 			'Dispensary Delivery' => 'services-dispensary',
+			'Dispensary Restock' => 'services-restock',
 			'Flat-Rate Transport' => 'flat-rate',
 			'On-Demand Transport' => 'on-demand',
 		],

@@ -43,6 +43,7 @@ final class SiteLinks
 		'services-cultivation' => '/services/#cultivation',
 		'services-lab' => '/services/#lab',
 		'services-dispensary' => '/services/#dispensary',
+		'services-restock' => '/services/#restock',
 		'locations' => '/locations/',
 		'flat-rate' => '/flat-rate-transport/',
 		'on-demand' => '/on-demand-transport/',

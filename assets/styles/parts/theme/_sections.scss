@@ -77,6 +77,11 @@
 		}
 	}
 
+	// Keep a gap above the arrow when the text fills the card (it rides on margin-top: auto).
+	&:not(:has(> .ggt-pill, > * > .ggt-pill)) > :last-child {
+		margin-block-end: var(--wp--preset--spacing--40);
+	}
+
 	&::after {
 		content: '';
 		width: 44px;
