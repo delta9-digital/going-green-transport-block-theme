@@ -521,7 +521,7 @@
 }
 
 // Full cards: a column with room between the chip/date row, the title and the excerpt.
-.ggt-post-card:not(.ggt-post-card--compact) {
+.ggt-post-card {
 	display: flex;
 	flex-direction: column;
 

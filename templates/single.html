@@ -72,10 +72,16 @@
 
 <!-- wp:query {"queryId":3,"query":{"perPage":4,"pages":0,"offset":0,"postType":"post","order":"desc","orderBy":"date","inherit":false},"className":"ggt-more-posts__query"} -->
 <div class="wp-block-query ggt-more-posts__query"><!-- wp:post-template {"layout":{"type":"grid","columnCount":4,"minimumColumnWidth":"240px"}} -->
-<!-- wp:group {"className":"ggt-card-link ggt-post-card ggt-post-card--compact","layout":{"type":"flex","orientation":"vertical"}} -->
-<div class="wp-block-group ggt-card-link ggt-post-card ggt-post-card--compact"><!-- wp:post-date /-->
+<!-- wp:group {"backgroundColor":"white","textColor":"green-900","className":"ggt-card-link ggt-post-card","style":{"spacing":{"padding":{"top":"var:preset|spacing|80","right":"var:preset|spacing|80","bottom":"var:preset|spacing|80","left":"var:preset|spacing|80"},"blockGap":"var:preset|spacing|40"},"border":{"radius":"24px"},"dimensions":{"minHeight":"340px"}},"layout":{"type":"default"}} -->
+<div class="wp-block-group ggt-card-link ggt-post-card has-green-900-color has-white-background-color has-text-color has-background" style="border-radius:24px;min-height:340px;padding-top:var(--wp--preset--spacing--80);padding-right:var(--wp--preset--spacing--80);padding-bottom:var(--wp--preset--spacing--80);padding-left:var(--wp--preset--spacing--80)"><!-- wp:group {"style":{"spacing":{"blockGap":"12px"}},"layout":{"type":"flex","flexWrap":"wrap","justifyContent":"space-between"}} -->
+<div class="wp-block-group"><!-- wp:post-terms {"term":"category","className":"ggt-term-chip"} /-->
 
-<!-- wp:post-title {"level":3,"isLink":true} /-->
+<!-- wp:post-date {"textColor":"gray-600","fontFamily":"mono","fontSize":"caption"} /--></div>
+<!-- /wp:group -->
+
+<!-- wp:post-title {"level":3,"isLink":true,"fontSize":"heading-sm","style":{"typography":{"letterSpacing":"-0.01em","lineHeight":"1.25"}}} /-->
+
+<!-- wp:post-excerpt {"excerptLength":20,"textColor":"ink-muted","fontSize":"meta","style":{"typography":{"lineHeight":"1.6"}}} /-->
 
 <!-- wp:read-more {"content":"Read More","className":"ggt-read-more"} /--></div>
 <!-- /wp:group -->

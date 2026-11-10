@@ -362,28 +362,3 @@
 		gap: 24px;
 	}
 }
-
-.ggt-post-card--compact {
-	gap: 12px;
-	min-height: 240px;
-	padding: 28px;
-	border-radius: var(--wp--custom--radius--panel);
-	background: var(--wp--preset--color--white);
-
-	.wp-block-post-date {
-		color: var(--wp--preset--color--gray-600);
-		font-family: var(--wp--preset--font-family--mono);
-		font-size: var(--wp--preset--font-size--caption);
-	}
-
-	.wp-block-post-title {
-		flex: 1 1 auto;
-		font-size: var(--wp--preset--font-size--heading-xs);
-		line-height: 1.25;
-
-		a {
-			color: var(--wp--preset--color--green-900);
-			text-decoration: none;
-		}
-	}
-}
