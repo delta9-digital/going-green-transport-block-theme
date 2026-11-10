@@ -366,6 +366,13 @@ $ease: cubic-bezier(0.2, 0, 0, 1);
 	transform: translate(-50%, -50%);
 }
 
+// A stop that is another customer's pickup (the regional route's stops 2 and 3): pickup colours.
+.ggt-rs__stop--pickup {
+	border-color: var(--wp--preset--color--lime-500);
+	background: var(--wp--preset--color--green-800);
+	color: var(--wp--preset--color--lime-500);
+}
+
 .ggt-rs__van {
 	display: flex;
 	align-items: center;
