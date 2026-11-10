@@ -87,7 +87,7 @@ class SignupForm implements ServiceInterface
 			. $field('business', \__('Business name', 'going-green-transport'), $input('business', 'text', 'organization', \__('Business name', 'going-green-transport')))
 			. $field('license', \__('License type', 'going-green-transport'), '<select id="ggt-signup-license" name="license" required>' . $options . '</select>')
 			. $field('email', \__('Email', 'going-green-transport'), $input('email', 'email', 'email', \__('Email', 'going-green-transport')))
-			. '<p class="ggt-signup__check"><input id="ggt-signup-newsletter" name="newsletter" type="checkbox" value="1" checked><label for="ggt-signup-newsletter">'
+			. '<p class="ggt-signup__check"><input id="ggt-signup-newsletter" name="newsletter" type="checkbox" value="1"><label for="ggt-signup-newsletter">'
 			. \esc_html__('Subscribe to our newsletter', 'going-green-transport') . '</label></p>'
 			. '<button class="ggt-signup__submit" type="submit">' . \esc_html__('Sign Up', 'going-green-transport') . '</button>'
 			. '</div>'
