@@ -5,7 +5,8 @@
  *
  * Every Forms form on the site gets the GGT field look from assets/styles/parts/theme/_forms.scss (the same fields
  * as the footer sign-up form). A style picked here adds `es-block-forms--{value}` to the Forms block for layouts:
- * - quote: multi-step quote request (service cards, numbered steps, stop cards).
+ * - quote: quote request, multi-step (numbered step bar) or single page (numbered section headings), with service
+ *   cards and stop cards.
  *
  * @package GoingGreenTransportTheme\Forms
  */
@@ -43,7 +44,7 @@ class FormsStyles implements ServiceInterface
 		$options = \is_array($options) ? $options : [];
 
 		$options[] = [
-			'label' => \__('Quote (multi-step)', 'going-green-transport'),
+			'label' => \__('Quote', 'going-green-transport'),
 			'value' => 'quote',
 		];
 

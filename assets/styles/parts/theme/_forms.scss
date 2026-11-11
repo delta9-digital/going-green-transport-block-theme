@@ -431,6 +431,54 @@ $ggt-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' 
 		margin-block-start: 12px;
 	}
 
+	// Single-page quote (long form): "01 Service Type" headings drawn from data-section-number / data-section-title
+	// on the first field of each section. Absolutely placed so a half-width first field (First name) can carry a
+	// full-width heading; the field beside it (data-section-spacer) gets the same top space.
+	.es-field:is([data-section-title], [data-section-spacer]) {
+		position: relative;
+		padding-block-start: 64px;
+	}
+
+	.es-field[data-section-title]:not([data-section-number='01']),
+	.es-field[data-section-spacer] {
+		margin-block-start: 28px;
+	}
+
+	.es-field[data-section-title]::before,
+	.es-field[data-section-title]::after {
+		position: absolute;
+		inset-block-start: 0;
+		white-space: nowrap;
+		color: var(--wp--preset--color--green-900);
+	}
+
+	.es-field[data-section-title]::before {
+		content: attr(data-section-number);
+		inset-block-start: 9px;
+		inset-inline-start: var(--es-grid-spacing);
+		color: var(--wp--preset--color--olive-500);
+		font-family: var(--wp--preset--font-family--mono);
+		font-size: var(--wp--preset--font-size--caption);
+		letter-spacing: var(--wp--custom--tracking--mono);
+	}
+
+	.es-field[data-section-title]::after {
+		content: attr(data-section-title);
+		inset-inline-start: calc(var(--es-grid-spacing) + 30px);
+		font-family: var(--wp--preset--font-family--heading);
+		font-size: var(--wp--preset--font-size--heading-lg);
+		font-weight: bold;
+		letter-spacing: var(--wp--custom--tracking--snug);
+		line-height: 1.2;
+	}
+
+	// The single-page form's submit sits apart from the last field.
+	.es-field--submit:not(.es-step__navigation-inner > *) {
+		margin-block-start: 8px;
+		padding-block-start: 24px;
+		border-block-start: 1px solid var(--wp--preset--color--gray-200);
+	}
+
 	.es-step__navigation {
 		margin-block-start: 8px;
 		padding-block-start: 24px;
