@@ -485,3 +485,13 @@ $ggt-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' 
 		border-block-start: 1px solid var(--wp--preset--color--gray-200);
 	}
 }
+
+// Quote page: the Forms quote form in place of the app iframe (src/Forms/FormsSwap.php) sits a
+// section gap under the hero.
+.ggt-quote-form {
+	margin-block-start: 56px;
+
+	@media (max-width: 600px) { /* stylelint-disable-line media-feature-range-notation */
+		margin-block-start: 32px;
+	}
+}

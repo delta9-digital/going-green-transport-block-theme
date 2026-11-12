@@ -585,6 +585,10 @@
 .ggt-ftr__band .es-form {
 	--es-field-spacing: 12px;
 
+	// The plugin centres forms at 850px; in the band the form fills its column under the heading.
+	max-width: none;
+	margin-inline: 0;
+
 	.es-field {
 		--es-field-width: 50%;
 
