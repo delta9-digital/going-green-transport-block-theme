@@ -7,6 +7,10 @@
  * URL. Sticky bar, blur, active underline, Pricing panel and the mobile drawer are in
  * assets/styles/parts/theme/_header.scss.
  *
+ * The navigation also holds a logo (first) and a Get a Quote / call block (last) that only show in
+ * the open mobile drawer: the drawer is the navigation's own overlay, so its content has to live
+ * inside the navigation block.
+ *
  * @package GoingGreenTransportTheme\BlockPatterns
  */
 
@@ -97,6 +101,43 @@ class SiteHeaderPattern extends AbstractBlockPattern
 	}
 
 	/**
+	 * Serialized logo image linking home.
+	 *
+	 * @param string $class Class name.
+	 *
+	 * @return string
+	 */
+	private function logo(string $class): string
+	{
+		$src = \esc_url(\get_theme_file_uri('assets/images/brand/ggt-wordmark-box.svg'));
+		$alt = \esc_attr__('Going Green Transport', 'going-green-transport');
+		$home = \esc_url(SiteLinks::url('home'));
+
+		return '<!-- wp:image ' . \wp_json_encode(['sizeSlug' => 'full', 'linkDestination' => 'custom', 'className' => $class], \JSON_UNESCAPED_SLASHES) . " -->\n"
+			. "<figure class=\"wp-block-image size-full {$class}\"><a href=\"{$home}\"><img src=\"{$src}\" alt=\"{$alt}\" width=\"94\" height=\"48\"/></a></figure>\n"
+			. "<!-- /wp:image -->\n";
+	}
+
+	/**
+	 * Serialized button.
+	 *
+	 * @param string $label Label (escaped here).
+	 * @param string $href URL (escaped here).
+	 * @param string $class Class name.
+	 *
+	 * @return string
+	 */
+	private function button(string $label, string $href, string $class): string
+	{
+		$href = \esc_url($href, ['http', 'https', 'tel']);
+		$label = \esc_html($label);
+
+		return '<!-- wp:button ' . \wp_json_encode(['width' => 100, 'className' => $class]) . " -->\n"
+			. "<div class=\"wp-block-button has-custom-width wp-block-button__width-100 {$class}\"><a class=\"wp-block-button__link wp-element-button\" href=\"{$href}\">{$label}</a></div>\n"
+			. "<!-- /wp:button -->\n";
+	}
+
+	/**
 	 * Get the pattern content.
 	 *
 	 * @return string
@@ -116,6 +157,17 @@ class SiteHeaderPattern extends AbstractBlockPattern
 			. $this->link(\__('Resources', 'going-green-transport'), 'resources')
 			. $this->link(\__('Partners', 'going-green-transport'), 'partner');
 
+		// Drawer only (hidden in the desktop bar): quote button and tap-to-call.
+		$drawerCta = "<!-- wp:buttons {\"className\":\"ggt-hdr__drawer-cta\",\"layout\":{\"type\":\"flex\",\"orientation\":\"vertical\"}} -->\n<div class=\"wp-block-buttons is-vertical ggt-hdr__drawer-cta\">"
+			. $this->button(\__('Get a Quote', 'going-green-transport'), SiteLinks::url('quote'), 'ggt-hdr__drawer-quote')
+			. $this->button(
+				/* translators: %s: phone number. */
+				\sprintf(\__('Call %s', 'going-green-transport'), SiteLinks::PHONE),
+				'tel:' . \str_replace('-', '', SiteLinks::PHONE),
+				'ggt-hdr__drawer-call'
+			)
+			. "</div>\n<!-- /wp:buttons -->\n";
+
 		$nav = '<!-- wp:navigation ' . \wp_json_encode([
 			'overlayMenu' => 'mobile',
 			'openSubmenusOnClick' => false,
@@ -124,14 +176,9 @@ class SiteHeaderPattern extends AbstractBlockPattern
 			'className' => 'ggt-hdr__menu',
 			'ariaLabel' => \__('Main', 'going-green-transport'),
 			'layout' => ['type' => 'flex', 'flexWrap' => 'nowrap', 'justifyContent' => 'right'],
-		], \JSON_UNESCAPED_SLASHES) . " -->\n{$items}<!-- /wp:navigation -->\n";
+		], \JSON_UNESCAPED_SLASHES) . " -->\n" . $this->logo('ggt-hdr__drawer-logo') . $items . $drawerCta . "<!-- /wp:navigation -->\n";
 
-		$logoSrc = \esc_url(\get_theme_file_uri('assets/images/brand/ggt-wordmark-box.svg'));
-		$logoAlt = \esc_attr__('Going Green Transport', 'going-green-transport');
-		$home = \esc_url(SiteLinks::url('home'));
-		$logo = '<!-- wp:image ' . \wp_json_encode(['sizeSlug' => 'full', 'linkDestination' => 'custom', 'className' => 'ggt-hdr__logo'], \JSON_UNESCAPED_SLASHES) . " -->\n"
-			. "<figure class=\"wp-block-image size-full ggt-hdr__logo\"><a href=\"{$home}\"><img src=\"{$logoSrc}\" alt=\"{$logoAlt}\" width=\"94\" height=\"48\"/></a></figure>\n"
-			. "<!-- /wp:image -->\n";
+		$logo = $this->logo('ggt-hdr__logo');
 
 		$quote = \esc_url(SiteLinks::url('quote'));
 		$ctaText = \esc_html__('Get a Quote', 'going-green-transport');

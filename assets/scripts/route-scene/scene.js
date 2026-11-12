@@ -133,7 +133,7 @@ export class RouteScene {
 		this.base = element.dataset.mapBase || '';
 		this.story = element.closest('.js-block-scroll-story');
 		this.data = DATA[this.variant];
-		this.state = { step: 0, local: 0 };
+		this.state = { step: 0, local: 0, count: LAST + 1 };
 		this.tipIds = { pick: '', drop: '' };
 		this.geo = null;
 	}
@@ -156,7 +156,7 @@ export class RouteScene {
 		this.build();
 		this.el.classList.add('is-live');
 		this.story?.addEventListener('scroll-story:change', (event) => {
-			this.state = { step: event.detail.step, local: event.detail.progress };
+			this.state = { step: event.detail.step, local: event.detail.progress, count: event.detail.count || LAST + 1 };
 			this.render();
 		});
 		new ResizeObserver(() => this.render()).observe(this.el);
@@ -199,7 +199,8 @@ export class RouteScene {
 		this.cities = this.config.cities.map(([name, lon, lat, onRoute]) => {
 			const [x, y] = P(lon, lat);
 			const flip = x > W * 0.6 || name === 'Rochester' || name === 'Hinckley';
-			const el = node('div', `ggt-rs__city${flip ? ' is-flipped' : ''}`, cam);
+			// Off-route towns are context only; phones hide them (see _route-scene.scss).
+			const el = node('div', `ggt-rs__city${flip ? ' is-flipped' : ''}${onRoute ? '' : ' is-minor'}`, cam);
 			Object.assign(el.style, pct([x, y]));
 			node('span', 'ggt-rs__city-dot', el);
 			node('span', 'ggt-rs__city-label', el, name);
@@ -216,13 +217,15 @@ export class RouteScene {
 			const dot = node('span', `ggt-rs__end ggt-rs__end--${kind}`, cam);
 			Object.assign(dot.style, pct(point));
 			if (!city) {
-				return { dot, card: null, range };
+				return { dot, card: null, range, point };
 			}
 			const card = node('div', `ggt-rs__end-card ggt-rs__end-card--${kind}${side ? ` ggt-rs__end-card--${side}` : ''}`, cam);
 			Object.assign(card.style, pct(point));
 			node('span', 'ggt-rs__end-city', card, city);
 			node('span', 'ggt-rs__end-tag', card, tag);
-			return { dot, card, range };
+			// Which side of its marker the card sits (see .ggt-rs__end-card modifiers).
+			const place = side || (kind === 'pickup' ? 'right' : 'left');
+			return { dot, card, range, point, place };
 		};
 		this.ends = this.config.ends.map(([index, kind, city, tag, side, range]) => end(this.g.route[index], kind, city, tag, side, range));
 
@@ -273,6 +276,11 @@ export class RouteScene {
 		const hb = this.hud.getBoundingClientRect().bottom - a.top;
 		const pickRect = this.pick.col.getBoundingClientRect();
 		const dropRect = this.drop.col.getBoundingClientRect();
+		// Phones hide the email columns (display: none): they no longer bound the camera.
+		const colsShown = this.pick.col.getClientRects().length > 0;
+		if (!colsShown) {
+			return { pw: a.width, ph: a.height, bx: b.left - a.left, by: b.top - a.top, bw: b.width, bh: b.height, hb, pB: hb, dT: a.height };
+		}
 		return {
 			pw: a.width,
 			ph: a.height,
@@ -310,6 +318,41 @@ export class RouteScene {
 		return [fx, fy, sc];
 	};
 
+	// Shift a view sideways when an end card would be cut off at the panel edge (narrow phones):
+	// the route plus its cards are centred instead of the route alone. Views that fit stay as is.
+	keepCardsIn = ([fx, fy, s], G, step) => {
+		const s0 = Number(this.cam.style.getPropertyValue('--ggt-rs-s')) || 1;
+		const gap = 14;
+		const edge = 8;
+		let lo = Infinity;
+		let hi = -Infinity;
+		this.ends.forEach(({ card, range, point, place }) => {
+			const shown = range ? step >= range[0] && step <= range[1] : step >= 1;
+			if (!card || !shown) {
+				return;
+			}
+			const x = G.bx + G.bw * (0.5 + (s * (point[0] - fx)) / W);
+			const y = G.by + G.bh * (0.5 + (s * (point[1] - fy)) / H);
+			if (y < 0 || y > G.ph) {
+				return;
+			}
+			// Cards keep a constant on-screen size: layout width at the current camera scale.
+			const w = card.offsetWidth * s0;
+			const [a, b] = {
+				left: [x - gap - w, x],
+				right: [x, x + gap + w],
+				below: [x - w / 2, x + w / 2],
+			}[place] || [x, x];
+			lo = Math.min(lo, a);
+			hi = Math.max(hi, b);
+		});
+		if (lo === Infinity || (lo >= edge && hi <= G.pw - edge)) {
+			return [fx, fy, s];
+		}
+		const shift = G.pw / 2 - (lo + hi) / 2;
+		return [fx - (shift * W) / (G.bw * s), fy, s];
+	};
+
 	tip = (col, msg, key, delay) => {
 		col.tip.hidden = !msg;
 		if (!msg) {
@@ -341,7 +384,7 @@ export class RouteScene {
 	};
 
 	render = () => {
-		const { step, local } = this.state;
+		const { step, local, count } = this.state;
 		const legs = this.config.legs || { [TRANSIT]: [0, 1] };
 		let prog = step < TRANSIT ? 0 : 1;
 		if (legs[step]) {
@@ -380,12 +423,9 @@ export class RouteScene {
 		this.hudDot.style.background = dot;
 		this.hudTime.textContent = time;
 		this.hudBar.style.width = `${Math.round(((step + (step === TRANSIT ? local : 0)) / LAST) * 100)}%`;
-		let stepLabel = `Step ${String(step).padStart(2, '0')} / 06`;
-		if (step === 0) {
-			stepLabel = 'Start';
-		} else if (step === LAST) {
-			stepLabel = 'Complete';
-		}
+		// Step 0 is the intro; the numbered steps are 1 to count - 1 (the content's STEP 01-07).
+		const pad = (n) => String(n).padStart(2, '0');
+		const stepLabel = step === 0 ? 'Start' : `Step ${pad(step)} / ${pad(count - 1)}`;
 		this.hudStep.textContent = stepLabel;
 		if (this.liveText !== `${status}: ${line}`) {
 			this.liveText = `${status}: ${line}`;
@@ -403,7 +443,8 @@ export class RouteScene {
 		Object.entries(this.config.views || {}).forEach(([i, [lon, lat, scale]]) => {
 			views[i] = [...P(lon, lat), scale];
 		});
-		const [fx, fy, s] = views[step] || views[0];
+		const view = views[step] || views[0];
+		const [fx, fy, s] = step >= 1 && step < LAST ? this.keepCardsIn(view, G, step) : view;
 		const tx = (0.5 - (fx / W) * s) * 100;
 		const ty = (0.5 - (fy / H) * s) * 100;
 		this.cam.style.transform = `translate(${tx}%, ${ty}%) scale(${s})`;

@@ -72,18 +72,55 @@ $ease: cubic-bezier(0.2, 0, 0, 1);
 	}
 
 	// Narrow: the map stays as a sticky strip at the top; the steps scroll under it.
+	// The story already sits in the page gutter, so the strip and the steps add no side padding
+	// of their own: map, step text and cards line up with the rest of the page (24px at 390), and
+	// the steps take the strip's full width (at 768 they used to stop 40px short on the right).
 	@media (max-width: 899px) {
 		&:not(.block-scroll-story--editor) > .block-scroll-story-panel {
 			position: sticky;
 			top: var(--scroll-story-sticky-top);
 			height: 46vh;
-			padding: 8px 16px;
+			padding: 8px 0;
 			background: var(--wp--preset--color--gray-50);
+
+			// Soft lower edge: step headings fade out under the strip instead of being cut.
+			&::after {
+				position: absolute;
+				top: 100%;
+				right: 0;
+				left: 0;
+				height: 24px;
+				background: linear-gradient(var(--wp--preset--color--gray-50), rgba(244, 245, 244, 0));
+				content: '';
+				pointer-events: none;
+			}
 		}
 
 		> .ggt-story-step {
+			max-width: none;
 			min-height: 70vh;
-			padding-inline: 16px;
+			padding-inline: 0;
+		}
+	}
+
+	// Phones: steps size to their content (a step activates when its top crosses 65% of the
+	// viewport, so any height works), and the steps read under the strip stay legible.
+	@media (max-width: 781px) {
+		> .ggt-story-step {
+			min-height: 50vh;
+			padding-block: 40px;
+		}
+
+		&[data-active-step] > .ggt-story-step[data-state]:not([data-state='active']) {
+			opacity: 0.5;
+		}
+	}
+
+	// Portrait phones: a shorter strip leaves room to read (it was 46vh + the header, over half
+	// the screen).
+	@media (max-width: 599px) {
+		&:not(.block-scroll-story--editor) > .block-scroll-story-panel {
+			height: clamp(220px, 34vh, 300px);
 		}
 	}
 }
@@ -588,4 +625,87 @@ $ease: cubic-bezier(0.2, 0, 0, 1);
 // Without the script only the base map shows (no HUD, no markers).
 .ggt-route-scene:not(.is-live) .ggt-rs__stage {
 	padding-top: 4%;
+}
+
+// Narrow screens. The frosted HUD blurred the green map layers into a smudge: more opaque, less blur.
+@media (max-width: 899px) {
+	.ggt-rs__hud {
+		background: rgba(255, 255, 255, 0.86);
+		backdrop-filter: blur(6px);
+	}
+}
+
+// Phones: map text at least 12px.
+@media (max-width: 781px) {
+	.ggt-rs__end-tag {
+		font-size: rs(12px);
+		letter-spacing: 0.06em;
+	}
+
+	.ggt-rs__stop {
+		font-size: rs(12px);
+	}
+
+	.ggt-rs__chip,
+	.ggt-rs__msg-head,
+	.ggt-rs__hud-status {
+		font-size: 12px;
+	}
+
+	.ggt-rs__msg-subject {
+		overflow-wrap: anywhere;
+	}
+}
+
+// Portrait phones: the strip is too narrow for the email cards (95px wide, clipped, covering the
+// route), and each step's text already shows the same email full width, so the cards go. The HUD
+// keeps status, time and progress on two short rows; the step heading below carries its line.
+@media (max-width: 599px) {
+	.ggt-rs__col {
+		display: none;
+	}
+
+	// Tighter end cards: a pickup card on one side and a drop-off card on the other must both fit
+	// a 312px strip (360px phones).
+	.ggt-rs__end-card {
+		padding: rs(6px) rs(8px);
+	}
+
+	.ggt-rs__end-tag {
+		padding: rs(2px) rs(5px);
+		letter-spacing: 0.03em;
+	}
+
+	// Off-route towns crowd the strip and get cut at its edges.
+	.ggt-rs__city.is-minor {
+		display: none;
+	}
+
+	.ggt-rs__hud {
+		top: 8px;
+		right: 8px;
+		left: 8px;
+		padding: 8px 12px;
+		border-radius: 12px;
+	}
+
+	.ggt-rs__hud-status {
+		padding: 3px 8px;
+	}
+
+	.ggt-rs__hud-line {
+		display: none;
+	}
+
+	.ggt-rs__hud-progress {
+		margin-top: 6px;
+	}
+
+	.ggt-rs__stage {
+		padding-top: 76px;
+	}
+
+	.ggt-route-scene:not(.is-live) .ggt-rs__stage {
+		padding-top: 4%;
+	}
 }

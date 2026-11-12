@@ -54,6 +54,46 @@ class SiteFooterPattern extends AbstractBlockPattern
 	];
 
 	/**
+	 * Links repeated in the legal row: hidden in the Company column on phones (_footer.scss).
+	 */
+	private const LEGAL_KEYS = ['privacy', 'terms'];
+
+	/**
+	 * Pages that skip the sign-up band: the quote form and its thank-you page (IDs on the live site,
+	 * slugs for other environments). A second form under the quote form competes with it.
+	 */
+	private const NO_BAND_PAGES = [1480, 1397, 'get-a-quote', 'quote-thank-you'];
+
+	/**
+	 * Register the pattern and the band filter.
+	 *
+	 * @return void
+	 */
+	public function register(): void
+	{
+		parent::register();
+		\add_filter('render_block_core/group', [$this, 'hideBand'], 10, 2);
+	}
+
+	/**
+	 * Drop the sign-up band on the quote and thank-you pages. The pattern content is built once at
+	 * init, before the query exists, so the page check runs at render time.
+	 *
+	 * @param string $html Rendered block.
+	 * @param array<string, mixed> $block Parsed block.
+	 *
+	 * @return string
+	 */
+	public function hideBand(string $html, array $block): string
+	{
+		if (($block['attrs']['className'] ?? '') !== 'ggt-ftr__band' || !\is_page(self::NO_BAND_PAGES)) {
+			return $html;
+		}
+
+		return '';
+	}
+
+	/**
 	 * Get the pattern categories.
 	 *
 	 * @return array<string>
@@ -156,7 +196,11 @@ class SiteFooterPattern extends AbstractBlockPattern
 	{
 		$items = '';
 		foreach ($links as $label => $key) {
-			$items .= '<!-- wp:navigation-link ' . \wp_json_encode(['label' => \__($label, 'going-green-transport'), 'url' => SiteLinks::url($key), 'kind' => 'custom'], \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE) . " /-->\n"; // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
+			$attrs = ['label' => \__($label, 'going-green-transport'), 'url' => SiteLinks::url($key), 'kind' => 'custom']; // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
+			if (\in_array($key, self::LEGAL_KEYS, true)) {
+				$attrs['className'] = 'ggt-ftr__legal-dup';
+			}
+			$items .= '<!-- wp:navigation-link ' . \wp_json_encode($attrs, \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE) . " /-->\n";
 		}
 
 		$title = \esc_html__($heading, 'going-green-transport'); // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
