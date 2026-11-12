@@ -1,0 +1,487 @@
+// Eightshift Forms (delta9-digital-forms): the GGT field look, matching the footer sign-up form (_footer.scss
+// .ggt-signup): white 52px fields with a 1.5px green-800 border and 12px radius, gray placeholders, green-800
+// checkboxes, pill submit (green-800, lime text). No lime section background: forms sit on the page surface.
+// Most of the plugin is driven by custom properties, so the theme sets those first and only overrides rules
+// where the plugin hard-codes a value (1px borders, square buttons, the select arrow).
+// Layouts by Forms block style (src/Forms/FormsStyles.php): .es-block-forms--quote.
+
+$ggt-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23133F2D' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+
+.es-form {
+	// Plugin accent (checked boxes, radios, focus, buttons) becomes GGT green.
+	--global-colors-esf-admin-accent: var(--wp--preset--color--green-800);
+	--global-colors-esf-admin-accent-dark: var(--wp--preset--color--green-900);
+	--global-colors-esf-admin-accent-30: var(--wp--preset--color--gray-300);
+	--global-colors-esf-red-500: var(--wp--preset--color--error);
+
+	// Fields.
+	--esf-input-height: 52px;
+	--es-input-spacing: 16px;
+	--es-input-radius: var(--wp--custom--radius--md);
+	--es-input-border-color: var(--wp--preset--color--green-800);
+	--es-input-focus-border-color: var(--wp--preset--color--green-900);
+	--es-input-background-color: var(--wp--preset--color--white);
+	--es-input-placeholder-color: var(--wp--preset--color--gray-600);
+	--es-input-disabled-background-color: var(--wp--preset--color--gray-50);
+	--es-input-readonly-background-color: var(--wp--preset--color--gray-50);
+	--es-input-font-size: 16px;
+	--es-field-spacing: 20px;
+	--es-grid-spacing: 6px;
+
+	color: var(--wp--preset--color--green-900);
+	font-family: var(--wp--preset--font-family--body);
+
+	// Labels: the comp's small bold labels above the fields.
+	.es-field__label {
+		margin-block-end: 8px;
+		color: var(--wp--preset--color--green-900);
+		font-size: var(--wp--preset--font-size--body);
+		font-weight: 600;
+	}
+
+	// The plugin adds the asterisk; give it the brand colour.
+	.es-field__label--is-required::after {
+		color: var(--wp--preset--color--olive-500);
+	}
+
+	.es-field__help {
+		color: var(--wp--preset--color--ink-muted);
+		font-size: var(--wp--preset--font-size--meta);
+	}
+
+	// Inputs, textareas, the select box and repeater inputs share the footer field.
+	.es-input,
+	.es-textarea,
+	.es-repeater__input,
+	.choices__inner {
+		box-sizing: border-box;
+		border: 1.5px solid var(--es-input-border-color);
+		border-radius: var(--es-input-radius);
+		background-color: var(--es-input-background-color);
+		color: var(--wp--preset--color--green-900);
+		font: inherit;
+		font-size: var(--es-input-font-size);
+	}
+
+	.es-textarea {
+		min-block-size: 140px;
+		padding: 14px var(--es-input-spacing);
+	}
+
+	:is(.es-input, .es-textarea, .es-repeater__input, .es-submit, .es-repeater__add, .es-repeater__stepper-button):focus-visible,
+	.choices.is-focused .choices__inner {
+		outline: 2px solid var(--wp--preset--color--green-900);
+		outline-offset: 2px;
+	}
+
+	// Select (Choices.js): white field, the footer chevron, rounded list.
+	.choices {
+		margin: 0;
+
+		&[data-type*='select-one']::after {
+			display: none;
+		}
+
+		&.es-select[data-type*='select-one'] .choices__inner { // stylelint-disable-line selector-max-specificity
+			display: flex;
+			align-items: center;
+			min-block-size: var(--esf-input-height);
+			padding: 0 44px 0 var(--es-input-spacing);
+			background: var(--es-input-background-color) $ggt-chevron right 16px center / 18px no-repeat;
+		}
+
+		.choices__list--single {
+			padding: 0;
+		}
+
+		.choices__placeholder {
+			color: var(--es-input-placeholder-color);
+			opacity: 1;
+		}
+
+		.choices__list--dropdown {
+			margin-block-start: 6px;
+			overflow: hidden;
+			border: 1.5px solid var(--wp--preset--color--green-800);
+			border-radius: var(--wp--custom--radius--md);
+			background: var(--wp--preset--color--white);
+			box-shadow: 0 12px 32px rgb(10 36 24 / 0.12);
+
+			.choices__item {
+				padding: 12px var(--es-input-spacing);
+				font-size: var(--es-input-font-size);
+			}
+
+			.choices__item.is-highlighted { // stylelint-disable-line selector-max-specificity
+				background: var(--wp--preset--color--gray-50);
+			}
+
+			.choices__input {
+				margin: 0;
+				border: 0;
+				border-block-end: 1px solid var(--wp--preset--color--gray-100);
+				border-radius: 0;
+			}
+		}
+	}
+
+	// Checkboxes and radios: green-800 box, 20px like the footer opt-in.
+	.es-checkbox,
+	.es-radio {
+		--es-checkbox-scoped-icon-size: 20px;
+		--es-checkbox-scoped-border-color: var(--wp--preset--color--green-800);
+		--es-checkbox-scoped-background-color: var(--wp--preset--color--white);
+	}
+
+	.es-checkbox__label::before {
+		border-width: 1.5px;
+		border-radius: 4px;
+	}
+
+	.es-checkbox__label {
+		font-weight: 600;
+		line-height: 1.45;
+
+		a {
+			color: inherit;
+			text-decoration: underline;
+			text-underline-offset: 0.15em;
+		}
+	}
+
+	// Errors.
+	.es-error {
+		margin-block-start: 6px;
+		color: var(--wp--preset--color--error);
+		font-size: var(--wp--preset--font-size--meta);
+		font-weight: 600;
+
+		&:empty {
+			display: none;
+		}
+	}
+
+	.es-form-has-error {
+		--es-input-border-color: var(--wp--preset--color--error);
+
+		// A repeater error is about the list (a missing address, totals that don't match), not every row.
+		.es-repeater {
+			--es-input-border-color: var(--wp--preset--color--green-800);
+		}
+	}
+
+	// Buttons: the footer pill. "Back" is the outlined variant.
+	.es-submit {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		inline-size: auto;
+		block-size: 52px;
+		padding: 0 36px;
+		border: 0;
+		border-radius: var(--wp--custom--radius--pill);
+		background: var(--wp--preset--color--green-800);
+		color: var(--wp--preset--color--lime-500);
+		font-family: var(--wp--preset--font-family--heading);
+		font-size: var(--wp--preset--font-size--lead);
+		font-weight: bold;
+		line-height: 1;
+		transition: background var(--wp--custom--motion--base) var(--wp--custom--motion--ease);
+
+		&:hover:not(:disabled) {
+			background: var(--wp--preset--color--green-900);
+		}
+	}
+
+	.es-field--submit-prev .es-submit {
+		border: 1.5px solid var(--wp--preset--color--green-800);
+		background: transparent;
+		color: var(--wp--preset--color--green-800);
+
+		&:hover:not(:disabled) { // stylelint-disable-line selector-max-specificity
+			background: var(--wp--preset--color--gray-50);
+		}
+	}
+
+	// Step navigation: Back on the left, Continue / submit on the right.
+	.es-step__navigation-inner {
+		flex: 1 1 100%;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 12px;
+		align-items: center;
+
+		> .es-field {
+			flex: 0 0 auto;
+			max-inline-size: none;
+			margin: 0;
+			padding: 0;
+		}
+
+		// Right-aligned row; a visible Back pushes itself to the left.
+		justify-content: flex-end;
+
+		> .es-field.es-field--submit-prev:not(.es-form-is-hidden) { // stylelint-disable-line selector-max-specificity
+			margin-inline-end: auto;
+		}
+
+		> .es-field--submit.es-form-is-hidden {
+			display: none;
+		}
+	}
+
+	// Global message after submit.
+	.es-global-msg:not(:empty) {
+		margin-block-end: 20px;
+		padding: 16px 20px;
+		border-radius: var(--wp--custom--radius--md);
+		background: var(--wp--preset--color--green-800);
+		color: var(--wp--preset--color--white);
+		font-weight: 600;
+	}
+
+	// Repeater rows (pickups, drop-offs): white cards with the same fields.
+	.es-repeater {
+		--es-repeater-gap: 12px;
+		--es-repeater-item-padding: 20px;
+		--es-repeater-item-border: 1px solid var(--wp--preset--color--gray-200);
+		--es-repeater-item-radius: var(--wp--custom--radius--lg);
+		--es-repeater-item-background: var(--wp--preset--color--white);
+	}
+
+	.es-repeater__item-label {
+		font-family: var(--wp--preset--font-family--heading);
+		font-size: var(--wp--preset--font-size--lead-lg);
+		font-weight: bold;
+	}
+
+	.es-repeater__subfield-label {
+		font-size: var(--wp--preset--font-size--meta);
+		font-weight: 600;
+	}
+
+	.es-repeater__subfield-required {
+		color: var(--wp--preset--color--olive-500);
+	}
+
+	.es-repeater__input {
+		block-size: var(--esf-input-height);
+		padding: 0 var(--es-input-spacing);
+
+		&::placeholder {
+			color: var(--es-input-placeholder-color);
+		}
+	}
+
+	.es-repeater__remove {
+		color: var(--wp--preset--color--ink-muted);
+		font-size: var(--wp--preset--font-size--meta);
+	}
+
+	// Package stepper: one bordered control, − value +.
+	.es-repeater__stepper {
+		overflow: hidden;
+		border: 1.5px solid var(--wp--preset--color--green-800);
+		border-radius: var(--es-input-radius);
+		background: var(--wp--preset--color--white);
+
+		.es-repeater__input {
+			inline-size: 72px;
+			border: 0;
+			border-inline: 1px solid var(--wp--preset--color--gray-200);
+			border-radius: 0;
+			font-weight: bold;
+		}
+	}
+
+	.es-repeater__stepper-button {
+		inline-size: 52px;
+		block-size: 49px;
+		border: 0;
+		border-radius: 0 !important; // stylelint-disable-line declaration-no-important
+		color: var(--wp--preset--color--green-800);
+		font-size: 22px;
+
+		&:hover {
+			background: var(--wp--preset--color--gray-50);
+		}
+	}
+
+	.es-repeater__add {
+		gap: 10px;
+		color: var(--wp--preset--color--green-800);
+		font-family: var(--wp--preset--font-family--heading);
+		font-size: var(--wp--preset--font-size--body-md);
+	}
+
+	.es-repeater__add-icon {
+		display: inline-grid;
+		place-items: center;
+		inline-size: 26px;
+		block-size: 26px;
+		border-radius: 50%;
+		background: var(--wp--preset--color--green-800);
+		color: var(--wp--preset--color--white);
+		font-size: 18px;
+		line-height: 1;
+	}
+}
+
+// Quote (multi-step) layout.
+.es-block-forms--quote {
+	.es-form {
+		max-inline-size: 760px;
+	}
+
+	// Steps as a numbered row: 01 Service Type, 02 Pickups & Drop-offs, 03 Your Details.
+	.es-progress-bar {
+		display: flex;
+		gap: 8px;
+		margin-block-end: 32px;
+		padding: 0;
+		counter-reset: ggt-step;
+	}
+
+	.es-progress-bar__item {
+		flex: 1 1 0;
+		padding-block-start: 12px;
+		border-block-start: 3px solid var(--wp--preset--color--gray-200);
+		color: var(--wp--preset--color--gray-600);
+		font-family: var(--wp--preset--font-family--heading);
+		font-size: var(--wp--preset--font-size--body-md);
+		font-weight: bold;
+		counter-increment: ggt-step;
+
+		&::before {
+			content: counter(ggt-step, decimal-leading-zero);
+			display: block;
+			margin-block-end: 2px;
+			font-family: var(--wp--preset--font-family--mono);
+			font-size: var(--wp--preset--font-size--caption);
+			letter-spacing: var(--wp--custom--tracking--mono);
+		}
+
+		&.es-form-is-active,
+		&.es-form-is-filled {
+			border-color: var(--wp--preset--color--green-800);
+			color: var(--wp--preset--color--green-900);
+		}
+	}
+
+	// Service tiers as cards.
+	.es-field--radios .es-field__content-wrap {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+		gap: 12px;
+	}
+
+	.es-field--radios .es-radio {
+		margin: 0;
+	}
+
+	.es-field--radios .es-radio__content {
+		block-size: 100%;
+	}
+
+	.es-field--radios .es-radio__label {
+		display: block;
+		box-sizing: border-box;
+		block-size: 100%;
+		padding: 18px 18px 18px 50px;
+		border: 1.5px solid var(--wp--preset--color--gray-300);
+		border-radius: var(--wp--custom--radius--md);
+		background: var(--wp--preset--color--white);
+		font-weight: normal;
+		transition: border-color var(--wp--custom--motion--base) var(--wp--custom--motion--ease);
+
+		&::before,
+		&::after {
+			inset-block-start: 20px;
+			inset-inline-start: 18px;
+		}
+
+		&:hover {
+			border-color: var(--wp--preset--color--green-800);
+		}
+	}
+
+	.es-field--radios .es-radio__input:checked + .es-radio__label { // stylelint-disable-line selector-max-specificity
+		border-color: var(--wp--preset--color--green-800);
+		box-shadow: inset 0 0 0 1px var(--wp--preset--color--green-800);
+	}
+
+	.es-radio__label-title {
+		display: block;
+		margin-block-end: 4px;
+		color: var(--wp--preset--color--green-900);
+		font-family: var(--wp--preset--font-family--heading);
+		font-size: var(--wp--preset--font-size--lead-lg);
+		font-weight: bold;
+	}
+
+	.es-radio__label-desc {
+		display: block;
+		color: var(--wp--preset--color--ink-muted);
+		font-size: var(--wp--preset--font-size--meta);
+		line-height: 1.5;
+	}
+
+	// Stops: pickups and drop-offs read as two groups.
+	.es-field--repeater + .es-field--repeater {
+		margin-block-start: 12px;
+	}
+
+	// Single-page quote (long form): "01 Service Type" headings drawn from data-section-number / data-section-title
+	// on the first field of each section. Absolutely placed so a half-width first field (First name) can carry a
+	// full-width heading; the field beside it (data-section-spacer) gets the same top space.
+	.es-field:is([data-section-title], [data-section-spacer]) {
+		position: relative;
+		padding-block-start: 64px;
+	}
+
+	.es-field[data-section-title]:not([data-section-number='01']),
+	.es-field[data-section-spacer] {
+		margin-block-start: 28px;
+	}
+
+	.es-field[data-section-title]::before,
+	.es-field[data-section-title]::after {
+		position: absolute;
+		inset-block-start: 0;
+		white-space: nowrap;
+		color: var(--wp--preset--color--green-900);
+	}
+
+	.es-field[data-section-title]::before {
+		content: attr(data-section-number);
+		inset-block-start: 9px;
+		inset-inline-start: var(--es-grid-spacing);
+		color: var(--wp--preset--color--olive-500);
+		font-family: var(--wp--preset--font-family--mono);
+		font-size: var(--wp--preset--font-size--caption);
+		letter-spacing: var(--wp--custom--tracking--mono);
+	}
+
+	.es-field[data-section-title]::after {
+		content: attr(data-section-title);
+		inset-inline-start: calc(var(--es-grid-spacing) + 30px);
+		font-family: var(--wp--preset--font-family--heading);
+		font-size: var(--wp--preset--font-size--heading-lg);
+		font-weight: bold;
+		letter-spacing: var(--wp--custom--tracking--snug);
+		line-height: 1.2;
+	}
+
+	// The single-page form's submit sits apart from the last field.
+	.es-field--submit:not(.es-step__navigation-inner > *) {
+		margin-block-start: 8px;
+		padding-block-start: 24px;
+		border-block-start: 1px solid var(--wp--preset--color--gray-200);
+	}
+
+	.es-step__navigation {
+		margin-block-start: 8px;
+		padding-block-start: 24px;
+		border-block-start: 1px solid var(--wp--preset--color--gray-200);
+	}
+}
