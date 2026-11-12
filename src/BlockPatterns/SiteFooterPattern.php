@@ -30,6 +30,7 @@ class SiteFooterPattern extends AbstractBlockPattern
 	private const COLUMNS = [
 		'Company' => [
 			'About Us' => 'about',
+			'Partner Program' => 'partner',
 			'Contact & Get a Quote' => 'quote',
 			'FAQ' => 'faq',
 			'Locations' => 'locations',

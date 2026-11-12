@@ -113,7 +113,8 @@ class SiteHeaderPattern extends AbstractBlockPattern
 			. $pricing
 			. $this->link(\__('How It Works', 'going-green-transport'), 'how-it-works')
 			. $this->link(\__('About Us', 'going-green-transport'), 'about')
-			. $this->link(\__('Resources', 'going-green-transport'), 'resources');
+			. $this->link(\__('Resources', 'going-green-transport'), 'resources')
+			. $this->link(\__('Partners', 'going-green-transport'), 'partner');
 
 		$nav = '<!-- wp:navigation ' . \wp_json_encode([
 			'overlayMenu' => 'mobile',

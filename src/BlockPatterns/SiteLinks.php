@@ -49,6 +49,7 @@ final class SiteLinks
 		'on-demand' => '/on-demand-transport/',
 		'how-it-works' => '/how-it-works/',
 		'about' => '/about-us/',
+		'partner' => '/partner-program/',
 		'resources' => '/cannabis-transport-resources/',
 		'quote' => '/get-a-quote/',
 		'faq' => '/#faq',
