@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Region taxonomy for locations: the five regional routes (Central Minnesota, Northeast,
+ * Region taxonomy for locations: the five regional routes (Central, Northeast,
  * Southeast, Northwest, Southwest). Each term carries its zone label in `ggt_zone`.
  *
  * @package GoingGreenTransportTheme\CustomTaxonomy
