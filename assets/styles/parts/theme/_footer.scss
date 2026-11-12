@@ -578,3 +578,47 @@
 		color: var(--wp--preset--color--green-800);
 	}
 }
+
+// The Forms sign-up form in the band (src/Forms/FormsSwap.php): the same two-by-two layout as
+// .ggt-signup above, labels for screen readers only (the form's placeholders name the fields),
+// the newsletter opt-in and the button sharing the last row. Field look comes from _forms.scss.
+.ggt-ftr__band .es-form {
+	--es-field-spacing: 12px;
+
+	.es-field {
+		--es-field-width: 50%;
+
+		@media (max-width: 600px) { /* stylelint-disable-line media-feature-range-notation */
+			--es-field-width: 100%;
+		}
+	}
+
+	.es-field--input,
+	.es-field--select,
+	.es-field--textarea {
+		.es-field__label {
+			position: absolute;
+			width: 1px;
+			height: 1px;
+			overflow: hidden;
+			clip-path: inset(50%);
+			white-space: nowrap;
+		}
+	}
+
+	.es-field--checkboxes {
+		align-self: center;
+		font-weight: 600;
+	}
+
+	.es-field--submit .es-field__content-wrap {
+		display: flex;
+		justify-content: flex-end;
+
+		@media (max-width: 600px) { /* stylelint-disable-line media-feature-range-notation */
+			.es-submit {
+				width: 100%;
+			}
+		}
+	}
+}
