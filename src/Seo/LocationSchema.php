@@ -3,8 +3,9 @@
 /**
  * Additions to Yoast's schema graph:
  * - every page: business facts on Yoast's `#organization` node (service area, hours, contact point,
- *   slogan, topics, the service catalogue). Name, logo, phone, email, legal name, founding date and
- *   sameAs come from Yoast > Settings > Site representation.
+ *   slogan, topics, the service catalogue). Name, logo and sameAs come from Yoast > Settings > Site
+ *   representation; its phone, email, legal name, description and founding date are added here
+ *   (Yoast Free stores them without printing them).
  * - city pages: a Service piece (licensed cannabis transport) with the city as areaServed (plus
  *   nearby towns), provided by that Organization.
  * - pages with core/accordion items (Home, FAQ, Get a Quote): the WebPage becomes an FAQPage with one
@@ -129,20 +130,29 @@ class LocationSchema implements ServiceInterface
 				continue;
 			}
 
-			$phone = '+1-' . SiteLinks::PHONE;
+			$phone = $this->yoast('org-phone') ?: '+1-' . SiteLinks::PHONE;
+			$email = $this->yoast('org-email') ?: SiteLinks::EMAIL;
+
+			// Yoast Free saves these Site representation fields but only Premium prints them.
+			$graph[$i] += \array_filter([
+				'legalName' => $this->yoast('org-legal-name'),
+				'description' => $this->yoast('org-description'),
+				'foundingDate' => $this->yoast('org-founding-date'),
+				'numberOfEmployees' => $this->yoast('org-number-employees'),
+			]);
 
 			$graph[$i] += [
 				'alternateName' => 'Going Green Transport',
 				'slogan' => 'From Seed to Sale, We Never Fail',
 				'telephone' => $phone,
-				'email' => SiteLinks::EMAIL,
+				'email' => $email,
 				'areaServed' => ['@type' => 'State', 'name' => 'Minnesota', 'sameAs' => 'https://en.wikipedia.org/wiki/Minnesota'],
 				'knowsAbout' => ['Cannabis transportation', 'Cannabis logistics', 'Metrc compliance', 'Chain of custody', 'Cannabis supply chain'],
 				'contactPoint' => [
 					'@type' => 'ContactPoint',
 					'contactType' => 'customer service',
 					'telephone' => $phone,
-					'email' => SiteLinks::EMAIL,
+					'email' => $email,
 					'areaServed' => 'US-MN',
 					'availableLanguage' => 'English',
 					'hoursAvailable' => $this->hours(),
@@ -331,6 +341,18 @@ class LocationSchema implements ServiceInterface
 			'name' => 'Cannabis Transport Services',
 			'itemListElement' => $items,
 		];
+	}
+
+	/**
+	 * A Yoast setting as a string ('' when Yoast is off or the field is empty).
+	 *
+	 * @param string $key Option key in wpseo_titles.
+	 *
+	 * @return string
+	 */
+	private function yoast(string $key): string
+	{
+		return \class_exists('WPSEO_Options') ? \trim((string) \WPSEO_Options::get($key, '')) : '';
 	}
 
 	/**
