@@ -59,6 +59,32 @@ class EnqueueTheme extends AbstractEnqueueTheme
 		\add_action('wp_enqueue_scripts', [$this, 'enqueueStyles'], 10);
 		\add_action('wp_enqueue_scripts', [$this, 'enqueueScripts']);
 		\add_action('wp_head', [$this, 'preloadFonts'], 1);
+		\add_filter('render_block_core/accordion-item', [$this, 'accordionHiddenState']);
+	}
+
+	/**
+	 * Closed accordion panels hidden in the server HTML, not only after the script runs.
+	 *
+	 * WordPress 7.1 binds each panel's `hidden` to `state.isHidden` ("until-found" when closed, so
+	 * find-in-page still opens it) but registers no server value for it, so every answer is printed
+	 * open and collapses on hydration: the FAQ page's layout shift (CLS 0.15 mobile). This gives the
+	 * Interactivity API the same value on the server; on 7.0 the binding is `inert` and it is unused.
+	 *
+	 * @param string $content Rendered accordion item.
+	 *
+	 * @return string Unchanged.
+	 */
+	public function accordionHiddenState(string $content): string
+	{
+		\wp_interactivity_state('core/accordion', [
+			'isHidden' => static function () {
+				$context = \wp_interactivity_get_context();
+
+				return empty($context['openByDefault']) ? 'until-found' : null;
+			},
+		]);
+
+		return $content;
 	}
 
 	/**

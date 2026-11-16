@@ -16,7 +16,8 @@
  *    query matching "pass", so /contact/?utm_source=x still redirects. redirection_options is not
  *    pushed with content: run this on production after the launch push too.
  * 2. Yoast Site representation: phone, email, legal name, founding year, description, sameAs.
- *    Author archives off (one author), default og:image (assets/images/social/ggt-og-default.jpg).
+ *    Author archives off (one author), default og:image (assets/images/social/ggt-og-default.jpg),
+ *    no site name after post titles.
  * 3. quote-thank-you: noindex.
  * 4. Meta descriptions for pages and category archives that had none, trims over 155 characters.
  * 5. Featured image on every location without a raster one (the round-3 SVG placeholders): the first
@@ -119,6 +120,8 @@ $ggtYoast = [
 	'other_social_urls' => ['https://www.instagram.com/goinggreentransportmn/'],
 	'disable-author' => true,
 	'noindex-author-wpseo' => true,
+	// Post titles ran to 113 characters with " - Going Green Transport LLC"; pages and locations keep it.
+	'title-post' => '%%title%% %%page%%',
 ];
 
 // Default social image, imported once from the theme.
