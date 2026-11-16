@@ -116,8 +116,12 @@ $ggtYoast = [
 	'org-founding-date' => '2023',
 	'org-description' => "Minnesota's first dedicated cannabis transport company, providing same-day, statewide, compliance-first B2B cannabis logistics for cultivators, manufacturers, testing labs, and dispensaries.",
 	'facebook_site' => 'https://www.facebook.com/61584143425787',
-	// LinkedIn (design kit URL) left out until the client confirms it; add the Google Business Profile URL here when known.
-	'other_social_urls' => ['https://www.instagram.com/goinggreentransportmn/'],
+	// Google Business Profile by its CID (stable through name/address changes; from the Maps place
+	// data 0x…:0x2475dc3eeb79a859). LinkedIn (design kit URL) left out until the client confirms it.
+	'other_social_urls' => [
+		'https://www.instagram.com/goinggreentransportmn/',
+		'https://maps.google.com/?cid=2627248120437254233',
+	],
 	'disable-author' => true,
 	'noindex-author-wpseo' => true,
 	// Post titles ran to 113 characters with " - Going Green Transport LLC"; pages and locations keep it.
