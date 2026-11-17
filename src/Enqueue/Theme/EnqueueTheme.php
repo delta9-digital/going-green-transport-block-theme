@@ -26,8 +26,8 @@ class EnqueueTheme extends AbstractEnqueueTheme
 	 * (same variable file at `font-stretch: 75%`), so one request covers headings and the header.
 	 */
 	private const PRELOAD_FONTS = [
-		'assets/fonts/Inter-VariableFont_opsz_wght.latin.woff2',
-		'assets/fonts/Roboto-VariableFont_wdth_wght.latin.woff2',
+		'assets/fonts/Inter-VariableFont_wght.latin.woff2',
+		'assets/fonts/Roboto-VariableFont_wght.latin.woff2',
 	];
 
 	/**
@@ -58,7 +58,9 @@ class EnqueueTheme extends AbstractEnqueueTheme
 	{
 		\add_action('wp_enqueue_scripts', [$this, 'enqueueStyles'], 10);
 		\add_action('wp_enqueue_scripts', [$this, 'enqueueScripts']);
-		\add_action('wp_head', [$this, 'preloadFonts'], 1);
+		// Priority 8: right after wp_print_styles (also 8), so the stylesheets the first paint needs are
+		// requested before the fonts instead of sharing the first round trips with them.
+		\add_action('wp_head', [$this, 'preloadFonts'], 8);
 		\add_filter('render_block_core/accordion-item', [$this, 'accordionHiddenState']);
 	}
 
