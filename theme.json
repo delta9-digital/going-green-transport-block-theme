@@ -154,26 +154,8 @@
 							"fontWeight": "100 900",
 							"fontDisplay": "swap",
 							"src": [
-								"file:./assets/fonts/Roboto-VariableFont_wdth_wght.latin.woff2"
-							],
-							"fontStretch": "75% 100%"
-						}
-					]
-				},
-				{
-					"slug": "display",
-					"name": "Roboto Condensed",
-					"fontFamily": "\"Roboto Condensed\", \"Helvetica Inserat\", Impact, sans-serif",
-					"fontFace": [
-						{
-							"fontFamily": "Roboto Condensed",
-							"fontStyle": "normal",
-							"fontWeight": "100 900",
-							"fontDisplay": "swap",
-							"src": [
-								"file:./assets/fonts/Roboto-VariableFont_wdth_wght.latin.woff2"
-							],
-							"fontStretch": "75%"
+								"file:./assets/fonts/Roboto-VariableFont_wght.latin.woff2"
+							]
 						}
 					]
 				},
@@ -188,7 +170,7 @@
 							"fontWeight": "100 900",
 							"fontDisplay": "swap",
 							"src": [
-								"file:./assets/fonts/Inter-VariableFont_opsz_wght.latin.woff2"
+								"file:./assets/fonts/Inter-VariableFont_wght.latin.woff2"
 							]
 						}
 					]
