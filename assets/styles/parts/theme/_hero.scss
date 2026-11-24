@@ -1,0 +1,559 @@
+// Home hero v5 (bin/home-hero-v5.php, handoff ggt-hero-v5-handoff.md): intro column 45 / quote form 55 on the page
+// grey, a faint Minnesota outline behind the intro, Google review carousel (assets/scripts/hero-v5). The section is
+// 1340px wide, about 50px past the 1240px nav on each side.
+
+$ggt-mn-outline: url("data:image/svg+xml,%3Csvg fill='%23133F2D' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 86.71 99.6'%3E %3Cpath d='M84.12,22.09c-1.87,0-1.44-1.02-5.38-.68-5.33.45-3.46-3.75-7.71-1.7-4.26,2.04-7.61.73-10.73-1.48-3.12-2.21-4.6.51-6.07-2.1-1.48-2.61-5.73-3.31-7.4-3.61-2.18-.38-2.83,2.05-5.86,2.05-1.64,0-2.3-1.37-5.64-2.44-1.79-.57-3.67-.82-5.19-1.38-1.53-.56.05-2.11-.94-3.87-.65-1.16-.63-2.55-.83-3.93-.25-1.76-.51-2.32-2.36-2.83-1.64-.45-1.97.45-2,1.74l-.06,2.13c-.02,1.03-.47,2.15-2.34,2.07l-19.54-.78s-2.21.48-1.49,3.97c.73,3.49-1.68,2.08.08,10.19,1.77,8.11,2.33,14.09,2.9,18.26.56,4.17-1.01,6.86.28,9.51,1.28,2.65,1.72,8.14,1.68,12.63-.04,4.49-2.73,4.07-2.71,6.51.04,4.1,3.97,3.24,3.8,7.83l-.93,21.91c-.08,2.02.14,3.04,2.97,3.07l58.85.44c2.22.01,2.8-.46,2.59-1.9l-.62-4.11c-.55-2.24-4.86-2.66-6.85-5.67-1.98-3.01-7.88-6.9-10.21-8.32-2.32-1.41-1.05-3.09-.99-6.89s1.08-4.03,1.13-6.02c.06-1.98-2.63-1.78-2.46-4.42.16-2.64,4.8-4.95,5.57-5.22,1.2-.42,1.23-1.27,1.23-2.13v-5.08c0-2.59-.17-3.74,1.86-5.58,1.07-.96,2.28-2.28,3.59-3.22,2.79-1.98,10.24-10.16,12.97-12.05,1.91-1.32,5.59-2.67,9.13-3.49,2.8-.66,3.37-3.41-.32-3.41ZM45.01,66.76c-.52.56-2.36,1.26-4.65,1.79-1.41.33-2.38.41-4.78.42-1.62.01-2.92.08-2.92.16.05.07.17.14.27.14.36,0,2.51,1.57,3.68,2.69,1.17,1.12,1.79,1.99,1.57,2.22-.27.27-1.73.06-2.98-.43-1.51-.59-4.31-2.38-4.89-3.12l-.38-.48v2.55c0,1.4-.09,2.71-.2,2.91-.23.45-1.14.48-1.56.07-.23-.24-.29-.78-.29-2.85v-2.57l-.89.83c-1.11,1.03-3.05,2.19-4.62,2.77-1.28.46-2.58.57-2.79.24-.33-.53,2.1-2.9,4.42-4.32.63-.38,1.16-.72,1.19-.74.03-.03-1.06-.03-2.42,0-2.05.05-2.86-.02-4.69-.4-3.19-.65-5.48-1.6-5.48-2.27,0-.73,2.97-1.28,6.9-1.28,1.59.01,3.22.07,3.63.14l.74.14-1-.57c-3.33-1.86-6.69-5.68-8.62-9.81-.48-1.02-.79-1.94-.79-2.4-.02-.71.01-.74.52-.7,1.36.09,5.35,2.48,7.82,4.68,1.63,1.44,3.64,3.8,4.44,5.2.31.54.58.98.61.98s-.06-.34-.2-.75c-.88-2.56-1.24-8.22-.74-11.78.37-2.63,1.03-5.32,1.8-7.32.66-1.72,1.01-2.32,1.36-2.32.58,0,2.11,4.57,2.73,8.17.66,3.85.42,9.41-.55,12.5-.5,1.58-.48,1.76.07.8,1.31-2.29,4.76-5.8,7.51-7.64,2.13-1.43,4.28-2.49,5.09-2.53.6-.03.63,0,.6.59-.04.85-2.07,4.88-3.24,6.42-1.99,2.62-4.29,4.76-6.35,5.92l-1,.56.75-.14c.41-.08,2.13-.13,3.82-.12,3.23.02,5.63.36,6.47.91l.46.3-.42.44Z'%3E%3C/path%3E %3C/svg%3E");
+
+.ggt-hero-v5 {
+	--ggt-hero-gap: 48px;
+	--ggt-muted: var(--wp--custom--color--gray-650);
+	overflow: hidden; // the outline is taller than the left column is wide; never a sideways scroll
+	padding-block-start: 16px !important; // stylelint-disable-line declaration-no-important
+
+	> .ggt-hero-v5__wrap.alignwide {
+		position: relative;
+		max-width: var(--wp--custom--hero--width);
+		padding-block: clamp(28px, 4vw, 56px) 32px;
+
+		// Decorative outline, as tall as the hero, centred on the 45fr column. Fixed aspect ratio: no layout shift.
+		&::before {
+			content: '';
+			position: absolute;
+			inset-block: 0;
+			left: calc(0.225 * (100% - var(--ggt-hero-gap)));
+			z-index: 0;
+			aspect-ratio: 86.71 / 99.6;
+			background: $ggt-mn-outline center / contain no-repeat;
+			opacity: 0.1;
+			transform: translateX(-50%);
+			pointer-events: none;
+		}
+	}
+
+	// Two columns as a grid (the columns block is flex): 45fr / 55fr, centred on each other.
+	.ggt-hero-v5__grid.wp-block-columns {
+		position: relative;
+		z-index: 1;
+		display: grid;
+		grid-template-columns: minmax(0, 45fr) minmax(0, 55fr);
+		gap: var(--ggt-hero-gap);
+		align-items: center;
+		margin: 0;
+
+		> .wp-block-column {
+			flex-basis: auto !important; // stylelint-disable-line declaration-no-important
+			min-width: 0;
+		}
+	}
+
+	@media (max-width: 960px) {
+		> .ggt-hero-v5__wrap.alignwide::before {
+			display: none;
+		}
+
+		.ggt-hero-v5__grid.wp-block-columns {
+			grid-template-columns: minmax(0, 1fr);
+		}
+	}
+}
+
+// ---------- Intro column ----------
+
+.ggt-hero-v5__intro {
+	color: var(--wp--preset--color--green-900);
+
+	> * {
+		margin-block: 0;
+	}
+}
+
+// Badge pill on its own line, then the light pills.
+.ggt-hero-v5__badge,
+.ggt-hero-v5__pills li {
+	padding: 8px 14px;
+	border: 1px solid var(--wp--preset--color--green-800);
+	border-radius: var(--wp--custom--radius--pill);
+	font-family: var(--wp--preset--font-family--heading);
+	font-size: 13px;
+	font-weight: 600;
+	line-height: 1;
+}
+
+.ggt-hero-v5 .ggt-hero-v5__badge {
+	display: inline-block;
+	margin-block-end: 10px;
+	background: var(--wp--preset--color--green-800);
+	color: var(--wp--preset--color--lime-500);
+}
+
+.ggt-hero-v5 .ggt-hero-v5__pills {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	margin-block-end: 20px;
+	padding: 0;
+	list-style: none;
+
+	li {
+		margin: 0;
+		border-color: var(--wp--preset--color--gray-200);
+		background: var(--wp--preset--color--white);
+		color: var(--wp--preset--color--green-800);
+	}
+}
+
+.ggt-hero-v5 .ggt-hero-v5__title {
+	margin-block-end: 18px;
+	color: var(--wp--preset--color--green-900);
+	font-family: var(--wp--preset--font-family--heading);
+	font-size: clamp(40px, 5vw, 68px);
+	font-weight: 700;
+	letter-spacing: -0.025em;
+	line-height: 1.04;
+	text-wrap: balance;
+}
+
+.ggt-hero-v5 .ggt-hero-v5__lead {
+	margin-block-end: 28px;
+	color: var(--wp--preset--color--ink-muted);
+	font-family: var(--wp--preset--font-family--body);
+	font-size: 17px;
+	line-height: 1.6;
+	text-wrap: pretty;
+}
+
+// Rating line; 44px below leaves room for the quote glyph above the review.
+.ggt-hero-v5 .ggt-hero-v5__rating {
+	margin-block-end: 44px;
+	color: var(--wp--preset--color--ink-muted);
+	font-size: 14px;
+
+	strong {
+		color: var(--wp--preset--color--green-700);
+		font-family: var(--wp--preset--font-family--heading);
+		font-weight: 700;
+	}
+}
+
+.ggt-hero-v5__stars,
+.ggt-review__stars {
+	color: var(--wp--custom--color--star);
+	letter-spacing: 2px;
+}
+
+// ---------- Review carousel ----------
+// Every slide sits in one grid cell, so the box is as tall as the longest review and never jumps. Without JS (or
+// before it runs) only the first review shows; the script then cross-fades every 6s (paused on hover, focus, hidden
+// tab, reduced motion).
+
+.ggt-hero-v5 .ggt-reviews {
+	position: relative;
+	display: grid;
+	max-width: 460px;
+	margin-block-end: 36px;
+
+	// Decorative quote mark behind the text.
+	&::before {
+		content: '\201C';
+		position: absolute;
+		top: -38px;
+		left: -18px;
+		z-index: 0;
+		color: var(--wp--preset--color--gray-200);
+		font-family: Georgia, 'Times New Roman', serif;
+		font-size: 110px;
+		line-height: 1;
+		pointer-events: none;
+	}
+
+	&:empty {
+		display: none;
+	}
+}
+
+.ggt-hero-v5 .ggt-review {
+	position: relative;
+	z-index: 1;
+	grid-area: 1 / 1;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	background: none;
+	transition: opacity 600ms ease, visibility 0s linear 0s;
+
+	p {
+		margin: 0 0 16px;
+		color: var(--wp--preset--color--green-900);
+		font-family: var(--wp--preset--font-family--body);
+		font-size: 20px;
+		font-style: italic;
+		line-height: 1.45;
+		text-wrap: pretty;
+	}
+
+	cite {
+		display: grid;
+		grid-template-columns: 40px minmax(0, 1fr);
+		column-gap: 12px;
+		align-items: center;
+		font-style: normal;
+	}
+}
+
+.ggt-review__avatar {
+	display: grid;
+	grid-row: span 2;
+	place-items: center;
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	background: var(--wp--preset--color--gray-100);
+	color: var(--wp--preset--color--green-900);
+	font-family: var(--wp--preset--font-family--heading);
+	font-size: 16px;
+	font-weight: 700;
+}
+
+.ggt-review__name {
+	color: var(--wp--preset--color--green-900);
+	font-family: var(--wp--preset--font-family--heading);
+	font-size: 16px;
+	font-weight: 700;
+	line-height: 1.3;
+}
+
+.ggt-review__source {
+	color: var(--wp--custom--color--gray-650);
+	font-family: var(--wp--preset--font-family--body);
+	font-size: 13px;
+	line-height: 1.4;
+}
+
+.ggt-hero-v5 .ggt-reviews:not(.is-ready) .ggt-review:not(:first-of-type),
+.ggt-hero-v5 .ggt-reviews.is-ready .ggt-review:not(.is-active) {
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity 600ms ease, visibility 0s linear 600ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.ggt-hero-v5 .ggt-review {
+		transition: none !important; // stylelint-disable-line declaration-no-important
+	}
+}
+
+// ---------- CTAs ----------
+
+.ggt-hero-v5 .ggt-hero-v5__ctas {
+	gap: 16px 24px;
+}
+
+// Dark split pill: forest pill with a lime label, lime circle with a forest arrow.
+.wp-block-button.is-style-ggt-split.ggt-split-dark {
+	--ggt-pill-bg: var(--wp--preset--color--green-800);
+	--ggt-pill-bg-hover: var(--wp--preset--color--green-900);
+	--ggt-pill-fg: var(--wp--preset--color--lime-500);
+	--ggt-circle-bg: var(--wp--preset--color--lime-500);
+	--ggt-circle-bg-hover: var(--wp--preset--color--lime-500);
+
+	.wp-block-button__link:hover {
+		color: var(--ggt-pill-fg);
+	}
+}
+
+@media (max-width: 480px) {
+	.ggt-hero-v5 .ggt-reviews {
+		max-width: none;
+	}
+}
+
+// ---------- Quote form card (FormsSwap::swapHero) ----------
+
+.ggt-hero-v5 .ggt-hero-form {
+	block-size: auto;
+	padding: clamp(22px, 3vw, 32px);
+	border: 1px solid rgba(255, 255, 255, 0.7);
+	border-radius: 18px;
+	background: var(--wp--custom--glass--card);
+	box-shadow: 0 1px 2px rgba(10, 40, 28, 0.05), 0 16px 40px rgba(10, 40, 28, 0.1);
+	backdrop-filter: blur(var(--wp--custom--glass--card-blur));
+	-webkit-backdrop-filter: blur(var(--wp--custom--glass--card-blur));
+
+	@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+		background: var(--wp--custom--glass--card-fallback);
+	}
+
+	.ggt-hero-form__title {
+		margin: 0 0 6px;
+		font-size: 26px;
+		letter-spacing: -0.01em;
+		text-align: center;
+	}
+
+	.ggt-hero-form__text {
+		margin: 0 0 22px;
+		color: var(--wp--preset--color--ink-muted);
+		font-size: 14px;
+		text-align: center;
+	}
+
+	.ggt-hero-form__call {
+		margin: 14px 0 0;
+		color: var(--wp--preset--color--ink-muted);
+		font-size: 14px;
+		text-align: center;
+
+		a {
+			color: var(--wp--preset--color--green-900);
+			font-weight: 700;
+			text-underline-offset: 3px;
+		}
+	}
+
+	// Fields: white, 1px gray-300, 10px radius, 15px text; Roboto 700 13px labels, red asterisk.
+	.es-form {
+		--esf-input-height: 48px;
+		--es-input-spacing: 14px;
+		--es-input-radius: 10px;
+		--es-input-border-color: var(--wp--preset--color--gray-300);
+		--es-input-focus-border-color: var(--wp--preset--color--green-800);
+		--es-input-font-size: 15px;
+		--es-grid-spacing: 0px; // stylelint-disable-line length-zero-no-unit
+	}
+
+	.es-form :is(.es-input, .es-repeater__input, .choices__inner) {
+		border-width: 1px;
+	}
+
+	.es-form :is(.es-input, .es-repeater__input):focus,
+	.es-form .choices.is-focused .choices__inner {
+		border-color: var(--wp--preset--color--green-800);
+		box-shadow: 0 0 0 3px rgba(19, 63, 45, 0.15);
+	}
+
+	.es-form .es-field__label {
+		margin-block-end: 6px;
+		font-family: var(--wp--preset--font-family--heading);
+		font-size: 13px;
+		font-weight: 700;
+	}
+
+	.es-form .es-field__label--is-required::after {
+		color: var(--wp--preset--color--error);
+	}
+
+	// Errors: the plugin's global message (role="alert", hero-v5 script) as a short red line under the buttons,
+	// not the green banner above the steps; each field still shows its own message.
+	.es-form {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.es-form .es-global-msg[data-status='error']:not(:empty) {
+		order: 1;
+		margin: 12px 0 0;
+		padding: 0;
+		background: none;
+		color: var(--wp--preset--color--error);
+		font-size: 13px;
+		font-weight: 600;
+		text-align: center;
+	}
+
+	// Stepper: 2px bars, mono 11px number, Roboto 700 12px label. Done and current forest, upcoming grey.
+	.es-block-forms--quote .es-progress-bar {
+		gap: 8px;
+		margin-block-end: 22px;
+	}
+
+	.es-block-forms--quote .es-progress-bar__item {
+		padding-block-start: 10px;
+		border-block-start-width: 2px;
+		border-color: var(--wp--preset--color--gray-300);
+		color: var(--ggt-muted);
+		font-size: 12px;
+		transition: border-color var(--wp--custom--motion--base) var(--wp--custom--motion--ease);
+
+		&::before {
+			font-size: 11px;
+		}
+
+		&.es-form-is-active,
+		&.es-form-is-filled {
+			border-color: var(--wp--preset--color--green-800);
+			color: var(--wp--preset--color--green-900);
+		}
+	}
+
+	// Step fields on a 2-column grid (14px gap): text inputs pair up, everything else spans the row.
+	.es-block-forms--quote .es-step__inner {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 14px;
+
+		> .es-field {
+			grid-column: 1 / -1;
+			width: auto;
+			max-width: none;
+			margin: 0;
+			padding: 0;
+		}
+
+		> .es-field--input {
+			grid-column: auto;
+		}
+
+		> .es-field.es-form-is-hidden {
+			display: none;
+		}
+	}
+
+	@media (max-width: 480px) {
+		.es-block-forms--quote .es-step__inner > .es-field--input {
+			grid-column: 1 / -1;
+		}
+	}
+
+	// Actions: full-width primary (forest, lime, 10px radius, Roboto 800 15px), Back outlined to its left.
+	.es-block-forms--quote .es-step__navigation {
+		margin-block-start: 8px;
+		padding-block-start: 0;
+		border: 0;
+	}
+
+	.es-block-forms--quote .es-step__navigation-inner {
+		flex-wrap: nowrap;
+		gap: 10px;
+
+		> .es-field:not(.es-field--submit-prev) {
+			flex: 1 1 auto;
+		}
+
+		> .es-field.es-field--submit-prev:not(.es-form-is-hidden) {
+			margin-inline-end: 0;
+		}
+	}
+
+	// Step 03: the Turnstile widget (forms plugin, placed just before the submit) gets its own row above the buttons.
+	.es-block-forms--quote .es-step__navigation-inner:has(> .es-goinggreen-turnstile) {
+		flex-wrap: wrap;
+
+		> .es-goinggreen-turnstile {
+			flex: 1 0 100%;
+			order: -1;
+			margin: 0 0 4px;
+		}
+	}
+
+	.es-block-forms--quote .es-submit {
+		inline-size: 100%;
+		block-size: auto;
+		padding: 14px 24px;
+		border-radius: 10px;
+		font-size: 15px;
+		font-weight: 800;
+		line-height: 1.2;
+
+		&:active:not(:disabled) {
+			transform: translateY(1px);
+		}
+
+		&:disabled {
+			cursor: not-allowed;
+			opacity: 0.6;
+		}
+	}
+
+	.es-block-forms--quote .es-field--submit-prev .es-submit {
+		padding-inline: 20px;
+		border-width: 1px;
+		border-color: var(--wp--preset--color--gray-300);
+		background: var(--wp--preset--color--white);
+		color: var(--wp--preset--color--green-900);
+
+		&:hover:not(:disabled) {
+			background: var(--wp--preset--color--gray-50);
+		}
+	}
+}
+
+// Success panel (hero-v5 script): replaces the steps after a sent quote; the stepper shows all three done.
+.ggt-hero-form__success {
+	display: none;
+	padding: 8px 0 4px;
+	text-align: center;
+
+	.ggt-hero-form.is-sent & {
+		display: block;
+	}
+
+	h3 {
+		margin: 0 0 10px;
+		color: var(--wp--preset--color--green-900);
+		font-family: var(--wp--preset--font-family--heading);
+		font-size: 26px;
+		font-weight: 700;
+		letter-spacing: -0.01em;
+
+		&:focus {
+			outline: none;
+		}
+	}
+
+	p {
+		margin: 0 auto 22px;
+		max-width: 420px;
+		color: var(--wp--preset--color--ink-muted);
+		font-size: 15px;
+		line-height: 1.6;
+	}
+
+	p a {
+		color: var(--wp--preset--color--green-900);
+		font-weight: 700;
+	}
+
+	button {
+		padding: 12px 22px;
+		border: 1px solid var(--wp--preset--color--gray-300);
+		border-radius: 10px;
+		background: var(--wp--preset--color--white);
+		color: var(--wp--preset--color--green-900);
+		font-family: var(--wp--preset--font-family--heading);
+		font-size: 15px;
+		font-weight: 700;
+		cursor: pointer;
+
+		&:hover {
+			background: var(--wp--preset--color--gray-50);
+		}
+
+		&:focus-visible {
+			outline: 2px solid var(--wp--preset--color--green-900);
+			outline-offset: 2px;
+		}
+	}
+}
+
+.ggt-hero-form__check {
+	display: grid;
+	place-items: center;
+	width: 56px;
+	height: 56px;
+	margin: 0 auto 16px;
+	border-radius: 50%;
+	background: var(--wp--preset--color--lime-500) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23133F2D' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m7 12.5 3.2 3.2L17 9'/%3E%3C/svg%3E") center / 30px no-repeat;
+}
+
+.ggt-hero-form.is-sent {
+	.es-form__fields,
+	.es-global-msg,
+	.ggt-hero-form__call {
+		display: none;
+	}
+
+	.es-block-forms--quote .es-progress-bar__item {
+		border-color: var(--wp--preset--color--green-800);
+		color: var(--wp--preset--color--green-900);
+	}
+}
