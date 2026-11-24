@@ -22,7 +22,10 @@ header.wp-block-template-part:has(.ggt-hdr) {
 .ggt-hdr {
 	margin-block: 0;
 
+	// Nav content is capped at 1240px (v5 comp), narrower than the 1380px wide size: the home hero runs about
+	// 50px past it on each side (1340px, _hero.scss).
 	.ggt-hdr__bar {
+		max-width: var(--wp--custom--nav--width);
 		min-height: var(--wp--custom--nav--height);
 		gap: 24px;
 	}
@@ -62,6 +65,7 @@ header.wp-block-template-part:has(.ggt-hdr) {
 
 	.wp-block-navigation__container > .wp-block-navigation-item > .wp-block-navigation-item__content {
 		padding-block-end: 4px;
+		white-space: nowrap;
 		border-block-end: 2px solid transparent;
 	}
 
@@ -120,6 +124,36 @@ header.wp-block-template-part:has(.ggt-hdr) {
 .ggt-hdr__cta .wp-block-button__link {
 	padding: 12px 22px;
 	background: var(--wp--preset--color--green-800);
+	color: var(--wp--preset--color--lime-500);
+	transition: background var(--wp--custom--motion--base) var(--wp--custom--motion--ease);
+
+	&:hover,
+	&:focus-visible {
+		background: var(--wp--preset--color--green-900);
+		color: var(--wp--preset--color--lime-500);
+	}
+}
+
+// Customer Portal (GGT's app): a plain nav link with a 15px stroke lock drawn in the text colour.
+$ggt-lock: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='4' y='11' width='16' height='10' rx='2'/%3E%3Cpath d='M8 11V7a4 4 0 0 1 8 0v4'/%3E%3C/svg%3E");
+
+.ggt-hdr__menu .ggt-hdr__portal > .wp-block-navigation-item__content {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+
+	&::before {
+		content: '';
+		flex: none;
+		width: 15px;
+		height: 15px;
+		background: currentColor;
+		mask: $ggt-lock center / contain no-repeat;
+	}
+}
+
+.ggt-hdr__menu .wp-block-navigation-item__content:hover {
+	color: var(--wp--preset--color--green-500);
 }
 
 // Drawer-only blocks (pattern: logo first, quote/call buttons last inside the navigation). They
@@ -128,9 +162,9 @@ header.wp-block-template-part:has(.ggt-hdr) {
 	display: none;
 }
 
-// Drawer below 960px: the six links do not fit beside the logo earlier than that. The Get a Quote
-// button stays visible at every width (the comps have no mobile header).
-@media (max-width: 959px) {
+// Drawer below 1140px: eight links (Customer Portal included) do not fit beside the logo earlier than that
+// and would wrap to two lines. The Get a Quote button stays visible at every width (the comps have no mobile header).
+@media (max-width: 1139px) {
 	.ggt-hdr__menu .wp-block-navigation__responsive-container-open:not(.always-shown) {
 		display: flex;
 	}

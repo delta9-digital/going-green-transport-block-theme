@@ -72,7 +72,7 @@ class SiteHeaderPattern extends AbstractBlockPattern
 	 */
 	protected function getDescription(): string
 	{
-		return \esc_html__('Sticky header: wordmark, main navigation with the Pricing panel, Get a Quote button.', 'going-green-transport');
+		return \esc_html__('Sticky header: wordmark, main navigation with the Pricing panel, Customer Portal link, Get a Quote button.', 'going-green-transport');
 	}
 
 	/**
@@ -155,7 +155,9 @@ class SiteHeaderPattern extends AbstractBlockPattern
 			. $this->link(\__('How It Works', 'going-green-transport'), 'how-it-works')
 			. $this->link(\__('About Us', 'going-green-transport'), 'about')
 			. $this->link(\__('Resources', 'going-green-transport'), 'resources')
-			. $this->link(\__('Partners', 'going-green-transport'), 'partner');
+			. $this->link(\__('Partners', 'going-green-transport'), 'partner')
+			// Last in the bar, right before Get a Quote; the lock icon is CSS (_header.scss).
+			. $this->link(\__('Customer Portal', 'going-green-transport'), 'portal', '', 'ggt-hdr__portal');
 
 		// Drawer only (hidden in the desktop bar): quote button and tap-to-call.
 		$drawerCta = "<!-- wp:buttons {\"className\":\"ggt-hdr__drawer-cta\",\"layout\":{\"type\":\"flex\",\"orientation\":\"vertical\"}} -->\n<div class=\"wp-block-buttons is-vertical ggt-hdr__drawer-cta\">"

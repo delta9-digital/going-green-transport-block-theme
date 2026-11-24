@@ -443,7 +443,8 @@
 			"nav": {
 				"height": "72px",
 				"surface": "rgba(244, 245, 244, 0.9)",
-				"blur": "8px"
+				"blur": "8px",
+				"width": "1240px"
 			},
 			"motion": {
 				"ease": "cubic-bezier(0.2, 0, 0, 1)",
@@ -456,6 +457,17 @@
 				"snug": "-0.02em",
 				"caps": "0.12em",
 				"mono": "0.1em"
+			},
+			"color": {
+				"star": "#8a6a1f"
+			},
+			"glass": {
+				"card": "rgba(244, 245, 244, 0.72)",
+				"cardBlur": "16px",
+				"cardFallback": "rgba(244, 245, 244, 0.95)"
+			},
+			"hero": {
+				"width": "1340px"
 			}
 		}
 	},

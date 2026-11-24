@@ -61,6 +61,15 @@ final class SiteLinks
 	];
 
 	/**
+	 * Links off this site, key => absolute URL.
+	 *
+	 * Customer Portal: GGT's own app (login). Placeholder from the v5 nav comp until the real URL is confirmed.
+	 */
+	private const EXTERNAL = [
+		'portal' => 'https://app.goinggreentransport.com/',
+	];
+
+	/**
 	 * Absolute URL for a link key.
 	 *
 	 * @param string $key Link key.
@@ -69,6 +78,10 @@ final class SiteLinks
 	 */
 	public static function url(string $key): string
 	{
+		if (isset(self::EXTERNAL[$key])) {
+			return self::EXTERNAL[$key];
+		}
+
 		return \home_url(self::PATHS[$key] ?? '/');
 	}
 }
