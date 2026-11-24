@@ -211,8 +211,14 @@ class SiteFooterPattern extends AbstractBlockPattern
 			'layout' => ['type' => 'flex', 'orientation' => 'vertical'],
 		], \JSON_UNESCAPED_SLASHES) . " -->\n{$items}<!-- /wp:navigation -->\n";
 
+		// h3 under the band's h2 (an h4 skipped a level), drawn like theme.json's h4: caption size,
+		// uppercase, 0.12em tracking.
+		$heading = '<!-- wp:heading {"level":3,"className":"ggt-ftr__heading","style":{"typography":{"letterSpacing":"0.12em","textTransform":"uppercase","lineHeight":"1.4"}},"fontSize":"caption"} -->' . "\n"
+			. "<h3 class=\"wp-block-heading ggt-ftr__heading has-caption-font-size\" style=\"letter-spacing:0.12em;line-height:1.4;text-transform:uppercase\">{$title}</h3>\n"
+			. "<!-- /wp:heading -->\n";
+
 		return $this->group(
-			"<!-- wp:heading {\"level\":4,\"className\":\"ggt-ftr__heading\"} -->\n<h4 class=\"wp-block-heading ggt-ftr__heading\">{$title}</h4>\n<!-- /wp:heading -->\n" . $nav,
+			$heading . $nav,
 			['className' => 'ggt-ftr__col', 'layout' => ['type' => 'default']]
 		);
 	}
