@@ -20,6 +20,8 @@ declare(strict_types=1);
 
 namespace GoingGreenTransportTheme\Forms;
 
+use GoingGreenTransportTheme\BlockPatterns\SiteLinks;
+
 use GoingGreenTransportThemeVendor\EightshiftLibs\Services\ServiceInterface;
 
 /**
@@ -129,10 +131,32 @@ class FormsSwap implements ServiceInterface
 			return $html;
 		}
 
+		$phone = SiteLinks::PHONE;
+		$tel = \esc_attr('tel:' . \str_replace('-', '', $phone));
+		$call = '<a href="' . $tel . '">' . \esc_html(\sprintf(
+			/* translators: %s: phone number. */
+			\__('Call %s', 'going-green-transport'),
+			$phone
+		)) . '</a>';
+
+		// The title is the card's h2 (the hero H1 is the page's only h1). The success panel stays hidden until the
+		// hero-v5 script hears the form's success event and fills in the email address.
 		return '<div class="ggt-hero-form">'
-			. '<p class="ggt-hero-form__title">' . \esc_html__('Get a Free Quote', 'going-green-transport') . '</p>'
+			. '<h2 class="ggt-hero-form__title" id="ggt-hero-quote-title">' . \esc_html__('Get a Free Quote', 'going-green-transport') . '</h2>'
 			. '<p class="ggt-hero-form__text">' . \esc_html__('Your quote will be emailed to you when you hit submit.', 'going-green-transport') . '</p>'
 			. $form
+			. '<div class="ggt-hero-form__success" hidden>'
+			. '<span class="ggt-hero-form__check" aria-hidden="true"></span>'
+			. '<h3 tabindex="-1">' . \esc_html__('Quote on Its Way.', 'going-green-transport') . '</h3>'
+			. '<p>' . \sprintf(
+				/* translators: 1: email address, 2: phone link. */
+				\esc_html__('We\'ve emailed your quote to %1$s. Questions? %2$s.', 'going-green-transport'),
+				'<strong class="ggt-hero-form__email"></strong>',
+				'<a href="' . $tel . '">' . \esc_html(\sprintf(\__('Call %s', 'going-green-transport'), $phone)) . '</a>' // phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment
+			) . '</p>'
+			. '<button type="button" class="ggt-hero-form__again">' . \esc_html__('Start another quote', 'going-green-transport') . '</button>'
+			. '</div>'
+			. '<p class="ggt-hero-form__call">' . \esc_html__('Rather talk it through?', 'going-green-transport') . ' ' . $call . '</p>'
 			. '</div>';
 	}
 
