@@ -388,6 +388,7 @@
 	column-gap: 8px;
 	row-gap: 0;
 	overflow: visible;
+	pointer-events: none;
 
 	> .swiper-wrapper {
 		margin-block-start: 48px;
@@ -413,6 +414,13 @@
 	// Pull the arrows up into the heading row on wide screens.
 	@media (min-width: 782px) {
 		margin-block-start: -104px;
+	}
+
+	// Pulled up (below), the carousel's box covers the heading row: let clicks through to what sits
+	// there (Get a Quote: the button beside the rating). Its parts stay live; Swiper's screen-reader
+	// notice does not take clicks.
+	> :not(.swiper-notification) {
+		pointer-events: auto;
 	}
 }
 
@@ -447,9 +455,51 @@
 	}
 }
 
+// Home hero, card 1/3 + form 2/3 (bin/home-hero-two-col.php): the heading sized for the narrow card, button
+// labels on one line; below 1200px the third is too narrow for the card, so the columns stack (card, then form).
+.ggt-sec--hero .ggt-hero-cols h1 {
+	font-size: clamp(40px, 3.6vw, 60px) !important; // stylelint-disable-line declaration-no-important
+}
+
+.ggt-sec--hero .ggt-hero-cols .wp-block-button__link {
+	white-space: nowrap;
+}
+
+// The form card fills the height of the hero row (as tall as the intro card at least); service types one per row.
+@media (min-width: 1200px) {
+	.ggt-sec--hero .ggt-hero-cols > .wp-block-column:last-child {
+		display: flex;
+		flex-direction: column;
+
+		> .ggt-hero-quote {
+			display: flex;
+			flex: 1 1 auto;
+			flex-direction: column;
+
+			> .ggt-quote-form {
+				flex: 1 1 auto;
+			}
+		}
+	}
+}
+
+.ggt-sec--hero .ggt-hero-cols .ggt-quote-form .es-field--radios .es-field__content-wrap { // stylelint-disable-line selector-max-specificity
+	grid-template-columns: minmax(0, 1fr);
+}
+
+@media (max-width: 1199px) {
+	.ggt-sec--hero .wp-block-columns.ggt-hero-cols {
+		flex-wrap: wrap !important; // stylelint-disable-line declaration-no-important
+
+		> .wp-block-column {
+			flex-basis: 100% !important; // stylelint-disable-line declaration-no-important
+		}
+	}
+}
+
 // Hero with the quote form (home): the form is much taller than the intro card, so the card stays
 // in view beside it while the visitor scrolls through the form.
-@media (min-width: 782px) {
+@media (min-width: 1200px) {
 	.ggt-sec--hero .wp-block-columns:has(.ggt-hero-quote) > .wp-block-column:first-child > .wp-block-group {
 		position: sticky;
 		top: calc(var(--wp--custom--nav--height) + var(--wp-admin--admin-bar--height, 0px) + 16px);

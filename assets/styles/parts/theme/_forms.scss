@@ -94,6 +94,91 @@ $ggt-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' 
 			padding: 0;
 		}
 
+		// Multi-select (Cannabis business type): same field and chevron as the single select; the picks read as a
+		// comma list ("Cultivation, Dispensary"). While the field is focused or open each pick shows a small × to take it
+		// out again; the "Select…" placeholder only shows while nothing is picked.
+		&.es-select[data-type*='select-multiple'] .choices__inner { // stylelint-disable-line selector-max-specificity
+			display: flex;
+			flex-wrap: wrap;
+			align-items: center;
+			min-block-size: var(--esf-input-height);
+			padding: 8px 44px 8px var(--es-input-spacing);
+			background: var(--es-input-background-color) $ggt-chevron right 16px center / 18px no-repeat;
+		}
+
+		&[data-type*='select-multiple'] .choices__list--multiple {
+			display: inline;
+		}
+
+		&[data-type*='select-multiple'] .choices__list--multiple .choices__item { // stylelint-disable-line selector-max-specificity
+			display: inline-flex;
+			align-items: center;
+			margin: 0;
+			padding: 0;
+			border: 0;
+			border-radius: 0;
+			background: none;
+			color: var(--wp--preset--color--green-900);
+			font-size: var(--es-input-font-size);
+			font-weight: normal;
+			line-height: 1.6;
+			word-break: normal;
+
+			&:not(:last-child)::after {
+				content: ',';
+				margin-inline-end: 0.3em;
+			}
+
+			&.is-highlighted {
+				background: none;
+				text-decoration: underline;
+			}
+		}
+
+		&[data-type*='select-multiple'] .choices__button { // stylelint-disable-line selector-max-specificity
+			display: none;
+			inline-size: 14px;
+			block-size: 14px;
+			margin: 0 0 0 3px;
+			padding: 0;
+			border: 0;
+			border-radius: 50%;
+			background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23133F2D' stroke-width='1.8' stroke-linecap='round'%3E%3Cpath d='M5 5l6 6M11 5l-6 6'/%3E%3C/svg%3E") center / 11px no-repeat;
+			opacity: 0.55;
+			text-indent: -9999px;
+			overflow: hidden;
+
+			&:hover,
+			&:focus-visible {
+				background-color: var(--wp--preset--color--gray-100);
+				opacity: 1;
+			}
+		}
+
+		&[data-type*='select-multiple']:is(.is-focused, .is-open) .choices__button { // stylelint-disable-line selector-max-specificity
+			display: inline-block;
+		}
+
+		&[data-type*='select-multiple'] .choices__input--cloned { // stylelint-disable-line selector-max-specificity
+			flex: 1 1 4rem;
+			min-inline-size: 4rem;
+			margin: 0;
+			padding: 0;
+			border: 0;
+			background: none;
+			font-size: var(--es-input-font-size);
+		}
+
+		// Something picked: no placeholder, and the (keyboard-only) input takes no room of its own.
+		&[data-type*='select-multiple'] .choices__list--multiple:has(.choices__item) + .choices__input--cloned { // stylelint-disable-line selector-max-specificity
+			flex: 0 1 2px;
+			min-inline-size: 2px;
+
+			&::placeholder {
+				color: transparent;
+			}
+		}
+
 		.choices__placeholder {
 			color: var(--es-input-placeholder-color);
 			opacity: 1;
@@ -278,8 +363,11 @@ $ggt-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' 
 		font-size: var(--wp--preset--font-size--meta);
 	}
 
-	// Package stepper: one bordered control, − value +.
+	// Package stepper: one bordered control, − value +, as tall as a text field (border included), so it lines
+	// up with the address input beside it.
 	.es-repeater__stepper {
+		box-sizing: border-box;
+		block-size: var(--esf-input-height);
 		overflow: hidden;
 		border: 1.5px solid var(--wp--preset--color--green-800);
 		border-radius: var(--es-input-radius);
@@ -287,6 +375,7 @@ $ggt-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' 
 
 		.es-repeater__input {
 			inline-size: 72px;
+			block-size: auto;
 			border: 0;
 			border-inline: 1px solid var(--wp--preset--color--gray-200);
 			border-radius: 0;
@@ -296,7 +385,7 @@ $ggt-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' 
 
 	.es-repeater__stepper-button {
 		inline-size: 52px;
-		block-size: 49px;
+		block-size: auto;
 		border: 0;
 		border-radius: 0 !important; // stylelint-disable-line declaration-no-important
 		color: var(--wp--preset--color--green-800);
@@ -325,6 +414,181 @@ $ggt-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' 
 		font-size: 18px;
 		line-height: 1;
 	}
+
+	// Finished stops: a horizontal route of one-line chips (numbered stop, label, truncated address,
+	// packages), joined by a line; click a chip to edit it.
+	.es-repeater[data-repeater-collapse] {
+		--es-repeater-summary-max: 280px;
+	}
+
+	// The line between consecutive stops in a horizontal strip.
+	.es-repeater__strip--horizontal > .es-repeater__summary + .es-repeater__summary::before { // stylelint-disable-line selector-max-specificity
+		content: '';
+		position: absolute;
+		inset-block-start: 50%;
+		inset-inline-start: calc((var(--es-repeater-gap) + 1.5px) * -1);
+		inline-size: var(--es-repeater-gap);
+		block-size: 2px;
+		background: var(--wp--preset--color--green-800);
+	}
+
+	// Finished stops: no card outline, just a thin divider under each line of the timeline.
+	.es-repeater__summary {
+		border: 0;
+		border-block-end: 1px solid var(--wp--preset--color--gray-200);
+		border-radius: 0;
+		background: transparent;
+		color: var(--wp--preset--color--green-900);
+	}
+
+	// Vertical timeline (pickups, drop-offs; stops stay in order, Edit opens a stop in place): a solid green rail
+	// through the stop numbers, finished and open alike.
+	.es-repeater[data-repeater-collapse='vertical'] {
+		--es-repeater-rail-offset: 40px;
+		--es-repeater-rail-color: var(--wp--preset--color--green-800);
+		--es-repeater-rail-opacity: 1;
+	}
+
+	.es-repeater__summary-number,
+	.es-repeater[data-repeater-collapse='vertical'] .es-repeater__item:not(.is-collapsed)::before {
+		background: var(--wp--preset--color--green-800);
+		color: var(--wp--preset--color--lime-500);
+		font-family: var(--wp--preset--font-family--mono);
+		-webkit-text-fill-color: var(--wp--preset--color--lime-500);
+	}
+
+	.es-repeater__summary-label {
+		color: var(--wp--preset--color--olive-500);
+		font-family: var(--wp--preset--font-family--mono);
+		font-size: var(--wp--preset--font-size--micro);
+		letter-spacing: var(--wp--custom--tracking--mono);
+		text-transform: uppercase;
+		opacity: 1;
+	}
+
+	// Second line: the address, smaller so more of it fits.
+	.es-repeater__summary-title {
+		color: var(--wp--preset--color--ink-muted);
+		font-size: var(--wp--preset--font-size--small);
+		font-weight: 500;
+		line-height: 1.35;
+	}
+
+	.es-repeater__summary-meta {
+		padding: 3px 8px;
+		border-radius: var(--wp--custom--radius--pill);
+		background: var(--wp--preset--color--gray-50);
+		color: var(--wp--preset--color--ink-muted);
+		font-size: var(--wp--preset--font-size--caption);
+		font-weight: 600;
+		opacity: 1;
+	}
+
+	// Visible Edit button on each finished stop.
+	.es-repeater__summary-edit {
+		margin-inline-end: 2px;
+		padding: 5px 12px;
+		border: 1.5px solid var(--wp--preset--color--green-800);
+		border-radius: var(--wp--custom--radius--pill);
+		color: var(--wp--preset--color--green-800);
+		font-family: var(--wp--preset--font-family--heading);
+		font-size: var(--wp--preset--font-size--caption);
+		font-weight: bold;
+
+		&:hover {
+			background: var(--wp--preset--color--green-800);
+			color: var(--wp--preset--color--lime-500);
+		}
+
+		// Narrow timeline: pencil only (the plugin hides the text).
+		@container (max-width: 260px) {
+			padding: 6px;
+		}
+	}
+
+	.es-repeater__summary-edit:focus-visible,
+	.es-repeater__summary-remove:focus-visible,
+	.es-repeater__done:focus-visible {
+		outline: 2px solid var(--wp--preset--color--green-900);
+		outline-offset: 2px;
+	}
+
+	.es-repeater__done {
+		padding: 10px 22px;
+		border: 1.5px solid var(--wp--preset--color--green-800);
+		border-radius: var(--wp--custom--radius--pill);
+		color: var(--wp--preset--color--green-800);
+		font-family: var(--wp--preset--font-family--heading);
+		font-size: var(--wp--preset--font-size--meta);
+		font-weight: bold;
+
+		&:hover {
+			background: var(--wp--preset--color--gray-50);
+		}
+	}
+
+	// Row layout (stops): Done ends the line of fields, as tall as them.
+	.es-repeater--fields-row .es-repeater__done {
+		block-size: var(--esf-input-height);
+		padding-block: 0;
+	}
+
+
+	.es-repeater__input[aria-invalid='true'] {
+		border-color: var(--wp--preset--color--error);
+	}
+
+	// Done refused for 0 packages: the stepper's outline turns red.
+	.es-repeater__stepper:has([aria-invalid='true']) {
+		border-color: var(--wp--preset--color--error);
+	}
+
+	// Places suggestions under "Business name or address": the same rounded list as the selects.
+	.es-repeater__places {
+		inset-block-start: calc(100% + 6px);
+		overflow: hidden;
+		border: 1.5px solid var(--wp--preset--color--green-800);
+		border-radius: var(--wp--custom--radius--md);
+		background: var(--wp--preset--color--white);
+		box-shadow: 0 12px 32px rgb(10 36 24 / 0.12);
+	}
+
+	.es-repeater__places-option {
+		padding: 10px var(--es-input-spacing);
+
+		&[aria-selected='true'],
+		&:hover {
+			background: var(--wp--preset--color--gray-50);
+		}
+	}
+
+	.es-repeater__places-main {
+		color: var(--wp--preset--color--green-900);
+		font-size: var(--es-input-font-size);
+		font-weight: bold;
+	}
+
+	.es-repeater__places-secondary {
+		color: var(--wp--preset--color--ink-muted);
+		font-size: var(--wp--preset--font-size--small);
+	}
+
+	.es-repeater__places-attribution {
+		padding: 6px var(--es-input-spacing);
+		border-block-start: 1px solid var(--wp--preset--color--gray-100);
+		color: var(--wp--preset--color--gray-600);
+		font-size: var(--wp--preset--font-size--caption);
+		text-align: end;
+	}
+
+	// Under the field, out of the row's flow, so the stepper and Done stay level with the input.
+	.es-repeater__places-hint {
+		position: absolute;
+		inset-block-start: calc(100% + 4px);
+		inset-inline-start: 0;
+		color: var(--wp--preset--color--error);
+		font-size: var(--wp--preset--font-size--small);
+	}
 }
 
 // Quote (multi-step) layout.
@@ -333,7 +597,7 @@ $ggt-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' 
 		max-inline-size: 760px;
 	}
 
-	// Steps as a numbered row: 01 Service Type, 02 Pickups & Drop-offs, 03 Your Details.
+	// Steps as a numbered row: 01 Your Details, 02 Stops, 03 Submit.
 	.es-progress-bar {
 		display: flex;
 		gap: 8px;
@@ -375,7 +639,10 @@ $ggt-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' 
 		gap: 12px;
 	}
 
-	.es-field--radios .es-radio {
+	// Every card fills its grid cell, whatever the length of its text.
+	.es-field--radios .es-radio,
+	.es-field--radios .es-radio__content {
+		inline-size: 100%;
 		margin: 0;
 	}
 
@@ -384,6 +651,7 @@ $ggt-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' 
 	}
 
 	.es-field--radios .es-radio__label {
+		flex: 1 1 auto;
 		display: block;
 		box-sizing: border-box;
 		block-size: 100%;
@@ -431,7 +699,7 @@ $ggt-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' 
 		margin-block-start: 12px;
 	}
 
-	// Single-page quote (long form): "01 Service Type" headings drawn from data-section-number / data-section-title
+	// Single-page quote (long form): "01 Your Details" headings drawn from data-section-number / data-section-title
 	// on the first field of each section. Absolutely placed so a half-width first field (First name) can carry a
 	// full-width heading; the field beside it (data-section-spacer) gets the same top space.
 	.es-field:is([data-section-title], [data-section-spacer]) {
@@ -442,6 +710,11 @@ $ggt-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' 
 	.es-field[data-section-title]:not([data-section-number='01']),
 	.es-field[data-section-spacer] {
 		margin-block-start: 28px;
+	}
+
+	// Beside section 01 (Your Details opens the form): no gap above either, so the pair stays level.
+	.es-field[data-section-number='01'] + .es-field[data-section-spacer] {
+		margin-block-start: 0;
 	}
 
 	.es-field[data-section-title]::before,
@@ -486,12 +759,79 @@ $ggt-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' 
 	}
 }
 
-// Quote page: the Forms quote form in place of the app iframe (src/Forms/FormsSwap.php) sits a
-// section gap under the hero.
+// Quote form as a white card: the homepage hero's right column (FormsSwap::swapHero, .ggt-hero-form) and the quote
+// page's own section under the banner (FormsSwap::swapQuote, .ggt-quote-form), full width there.
+.ggt-hero-form,
 .ggt-quote-form {
-	margin-block-start: 56px;
+	box-sizing: border-box;
+	block-size: 100%;
+	margin: 0;
+	padding: clamp(24px, 3vw, 36px);
+	border-radius: var(--wp--custom--radius--panel);
+	background: var(--wp--preset--color--white);
+	color: var(--wp--preset--color--green-900);
 
 	@media (max-width: 600px) { /* stylelint-disable-line media-feature-range-notation */
-		margin-block-start: 32px;
+		padding: 20px 16px;
 	}
+
+	.es-block-forms--quote .es-form {
+		max-inline-size: none;
+	}
+}
+
+// Homepage hero card: the multi-step form compacted to fit a column (service types stacked, smaller step bar).
+.ggt-hero-form {
+	.es-block-forms--quote .es-progress-bar {
+		margin-block-end: 24px;
+	}
+
+	.es-block-forms--quote .es-progress-bar__item {
+		font-size: var(--wp--preset--font-size--meta);
+	}
+
+	// Service types: one compact row each.
+	.es-block-forms--quote .es-field--radios .es-field__content-wrap { // stylelint-disable-line selector-max-specificity
+		grid-template-columns: minmax(0, 1fr);
+		gap: 8px;
+	}
+
+	.es-block-forms--quote .es-field--radios .es-radio__label { // stylelint-disable-line selector-max-specificity
+		padding: 12px 14px 12px 46px;
+
+		&::before, // stylelint-disable-line selector-max-specificity
+		&::after { // stylelint-disable-line selector-max-specificity
+			inset-block-start: 14px;
+			inset-inline-start: 14px;
+		}
+	}
+
+	.es-block-forms--quote .es-radio__label-title {
+		margin-block-end: 2px;
+		font-size: var(--wp--preset--font-size--body-md);
+	}
+
+	.es-block-forms--quote .es-radio__label-desc {
+		font-size: var(--wp--preset--font-size--small);
+	}
+
+	.es-block-forms--quote .es-repeater {
+		--es-repeater-item-padding: 16px;
+	}
+}
+
+.ggt-hero-form__title {
+	margin: 0 0 4px;
+	color: var(--wp--preset--color--green-900);
+	font-family: var(--wp--preset--font-family--heading);
+	font-size: var(--wp--preset--font-size--heading-md);
+	font-weight: bold;
+	letter-spacing: var(--wp--custom--tracking--snug);
+	line-height: 1.2;
+}
+
+.ggt-hero-form__text {
+	margin: 0 0 20px;
+	color: var(--wp--preset--color--ink-muted);
+	font-size: var(--wp--preset--font-size--meta);
 }

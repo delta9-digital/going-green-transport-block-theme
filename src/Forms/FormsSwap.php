@@ -5,7 +5,10 @@
  *
  * Settings > General > "Site forms" picks a form for each slot; "Old form" keeps what was there:
  * - Footer sign-up: replaces the `.ggt-signup` form in the footer band (src/Signup/SignupForm.php).
- * - Quote page: replaces the embedded app.goinggreentransport.com quote iframe (embed-frame block).
+ * - Quote page: replaces the embedded app.goinggreentransport.com quote iframe (embed-frame block), which sits in
+ *   its own section under the quote page banner.
+ * - Homepage hero: fills any group with the class `ggt-hero-form-slot` (the homepage hero's right column) with the
+ *   form in a white card; with "Old form" the group's own content (the hero photo) shows.
  *
  * The swap happens at render time, so switching back is one setting, with no content to edit. If the
  * Forms plugin is off or the chosen form is gone, the old form shows.
@@ -35,6 +38,16 @@ class FormsSwap implements ServiceInterface
 	public const OPTION_QUOTE = 'ggt_forms_quote_form_id';
 
 	/**
+	 * Option: form for the homepage hero.
+	 */
+	public const OPTION_HERO = 'ggt_forms_hero_form_id';
+
+	/**
+	 * Class that marks a group as the hero form slot.
+	 */
+	public const HERO_SLOT_CLASS = 'ggt-hero-form-slot';
+
+	/**
 	 * Forms post type and block.
 	 */
 	private const POST_TYPE = 'eightshift-forms';
@@ -54,6 +67,7 @@ class FormsSwap implements ServiceInterface
 	{
 		\add_filter('render_block_core/html', [$this, 'swapFooter'], 10, 2);
 		\add_filter('render_block_eightshift-boilerplate/embed-frame', [$this, 'swapQuote'], 10, 2);
+		\add_filter('render_block_core/group', [$this, 'swapHero'], 10, 2);
 		\add_action('admin_init', [$this, 'registerSettings']);
 	}
 
@@ -94,6 +108,35 @@ class FormsSwap implements ServiceInterface
 	}
 
 	/**
+	 * Homepage hero: the Forms quote form in a card instead of the slot's own content (the hero photo).
+	 *
+	 * @param string $html Rendered block.
+	 * @param array<string, mixed> $block Parsed block.
+	 *
+	 * @return string
+	 */
+	public function swapHero(string $html, array $block): string
+	{
+		$classes = \explode(' ', (string) ($block['attrs']['className'] ?? ''));
+
+		if (!\in_array(self::HERO_SLOT_CLASS, $classes, true)) {
+			return $html;
+		}
+
+		$form = $this->renderForm(self::OPTION_HERO, ['formsStyle' => ['quote']]);
+
+		if ($form === null) {
+			return $html;
+		}
+
+		return '<div class="ggt-hero-form">'
+			. '<p class="ggt-hero-form__title">' . \esc_html__('Get a Free Quote', 'going-green-transport') . '</p>'
+			. '<p class="ggt-hero-form__text">' . \esc_html__('Your quote will be emailed to you when you hit submit.', 'going-green-transport') . '</p>'
+			. $form
+			. '</div>';
+	}
+
+	/**
 	 * Settings > General > Site forms.
 	 *
 	 * @return void
@@ -104,7 +147,7 @@ class FormsSwap implements ServiceInterface
 			'ggt_site_forms',
 			\__('Site forms', 'going-green-transport'),
 			static function (): void {
-				echo '<p>' . \esc_html__('Which Forms form shows in each place. "Old form" keeps the hand-built footer form and the embedded quote app. Edit the forms themselves under Forms.', 'going-green-transport') . '</p>';
+				echo '<p>' . \esc_html__('Which Forms form shows in each place. "Old form" keeps the hand-built footer form, the embedded quote app and the homepage hero photo. Edit the forms themselves under Forms.', 'going-green-transport') . '</p>';
 			},
 			'general'
 		);
@@ -112,6 +155,7 @@ class FormsSwap implements ServiceInterface
 		$slots = [
 			self::OPTION_FOOTER => \__('Footer sign-up', 'going-green-transport'),
 			self::OPTION_QUOTE => \__('Quote page', 'going-green-transport'),
+			self::OPTION_HERO => \__('Homepage hero', 'going-green-transport'),
 		];
 
 		foreach ($slots as $option => $label) {

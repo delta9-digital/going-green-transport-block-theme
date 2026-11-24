@@ -709,3 +709,27 @@ $ease: cubic-bezier(0.2, 0, 0, 1);
 		padding-top: 4%;
 	}
 }
+
+// Email notification cards in the route stories (header row: "To: …" pill and the date line).
+// The pill never wraps; the date line (bin/email-meta-lines.php wraps its parts in spans) is two lines at every
+// width, "date · time" over "n of n", because the card is narrow even on desktop.
+.is-nowrap > .ggt-pill {
+	flex: 0 0 auto;
+	white-space: nowrap;
+}
+
+.ggt-email-meta {
+	flex: 0 1 auto;
+	min-inline-size: 0;
+	text-align: end;
+}
+
+.ggt-email-meta__when,
+.ggt-email-meta__count {
+	display: block;
+	white-space: nowrap;
+}
+
+.ggt-email-meta__sep {
+	display: none;
+}

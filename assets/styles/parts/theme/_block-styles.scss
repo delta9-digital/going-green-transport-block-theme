@@ -3,6 +3,9 @@
 // Arrow from the comps' split CTA (path "M7 17 17 7M9 7h8v8"), one per arrow colour.
 $ggt-arrow-green: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23133F2D' stroke-width='2' stroke-linecap='square'%3E%3Cpath d='M7 17 17 7M9 7h8v8'/%3E%3C/svg%3E");
 $ggt-arrow-lime: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23BBFD6A' stroke-width='2' stroke-linecap='square'%3E%3Cpath d='M7 17 17 7M9 7h8v8'/%3E%3C/svg%3E");
+// Same stroke, pointing down and right (split buttons with the class ggt-arrow-down: "go to what's below").
+$ggt-arrow-down-green: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23133F2D' stroke-width='2' stroke-linecap='square'%3E%3Cpath d='M7 7l10 10M17 9v8H9'/%3E%3C/svg%3E");
+$ggt-arrow-down-lime: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23BBFD6A' stroke-width='2' stroke-linecap='square'%3E%3Cpath d='M7 7l10 10M17 9v8H9'/%3E%3C/svg%3E");
 $ggt-check: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23133F2D' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m7 12.5 3.2 3.2L17 9'/%3E%3C/svg%3E");
 
 // ---------- Buttons ----------
@@ -61,6 +64,15 @@ $ggt-check: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' vi
 	--ggt-circle-bg: var(--wp--preset--color--green-900);
 	--ggt-circle-bg-hover: var(--wp--preset--color--green-800);
 	--ggt-arrow: #{$ggt-arrow-lime};
+}
+
+// Arrow pointing down and right (add the class ggt-arrow-down to a split button that jumps to something below).
+.wp-block-button.is-style-ggt-split.ggt-arrow-down {
+	--ggt-arrow: #{$ggt-arrow-down-green};
+}
+
+.wp-block-button.is-style-ggt-split-light.ggt-arrow-down {
+	--ggt-arrow: #{$ggt-arrow-down-lime};
 }
 
 .wp-block-button.is-style-ggt-outline .wp-block-button__link,
