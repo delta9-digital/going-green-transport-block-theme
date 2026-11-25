@@ -120,7 +120,7 @@ $ggt-mn-outline: url("data:image/svg+xml,%3Csvg fill='%23133F2D' xmlns='http://w
 	margin-block-end: 28px;
 	color: var(--wp--preset--color--ink-muted);
 	font-family: var(--wp--preset--font-family--body);
-	font-size: 17px;
+	font-size: clamp(17px, 1.35vw, 19px);
 	line-height: 1.6;
 	text-wrap: pretty;
 }
@@ -334,10 +334,10 @@ $ggt-mn-outline: url("data:image/svg+xml,%3Csvg fill='%23133F2D' xmlns='http://w
 		box-shadow: 0 0 0 3px rgba(19, 63, 45, 0.15);
 	}
 
-	.es-form .es-field__label {
+	.es-form :is(.es-field__label, .es-repeater__subfield-label) {
 		margin-block-end: 6px;
 		font-family: var(--wp--preset--font-family--heading);
-		font-size: 13px;
+		font-size: 15px;
 		font-weight: 700;
 	}
 
