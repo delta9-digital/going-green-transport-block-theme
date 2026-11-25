@@ -147,7 +147,7 @@ $ggt-mn-outline: url("data:image/svg+xml,%3Csvg fill='%23133F2D' xmlns='http://w
 .ggt-hero-v5 .ggt-hero-v5__rating {
 	margin-block-end: 44px;
 	color: var(--wp--preset--color--ink-muted);
-	font-size: 14px;
+	font-size: 18px; // 30% over the comp's 14px
 
 	strong {
 		color: var(--wp--preset--color--green-700);
