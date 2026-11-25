@@ -24,7 +24,7 @@ $ggt-mn-outline: url("data:image/svg+xml,%3Csvg fill='%23133F2D' xmlns='http://w
 			z-index: 0;
 			aspect-ratio: 86.71 / 99.6;
 			background: $ggt-mn-outline center / contain no-repeat;
-			opacity: 0.1;
+			opacity: 0.06; // lighter than the comp's 0.1 so the copy over it reads clearly
 			transform: translateX(-50%);
 			pointer-events: none;
 		}
@@ -40,8 +40,11 @@ $ggt-mn-outline: url("data:image/svg+xml,%3Csvg fill='%23133F2D' xmlns='http://w
 		align-items: center;
 		margin: 0;
 
+		// Core sets align-items: normal !important on columns, so centre each column itself: the shorter one (usually
+		// the form card) sits halfway down the taller one.
 		> .wp-block-column {
 			flex-basis: auto !important; // stylelint-disable-line declaration-no-important
+			align-self: center;
 			min-width: 0;
 		}
 	}
