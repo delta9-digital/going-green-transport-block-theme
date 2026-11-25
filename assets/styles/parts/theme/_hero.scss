@@ -7,7 +7,9 @@ $ggt-mn-outline: url("data:image/svg+xml,%3Csvg fill='%23133F2D' xmlns='http://w
 .ggt-hero-v5 {
 	--ggt-hero-gap: 48px;
 	--ggt-muted: var(--wp--custom--color--gray-650);
-	overflow: hidden; // the outline is taller than the left column is wide; never a sideways scroll
+	// The outline is wider than the left column; never a sideways scroll. clip, not hidden: hidden would make the
+	// section a scroll container and stop the sticky form card below.
+	overflow: clip;
 	padding-block-start: 16px !important; // stylelint-disable-line declaration-no-important
 
 	> .ggt-hero-v5__wrap.alignwide {
@@ -46,6 +48,22 @@ $ggt-mn-outline: url("data:image/svg+xml,%3Csvg fill='%23133F2D' xmlns='http://w
 			flex-basis: auto !important; // stylelint-disable-line declaration-no-important
 			align-self: center;
 			min-width: 0;
+		}
+	}
+
+	// Sticky form card (desktop): its column stretches to the row, the card starts centred and stays pinned under the
+	// nav while the intro column scrolls past. Taller than the intro (steps 2-3) it simply sets the row height.
+	@media (min-width: 961px) {
+		.ggt-hero-v5__grid.wp-block-columns > .wp-block-column:last-child {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-self: stretch;
+		}
+
+		.ggt-hero-form {
+			position: sticky;
+			top: calc(var(--wp--custom--nav--height) + var(--wp-admin--admin-bar--height, 0px) + 16px);
 		}
 	}
 
