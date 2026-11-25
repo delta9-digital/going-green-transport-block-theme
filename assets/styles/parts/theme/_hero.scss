@@ -7,7 +7,8 @@ $ggt-mn-outline: url("data:image/svg+xml,%3Csvg fill='%23133F2D' xmlns='http://w
 .ggt-hero-v5 {
 	--ggt-hero-gap: 48px;
 	--ggt-muted: var(--wp--custom--color--gray-650);
-	overflow: hidden; // the outline is taller than the left column is wide; never a sideways scroll
+	// No overflow clipping, so the form card's shadow shows in full. The outline only spills past the left edge of
+	// the page (which never adds a scrollbar) and is hidden below 960px.
 	padding-block-start: 16px !important; // stylelint-disable-line declaration-no-important
 
 	> .ggt-hero-v5__wrap.alignwide {
@@ -278,7 +279,7 @@ $ggt-mn-outline: url("data:image/svg+xml,%3Csvg fill='%23133F2D' xmlns='http://w
 	border: 1px solid rgba(255, 255, 255, 0.7);
 	border-radius: 18px;
 	background: var(--wp--custom--glass--card);
-	box-shadow: 0 1px 2px rgba(10, 40, 28, 0.05), 0 16px 40px rgba(10, 40, 28, 0.1);
+	// Shadow: the group block's own Shadow setting (preset "Card", theme.json), not CSS.
 	backdrop-filter: blur(var(--wp--custom--glass--card-blur));
 	-webkit-backdrop-filter: blur(var(--wp--custom--glass--card-blur));
 

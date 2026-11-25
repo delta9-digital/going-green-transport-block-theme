@@ -51,8 +51,59 @@ if ($heroIndex === null) {
 	WP_CLI::error('Homepage: no .ggt-sec--hero section.');
 }
 
+// Already v5: only make sure the form card group carries the core Shadow setting (preset "Card"), which earlier
+// runs of this script did not set.
 if (in_array('ggt-hero-v5', explode(' ', (string) ($blocks[$heroIndex]['attrs']['className'] ?? '')), true)) {
-	WP_CLI::log('Homepage: hero is already v5; skipped.');
+	$ggtShadowed = false;
+	$ggtAddShadow = static function (array &$list) use (&$ggtAddShadow, &$ggtShadowed): void {
+		foreach ($list as &$block) {
+			$classes = explode(' ', (string) ($block['attrs']['className'] ?? ''));
+
+			if (($block['blockName'] ?? '') === 'core/group' && in_array('ggt-hero-form-slot', $classes, true)) {
+				if (!empty($block['attrs']['style']['shadow'])) {
+					return;
+				}
+
+				$block['attrs']['style']['shadow'] = 'var:preset|shadow|card';
+				$css = 'box-shadow:var(--wp--preset--shadow--card)';
+				$open = static function (string $html) use ($css): string {
+					if (preg_match('/^(\s*<div\b[^>]*?)style="([^"]*)"/', $html)) {
+						return preg_replace('/^(\s*<div\b[^>]*?)style="([^"]*)"/', '$1style="$2;' . $css . '"', $html, 1);
+					}
+
+					return preg_replace('/^(\s*<div\b[^>]*?)>/', '$1 style="' . $css . '">', $html, 1);
+				};
+				$block['innerHTML'] = $open($block['innerHTML']);
+				$block['innerContent'][0] = $open((string) $block['innerContent'][0]);
+				$ggtShadowed = true;
+				return;
+			}
+
+			if (!empty($block['innerBlocks'])) {
+				$ggtAddShadow($block['innerBlocks']);
+			}
+		}
+	};
+
+	$ggtAddShadow($blocks[$heroIndex]['innerBlocks']);
+
+	if (!$ggtShadowed) {
+		WP_CLI::log('Homepage: hero is already v5 (card shadow already set); skipped.');
+		return;
+	}
+
+	if ($ggtDryRun) {
+		WP_CLI::success('Dry run: the form card group would get the Card shadow. Nothing saved.');
+		return;
+	}
+
+	$result = wp_update_post(wp_slash(['ID' => $ggtFront, 'post_content' => serialize_blocks($blocks)]), true);
+
+	if (is_wp_error($result)) {
+		WP_CLI::error($result->get_error_message());
+	}
+
+	WP_CLI::success(sprintf('Homepage (%d): form card group now uses the core Shadow setting, preset Card (revision kept).', $ggtFront));
 	return;
 }
 
@@ -133,8 +184,8 @@ $ggtHero = <<<HTML
 <!-- /wp:column -->
 
 <!-- wp:column {"width":"55%","style":{"spacing":{"blockGap":"0"}}} -->
-<div class="wp-block-column" style="flex-basis:55%"><!-- wp:group {"className":"ggt-hero-form-slot","style":{"spacing":{"blockGap":"0"}},"layout":{"type":"default"}} -->
-<div class="wp-block-group ggt-hero-form-slot"><!-- wp:paragraph -->
+<div class="wp-block-column" style="flex-basis:55%"><!-- wp:group {"className":"ggt-hero-form-slot","style":{"spacing":{"blockGap":"0"},"shadow":"var:preset|shadow|card"},"layout":{"type":"default"}} -->
+<div class="wp-block-group ggt-hero-form-slot" style="box-shadow:var(--wp--preset--shadow--card)"><!-- wp:paragraph -->
 <p><a href="{$ggtQuoteUrl}">Get a free quote</a></p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group --></div>

@@ -141,7 +141,7 @@ class FormsSwap implements ServiceInterface
 
 		// The title is the card's h2 (the hero H1 is the page's only h1). The success panel stays hidden until the
 		// hero-v5 script hears the form's success event and fills in the email address.
-		return '<div class="ggt-hero-form">'
+		$inner = ''
 			. '<h2 class="ggt-hero-form__title" id="ggt-hero-quote-title">' . \esc_html__('Get a Free Quote', 'going-green-transport') . '</h2>'
 			. '<p class="ggt-hero-form__text">' . \esc_html__('Your quote will be emailed to you when you hit submit.', 'going-green-transport') . '</p>'
 			. $form
@@ -156,8 +156,21 @@ class FormsSwap implements ServiceInterface
 			) . '</p>'
 			. '<button type="button" class="ggt-hero-form__again">' . \esc_html__('Start another quote', 'going-green-transport') . '</button>'
 			. '</div>'
-			. '<p class="ggt-hero-form__call">' . \esc_html__('Rather talk it through?', 'going-green-transport') . ' ' . $call . '</p>'
-			. '</div>';
+			. '<p class="ggt-hero-form__call">' . \esc_html__('Rather talk it through?', 'going-green-transport') . ' ' . $call . '</p>';
+
+		// Keep the group's own opening tag, so settings made on the block in the editor (Shadow, and any other style
+		// support) still apply to the card; only its content is swapped for the form.
+		if (\preg_match('/^\s*(<div\b[^>]*>)/', $html, $open)) {
+			$tag = new \WP_HTML_Tag_Processor($open[1]);
+
+			if ($tag->next_tag()) {
+				$tag->add_class('ggt-hero-form');
+
+				return $tag->get_updated_html() . $inner . '</div>';
+			}
+		}
+
+		return '<div class="ggt-hero-form">' . $inner . '</div>';
 	}
 
 	/**
